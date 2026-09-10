@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin Login | Zakmolanitech Solutions</title>
+<meta name="theme-color" content="#050b14">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}body{min-height:100vh;background:#050b14;color:#eef8ff;font-family:Arial,sans-serif;display:grid;place-items:center;padding:20px;overflow:hidden}body:before{content:"";position:fixed;inset:0;background:linear-gradient(rgba(70,230,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(70,230,255,.035) 1px,transparent 1px);background-size:45px 45px;animation:grid 18s linear infinite}@keyframes grid{to{transform:translate(45px,45px)}}.login{position:relative;width:min(100%,440px);padding:34px;border:1px solid rgba(80,210,255,.22);border-radius:25px;background:rgba(9,20,35,.88);box-shadow:0 30px 100px rgba(0,0,0,.5);backdrop-filter:blur(18px)}.logo{width:58px;height:58px;border:1px solid rgba(70,230,255,.45);border-radius:17px;display:grid;place-items:center;color:#46e6ff;font-weight:900;font-size:20px;margin-bottom:24px;box-shadow:0 0 35px rgba(70,230,255,.12)}.eyebrow{color:#46e6ff;font-size:10px;font-weight:800;letter-spacing:2px}.login h1{margin:10px 0 9px;font-size:30px}.login p{color:#91a7ba;font-size:13px;line-height:1.7}.field{margin-top:20px}.field label{display:block;margin-bottom:8px;font-size:11px;font-weight:800;letter-spacing:1px}.field input{width:100%;padding:14px 15px;border:1px solid rgba(130,180,220,.14);border-radius:13px;background:#050b14;color:#eef8ff;outline:0}.field input:focus{border-color:#46e6ff;box-shadow:0 0 0 3px rgba(70,230,255,.08)}button{width:100%;margin-top:22px;padding:14px;border:1px solid rgba(70,230,255,.4);border-radius:13px;background:linear-gradient(135deg,#46e6ff,#4287ff);color:#03101a;font-weight:900;cursor:pointer}.status{margin-top:15px;color:#91a7ba;font-size:12px;line-height:1.6}.back{display:block;margin-top:20px;color:#46e6ff;text-decoration:none;font-size:12px}.warning{margin-top:20px;padding:12px 13px;border:1px solid rgba(255,190,80,.2);border-radius:12px;background:rgba(255,190,80,.05);color:#c8b98f;font-size:11px;line-height:1.6}@media(max-width:480px){.login{padding:25px}.login h1{font-size:26px}}
+</style>
+</head>
+<body>
+<main class="login">
+<div class="logo">Z</div>
+<div class="eyebrow">ADMIN / SECURE ACCESS</div>
+<h1>Control Center</h1>
+<p>Manage Zakmolanitech website updates, announcements, services and published content.</p><form id="adminLoginForm">
+<div class="field">
+<label for="adminEmail">ADMIN EMAIL</label>
+<input id="adminEmail" type="email" autocomplete="username" required>
+</div><div class="field">
+<label for="adminPassword">PASSWORD</label>
+<input id="adminPassword" type="password" autocomplete="current-password" required>
+</div><button type="submit">ACCESS DASHBOARD →</button>
+
+<div class="status" id="adminLoginStatus"></div>
+</form><div class="warning">Frontend administrator authentication is not connected yet. Do not enter a real production password here until the secure backend authentication system is connected.</div>
+<a class="back" href="../index.html">← Return to website</a>
+</main>
+<script src="../static/js/admin.js"></script>
+</body>
+  </html>
