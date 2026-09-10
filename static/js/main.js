@@ -533,3 +533,26 @@ if(serviceForm&&serviceStatus){
   serviceForm.reset();
  });
  }
+const companyLogo=document.getElementById("companyLogo");
+
+if(companyLogo){
+ let taps=0
+    ;
+ let tapTimer;
+
+ companyLogo.addEventListener("click",e=>{
+  e.preventDefault();
+  taps++;
+
+  clearTimeout(tapTimer);
+
+  tapTimer=setTimeout(()=>{
+   taps=0;
+  },1500);
+
+  if(taps>=5){
+   taps=0;
+   window.location.href="templates/admin-login.html";
+  }
+ });
+}
