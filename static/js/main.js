@@ -476,6 +476,7 @@ const updatesTrack=document.getElementById("updatesTrack"),updatesPrev=document.
 
 if(updatesTrack&&updatesPrev&&updatesNext&&updatesDots){
  const cards=[...updatesTrack.querySelectorAll(".update-card")];
+if(!cards.length)return;
  let current=0;
  let timer;
 
