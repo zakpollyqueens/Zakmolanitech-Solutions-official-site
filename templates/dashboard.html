@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard | Zakmolanitech Solutions</title>
+<meta name="description" content="Your Zakmolanitech Solutions dashboard.">
+<meta name="theme-color" content="#050b14">
+<link rel="stylesheet" href="../static/css/main.css">
+<style>
+.dashboard-page{padding:100px 20px 70px;width:min(var(--max-width),calc(100% - 40px));margin:auto}
+.dashboard-head{display:flex;align-items:flex-end;justify-content:space-between;gap:25px;margin-bottom:35px}
+.dashboard-head h1{font-size:clamp(34px,5vw,58px)}
+.dashboard-head p{margin-top:10px;color:var(--muted);line-height:1.7}
+.dashboard-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.dashboard-card{position:relative;padding:25px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden;transition:.35s}
+.dashboard-card:hover{transform:translateY(-5px);border-color:var(--line-bright);box-shadow:var(--shadow)}
+.dashboard-card:after{content:"";position:absolute;width:100px;height:100px;right:-45px;top:-45px;border-radius:50%;background:rgba(70,230,255,.08)}
+.dashboard-icon{width:48px;height:48px;display:grid;place-items:center;margin-bottom:18px;border:1px solid var(--line-bright);border-radius:14px;color:var(--cyan);font-weight:800}
+.dashboard-card h3{margin-bottom:8px}
+.dashboard-card p{color:var(--muted);font-size:13px;line-height:1.7}
+.dashboard-card .card-link{margin-top:17px}
+.dashboard-wide{grid-column:span 2}
+.dashboard-status{display:flex;align-items:center;gap:10px;margin-top:20px;color:var(--muted);font-size:12px}
+.status-dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 15px rgba(80,227,154,.6)}
+.dashboard-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.quick-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
+.quick-nav a{padding:14px;border:1px solid var(--line);border-radius:14px;color:var(--muted);font-size:12px;text-align:center;transition:.3s}
+.quick-nav a:hover{border-color:var(--line-bright);color:var(--cyan);background:rgba(70,230,255,.05)}
+@media(max-width:900px){.dashboard-grid{grid-template-columns:repeat(2,1fr)}.dashboard-wide{grid-column:span 2}.quick-nav{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.dashboard-page{width:min(100% - 32px,600px);padding:80px 0 50px}.dashboard-head{align-items:flex-start;flex-direction:column}.dashboard-grid{grid-template-columns:1fr}.dashboard-wide{grid-column:span 1}.quick-nav{grid-template-columns:1fr 1fr}.dashboard-card{padding:21px}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+<button class="explore-toggle" id="exploreToggle" aria-expanded="false" aria-controls="explorePanel">Explore</button>
+<a class="brand" href="../index.html"><span class="brand-mark">Z</span><span class="brand-name">ZAKMOLANITECH</span></a>
+<nav class="desktop-nav" aria-label="Main navigation">
+<a href="../index.html">Home</a>
+<a href="services.html">Services</a>
+<a href="portfolio.html">Portfolio</a>
+<a href="contact.html">Contact Us</a>
+</nav>
+</header>
+
+<aside class="explore-panel" id="explorePanel" aria-hidden="true">
+<div class="explore-title">Explore Zakmolanitech</div>
+<nav class="explore-links">
+<a class="explore-link" href="../index.html"><span>01</span>Home</a>
+<a class="explore-link" href="about.html"><span>02</span>About</a>
+<a class="explore-link" href="services.html"><span>03</span>Services</a>
+<a class="explore-link" href="portfolio.html"><span>04</span>Portfolio</a>
+<a class="explore-link" href="pricing.html"><span>05</span>Pricing</a>
+<a class="explore-link" href="contact.html"><span>06</span>Contact Us</a>
+<a class="explore-link" href="donate.html"><span>07</span>Donate</a>
+<a class="explore-link" href="dashboard.html"><span>08</span>Dashboard</a>
+<a class="explore-link" href="profile.html"><span>09</span>My Profile</a>
+<a class="explore-link" href="settings.html"><span>10</span>Settings</a>
+</nav>
+</aside>
+
+<div class="navigation-backdrop" id="navigationBackdrop"></div>
+
+<main class="dashboard-page">
+
+<section class="dashboard-head reveal">
+<div>
+<div class="eyebrow">ACCOUNT / 03</div>
+<h1>Your <span>dashboard.</span></h1>
+<p>Manage your Zakmolanitech Solutions account and quickly access our technology services.</p>
+<div class="dashboard-status"><span class="status-dot"></span><span>Account system ready for secure backend connection</span></div>
+</div>
+</section>
+
+<section class="dashboard-grid">
+
+<article class="dashboard-card dashboard-wide reveal">
+<div class="dashboard-icon">Z</div>
+<div class="eyebrow">WELCOME</div>
+<h3>Welcome to Zakmolanitech Solutions.</h3>
+<p>Your account will become the central place for managing your profile, service requests, technology activities and personalized features.</p>
+<div class="dashboard-actions">
+<a class="btn btn-primary" href="profile.html">My Profile</a>
+<a class="btn" href="settings.html">Settings</a>
+</div>
+</article>
+
+<article class="dashboard-card reveal">
+<div class="dashboard-icon">01</div>
+<h3>My Profile</h3>
+<p>View and manage your personal account information.</p>
+<a class="card-link" href="profile.html">Open Profile →</a>
+</article>
+
+<article class="dashboard-card reveal">
+<div class="dashboard-icon">02</div>
+<h3>Settings</h3>
+<p>Manage account preferences and security settings.</p>
+<a class="card-link" href="settings.html">Open Settings →</a>
+</article>
+
+<article class="dashboard-card reveal">
+<div class="dashboard-icon">03</div>
+<h3>Services</h3>
+<p>Explore technology services and request professional support.</p>
+<a class="card-link" href="services.html">View Services →</a>
+</article>
+
+<article class="dashboard-card reveal">
+<div class="dashboard-icon">04</div>
+<h3>Portfolio</h3>
+<p>Explore our technology projects, training and digital work.</p>
+<a class="card-link" href="portfolio.html">View Portfolio →</a>
+</article>
+
+<article class="dashboard-card reveal">
+<div class="dashboard-icon">05</div>
+<h3>Pricing</h3>
+<p>Review ICT training and IT service packages.</p>
+<a class="card-link" href="pricing.html">View Pricing →</a>
+</article>
+
+<article class="dashboard-card reveal">
+<div class="dashboard-icon">06</div>
+<h3>About</h3>
+<p>Learn more about Zakmolanitech Solutions and our technology mission.</p>
+<a class="card-link" href="about.html">About Us →</a>
+</article>
+
+<article class="dashboard-card reveal">
+<div class="dashboard-icon">07</div>
+<h3>Contact Us</h3>
+<p>Reach us through phone, WhatsApp, Telegram or email.</p>
+<a class="card-link" href="contact.html">Contact Us →</a>
+</article>
+
+<article class="dashboard-card reveal">
+<div class="dashboard-icon">08</div>
+<h3>Donate</h3>
+<p>Support digital learning, technology access and students in need.</p>
+<a class="card-link" href="donate.html">Support the Mission →</a>
+</article>
+
+<article class="dashboard-card dashboard-wide reveal">
+<div class="eyebrow">QUICK ACCESS</div>
+<h3>Explore Zakmolanitech.</h3>
+<p>Everything you need is one step away.</p>
+<div class="quick-nav">
+<a href="../index.html">Home</a>
+<a href="profile.html">My Profile</a>
+<a href="settings.html">Settings</a>
+<a href="services.html">Services</a>
+<a href="portfolio.html">Portfolio</a>
+<a href="pricing.html">Pricing</a>
+<a href="contact.html">Contact Us</a>
+<a href="donate.html">Donate</a>
+</div>
+</article>
+
+</section>
+
+<section class="final-cta">
+<div class="final-cta-inner reveal">
+<div class="eyebrow">ACCOUNT / 04</div>
+<h2>Ready to build something?</h2>
+<p>Explore our services or contact Zakmolanitech Solutions about your next technology project.</p>
+<div class="account-actions">
+<a class="btn btn-primary" href="services.html">Explore Services</a>
+<a class="btn" href="contact.html">Contact Us</a>
+</div>
+</div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+<div class="footer-brand">ZAKMOLANITECH SOLUTIONS</div>
+<p class="footer-text">Technology • Security • Innovation • Empowerment</p>
+<nav class="footer-links" aria-label="Footer navigation">
+<a href="../index.html">Home</a>
+<a href="about.html">About</a>
+<a href="services.html">Services</a>
+<a href="portfolio.html">Portfolio</a>
+<a href="pricing.html">Pricing</a>
+<a href="contact.html">Contact</a>
+<a href="donate.html">Donate</a>
+</nav>
+<div class="footer-copy">© 2026 Zakmolanitech Solutions. All Rights Reserved.</div>
+</footer>
+
+<script src="../static/js/main.js"></script>
+</body>
+                                                                </html>
