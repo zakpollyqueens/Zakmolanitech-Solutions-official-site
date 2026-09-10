@@ -471,3 +471,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 });
+/* LIVE UPDATES SLIDER */
+const updatesTrack=document.getElementById("updatesTrack"),updatesPrev=document.getElementById("updatesPrev"),updatesNext=document.getElementById("updatesNext"),updatesDots=document.getElementById("updatesDots");
+
+if(updatesTrack&&updatesPrev&&updatesNext&&updatesDots){
+ const cards=[...updatesTrack.querySelectorAll(".update-card")];
+ let current=0;
+ let timer;
+
+ const perView=()=>window.innerWidth<=680?1:window.innerWidth<=1000?2:3;
+ const maxIndex=()=>Math.max(0,cards.length-perView());
+
+ function renderDots(){
+  updatesDots.innerHTML="";
+  for(let i=0;i<=maxIndex();i++){
+   const d=document.createElement("button");
+   d.className="update-dot"+(i===current?" active":"");
+   d.type="button";
+   d.setAttribute("aria-label","Show update "+(i+1));
+   d.onclick=()=>goTo(i);
+   updatesDots.appendChild(d);
+  }
+ }
+
+ function goTo(index){
+  current=Math.max(0,Math.min(index,maxIndex()));
+  const cardWidth=cards[0].getBoundingClientRect().width;
+  const gap=parseFloat(getComputedStyle(updatesTrack).gap)||0;
+  updatesTrack.style.transform=`translateX(-${current*(cardWidth+gap)}px)`;
+  renderDots();
+ }
+
+ function next(){goTo(current>=maxIndex()?0:current+1)}
+ function prev(){goTo(current<=0?maxIndex():current-1)}
+
+ updatesNext.addEventListener("click",next);
+ updatesPrev.addEventListener("click",prev);
+
+ function startAuto(){
+  clearInterval(timer);
+  timer=setInterval(next,5000);
+ }
+
+ window.addEventListener("resize",()=>{current=Math.min(current,maxIndex());goTo(current)});
+ renderDots();
+ goTo(0);
+ startAuto();
+
+ updatesTrack.addEventListener("mouseenter",()=>clearInterval(timer));
+ updatesTrack.addEventListener("mouseleave",startAuto);
+        }
