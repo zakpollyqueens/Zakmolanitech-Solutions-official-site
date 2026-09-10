@@ -18,7 +18,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const navigationBackdrop =
         document.getElementById("navigationBackdrop");
+   const adminTrigger=document.getElementById("adminTrigger");
 
+if(adminTrigger){
+  let taps=0;
+  let tapTimer=null;
+
+  const activateAdmin=()=>{
+    taps++;
+
+    clearTimeout(tapTimer);
+
+    tapTimer=setTimeout(()=>{
+      taps=0;
+    },1500);
+
+    if(taps>=5){
+      taps=0;
+      window.location.href="templates/admin-login.html";
+    }
+  };
+
+  adminTrigger.addEventListener("click",e=>{
+    e.preventDefault();
+    e.stopPropagation();
+    activateAdmin();
+  });
+   }
 
     /* ========================================================
        EXPLORE NAVIGATION
