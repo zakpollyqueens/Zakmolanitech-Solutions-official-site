@@ -15,7 +15,22 @@ button{font:inherit}
 .explore-toggle{position:relative;z-index:105;border:1px solid var(--line-bright);background:rgba(10,25,42,.7);color:var(--text);padding:11px 17px;border-radius:999px;cursor:pointer;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:.3s}
 .explore-toggle:hover,.explore-toggle.is-open{background:rgba(70,230,255,.12);box-shadow:0 0 25px rgba(70,230,255,.12)}
 .brand{display:flex;align-items:center;gap:10px;margin-left:25px}
-.brand-mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--cyan),var(--blue));color:#03101a;font-weight:900;box-shadow:0 0 30px rgba(70,230,255,.2)}
+.brand-mark{
+  width:46px;
+  height:46px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  border-radius:12px;
+  cursor:pointer;
+}
+
+.brand-mark img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:contain;
+}
 .brand-name{font-size:14px;font-weight:800;letter-spacing:1.5px}
 .desktop-nav{display:flex;gap:24px;margin-left:auto}
 .desktop-nav a{color:var(--muted);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;transition:.3s}
