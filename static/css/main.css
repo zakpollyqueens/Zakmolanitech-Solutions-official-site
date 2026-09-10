@@ -116,6 +116,17 @@ section{position:relative}
  .update-card{flex:0 0 100%}
  .update-image{height:165px}
                }
+/* SERVICE FORM */
+.service-form{margin-top:25px}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.form-field{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.form-field label{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--text)}
+.form-field input,.form-field select,.form-field textarea{width:100%;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:rgba(5,11,20,.65);color:var(--text);font:inherit;outline:0;transition:.3s}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--line-bright);box-shadow:0 0 0 3px rgba(70,230,255,.08)}
+.form-field textarea{resize:vertical;min-height:140px}
+.form-field select option{background:#07111f;color:var(--text)}
+.form-status{margin-top:15px;color:var(--muted);font-size:13px;line-height:1.6}
+@media(max-width:680px){.form-grid{grid-template-columns:1fr}}
 /* STATS */
 .stats-section{padding:50px 0 90px}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
