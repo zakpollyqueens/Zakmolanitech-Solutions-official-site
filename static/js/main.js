@@ -520,4 +520,15 @@ if(updatesTrack&&updatesPrev&&updatesNext&&updatesDots){
 
  updatesTrack.addEventListener("mouseenter",()=>clearInterval(timer));
  updatesTrack.addEventListener("mouseleave",startAuto);
-        }
+       }
+/* SERVICE REQUEST */
+const serviceForm=document.getElementById("serviceRequestForm"),serviceStatus=document.getElementById("serviceFormStatus");
+
+if(serviceForm&&serviceStatus){
+ serviceForm.addEventListener("submit",e=>{
+  e.preventDefault();
+  serviceStatus.textContent="Service request received on this page. Backend submission will be connected in the next phase.";
+  serviceStatus.style.color="var(--cyan)";
+  serviceForm.reset();
+ });
+ }
