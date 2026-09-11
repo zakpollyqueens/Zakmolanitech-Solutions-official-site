@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Create Account | Zakmolanitech Solutions</title>
+
+<meta
+  name="description"
+  content="Create your Zakmolanitech Solutions account."
+>
+
+<meta name="theme-color" content="#050b14">
+
+<link rel="stylesheet" href="../static/css/main.css">
+
+<style>
+
+/* =========================================================
+   AUTH PAGE
+   ========================================================= */
+
+.auth-page{
+  min-height:calc(100vh - 80px);
+  display:grid;
+  place-items:center;
+  padding:90px 20px;
+}
+
+.auth-wrap{
+  width:min(100%,520px);
+}
+
+.auth-card{
+  position:relative;
+  padding:38px;
+  border:1px solid var(--line);
+  border-radius:28px;
+  background:var(--surface-strong);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+.auth-card:before{
+  content:"";
+  position:absolute;
+  width:220px;
+  height:220px;
+  right:-100px;
+  top:-100px;
+  border-radius:50%;
+  background:rgba(70,230,255,.1);
+  filter:blur(10px);
+  pointer-events:none;
+}
+
+.auth-heading{
+  position:relative;
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.auth-heading .eyebrow{
+  margin-bottom:12px;
+}
+
+.auth-heading h1{
+  font-size:clamp(30px,5vw,46px);
+}
+
+.auth-heading p{
+  margin-top:12px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.7;
+}
+
+.auth-form{
+  position:relative;
+  z-index:2;
+}
+
+.auth-field{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-bottom:18px;
+}
+
+.auth-field label{
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.auth-field input{
+  width:100%;
+  box-sizing:border-box;
+  padding:15px 16px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(5,11,20,.7);
+  color:var(--text);
+  font:inherit;
+  outline:0;
+  transition:.3s;
+}
+
+.auth-field input:focus{
+  border-color:var(--line-bright);
+  box-shadow:0 0 0 3px rgba(70,230,255,.08);
+}
+
+
+/* =========================================================
+   PASSWORD
+   ========================================================= */
+
+.password-wrap{
+  position:relative;
+  width:100%;
+}
+
+.password-wrap input{
+  padding-right:82px;
+}
+
+.password-toggle{
+  position:absolute;
+  right:8px;
+  top:50%;
+  transform:translateY(-50%);
+
+  height:36px;
+  padding:0 11px;
+
+  border:1px solid var(--line);
+  border-radius:10px;
+
+  background:rgba(70,230,255,.05);
+  color:var(--cyan);
+
+  font-size:10px;
+  font-weight:800;
+
+  cursor:pointer;
+}
+
+
+/* =========================================================
+   TERMS
+   ========================================================= */
+
+.auth-check{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+
+  margin:5px 0 22px;
+
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
+}
+
+.auth-check input{
+  flex:0 0 auto;
+  width:auto;
+  margin-top:3px;
+  accent-color:var(--cyan);
+}
+
+
+/* =========================================================
+   CREATE ACCOUNT BUTTON
+   Strong override for global .btn styles
+   ========================================================= */
+
+.auth-submit{
+  width:100% !important;
+
+  min-height:54px !important;
+  height:54px !important;
+
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  box-sizing:border-box !important;
+
+  padding:0 20px !important;
+  margin:0 !important;
+
+  border-radius:14px !important;
+
+  font-family:inherit !important;
+  font-size:13px !important;
+  font-weight:900 !important;
+  letter-spacing:1.2px !important;
+
+  line-height:1 !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+
+  cursor:pointer !important;
+
+  position:relative !important;
+  overflow:hidden !important;
+
+  transform:none !important;
+}
+
+.auth-submit:hover{
+  transform:translateY(-1px) !important;
+}
+
+.auth-submit:disabled{
+  opacity:.65;
+  cursor:not-allowed !important;
+  transform:none !important;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.auth-status{
+  min-height:22px;
+
+  margin:15px 0 0;
+
+  text-align:center;
+
+  color:var(--muted);
+
+  font-size:12px;
+  line-height:1.6;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.auth-footer{
+  position:relative;
+  z-index:2;
+
+  text-align:center;
+
+  margin-top:26px;
+  padding-top:22px;
+
+  border-top:1px solid var(--line);
+
+  color:var(--muted);
+
+  font-size:13px;
+}
+
+.auth-footer a{
+  color:var(--cyan);
+  font-weight:800;
+  text-decoration:none;
+}
+
+
+/* =========================================================
+   NOTE
+   ========================================================= */
+
+.auth-note{
+  position:relative;
+  z-index:2;
+
+  margin-top:20px;
+
+  text-align:center;
+
+  color:var(--muted);
+
+  font-size:10px;
+  line-height:1.6;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:680px){
+
+  .auth-page{
+    padding:60px 16px;
+  }
+
+  .auth-card{
+    padding:25px 20px;
+    border-radius:22px;
+  }
+
+  .auth-submit{
+    min-height:52px !important;
+    height:52px !important;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- =======================================================
+     HEADER
+     ======================================================= -->
+
+<header class="site-header">
+
+<button
+  class="explore-toggle"
+  id="exploreToggle"
+  aria-expanded="false"
+  aria-controls="explorePanel"
+>
+Explore
+</button>
+
+<a
+  class="brand"
+  href="../index.html"
+>
+<span class="brand-mark">Z</span>
+<span class="brand-name">ZAKMOLANITECH</span>
+</a>
+
+<nav
+  class="desktop-nav"
+  aria-label="Main navigation"
+>
+
+<a href="../index.html">Home</a>
+<a href="services.html">Services</a>
+<a href="portfolio.html">Portfolio</a>
+<a href="contact.html">Contact Us</a>
+
+</nav>
+
+</header>
+
+
+<!-- =======================================================
+     EXPLORE PANEL
+     ======================================================= -->
+
+<aside
+  class="explore-panel"
+  id="explorePanel"
+  aria-hidden="true"
+>
+
+<div class="explore-title">
+Explore Zakmolanitech
+</div>
+
+<nav class="explore-links">
+
+<a
+  class="explore-link"
+  href="../index.html"
+>
+<span>01</span>Home
+</a>
+
+<a
+  class="explore-link"
+  href="about.html"
+>
+<span>02</span>About
+</a>
+
+<a
+  class="explore-link"
+  href="services.html"
+>
+<span>03</span>Services
+</a>
+
+<a
+  class="explore-link"
+  href="portfolio.html"
+>
+<span>04</span>Portfolio
+</a>
+
+<a
+  class="explore-link"
+  href="pricing.html"
+>
+<span>05</span>Pricing
+</a>
+
+<a
+  class="explore-link"
+  href="contact.html"
+>
+<span>06</span>Contact Us
+</a>
+
+<a
+  class="explore-link"
+  href="donate.html"
+>
+<span>07</span>Donate
+</a>
+
+<a
+  class="explore-link"
+  href="dashboard.html"
+>
+<span>08</span>Dashboard
+</a>
+
+<a
+  class="explore-link"
+  href="profile.html"
+>
+<span>09</span>My Profile
+</a>
+
+<a
+  class="explore-link"
+  href="settings.html"
+>
+<span>10</span>Settings
+</a>
+
+</nav>
+
+</aside>
+
+<div
+  class="navigation-backdrop"
+  id="navigationBackdrop"
+></div>
+
+
+<!-- =======================================================
+     SIGN UP
+     ======================================================= -->
+
+<main class="auth-page">
+
+<div class="auth-wrap">
+
+<div class="auth-card reveal">
+
+
+<div class="auth-heading">
+
+<div class="eyebrow">
+ACCOUNT / 01
+</div>
+
+<h1>
+Create your <span>account.</span>
+</h1>
+
+<p>
+Join Zakmolanitech Solutions and access your personalized technology experience.
+</p>
+
+</div>
+
+
+<form
+  class="auth-form"
+  id="signupForm"
+  novalidate
+>
+
+
+<!-- FULL NAME -->
+
+<div class="auth-field">
+
+<label for="signupName">
+FULL NAME
+</label>
+
+<input
+  id="signupName"
+  name="name"
+  type="text"
+  placeholder="Enter your full name"
+  autocomplete="name"
+  required
+>
+
+</div>
+
+
+<!-- EMAIL -->
+
+<div class="auth-field">
+
+<label for="signupEmail">
+EMAIL ADDRESS
+</label>
+
+<input
+  id="signupEmail"
+  name="email"
+  type="email"
+  placeholder="you@example.com"
+  autocomplete="email"
+  required
+>
+
+</div>
+
+
+<!-- PHONE -->
+
+<div class="auth-field">
+
+<label for="signupPhone">
+PHONE / WHATSAPP
+</label>
+
+<input
+  id="signupPhone"
+  name="phone"
+  type="tel"
+  placeholder="+256..."
+  autocomplete="tel"
+  required
+>
+
+</div>
+
+
+<!-- PASSWORD -->
+
+<div class="auth-field">
+
+<label for="signupPassword">
+PASSWORD
+</label>
+
+<div class="password-wrap">
+
+<input
+  id="signupPassword"
+  name="password"
+  type="password"
+  placeholder="Create a password"
+  autocomplete="new-password"
+  minlength="8"
+  required
+>
+
+<button
+  type="button"
+  class="password-toggle"
+  id="passwordToggle"
+>
+SHOW
+</button>
+
+</div>
+
+</div>
+
+
+<!-- TERMS -->
+
+<label class="auth-check">
+
+<input
+  id="signupTerms"
+  type="checkbox"
+  required
+>
+
+<span>
+I agree to use this account responsibly and accept the site's terms and privacy requirements.
+</span>
+
+</label>
+
+
+<!-- =====================================================
+     MAIN SIGNUP BUTTON
+     ===================================================== -->
+
+<button
+  class="btn btn-primary auth-submit"
+  id="signupButton"
+  type="submit"
+>
+CREATE MY ACCOUNT
+</button>
+
+
+<!-- STATUS -->
+
+<p
+  class="auth-status"
+  id="signupStatus"
+  aria-live="polite"
+></p>
+
+
+</form>
+
+
+<!-- EXISTING ACCOUNT -->
+
+<div class="auth-footer">
+
+Already have an account?
+
+<a href="signin.html">
+SIGN IN
+</a>
+
+</div>
+
+
+<div class="auth-note">
+Your account is securely registered through Supabase authentication.
+</div>
+
+
+</div>
+
+</div>
+
+</main>
+
+
+<!-- =======================================================
+     FOOTER
+     ======================================================= -->
+
+<footer class="site-footer">
+
+<div class="footer-brand">
+ZAKMOLANITECH SOLUTIONS
+</div>
+
+<p class="footer-text">
+Technology • Security • Innovation • Empowerment
+</p>
+
+<nav
+  class="footer-links"
+  aria-label="Footer navigation"
+>
+
+<a href="../index.html">Home</a>
+<a href="about.html">About</a>
+<a href="services.html">Services</a>
+<a href="portfolio.html">Portfolio</a>
+<a href="pricing.html">Pricing</a>
+<a href="contact.html">Contact</a>
+<a href="donate.html">Donate</a>
+
+</nav>
+
+<div class="footer-copy">
+© 2026 Zakmolanitech Solutions. All Rights Reserved.
+</div>
+
+</footer>
+
+
+<script src="../static/js/main.js"></script>
+
+
+<!-- =======================================================
+     SUPABASE
+     ======================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+/* =========================================================
+   SUPABASE CONFIGURATION
+   ========================================================= */
+
+const SUPABASE_URL =
+"https://julhswsijtcoyjrjrobk.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_a0qKsqBB0hR9BOWpP3dkwg_7nUOmXYC";
+
+
+const {
+  createClient
+} = window.supabase;
+
+
+const supabase =
+createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+
+const signupForm =
+document.getElementById("signupForm");
+
+const signupStatus =
+document.getElementById("signupStatus");
+
+const signupButton =
+document.getElementById("signupButton");
+
+const signupName =
+document.getElementById("signupName");
+
+const signupEmail =
+document.getElementById("signupEmail");
+
+const signupPhone =
+document.getElementById("signupPhone");
+
+const signupPassword =
+document.getElementById("signupPassword");
+
+const signupTerms =
+document.getElementById("signupTerms");
+
+const passwordToggle =
+document.getElementById("passwordToggle");
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+function showStatus(
+  message,
+  success=false
+){
+
+if(!signupStatus) return;
+
+signupStatus.textContent =
+message;
+
+signupStatus.style.color =
+success
+  ? "var(--cyan)"
+  : "#ff8a8a";
+
+}
+
+
+/* =========================================================
+   PASSWORD SHOW / HIDE
+   ========================================================= */
+
+if(
+  passwordToggle &&
+  signupPassword
+){
+
+passwordToggle.addEventListener(
+"click",
+function(){
+
+const visible =
+signupPassword.type === "text";
+
+signupPassword.type =
+visible
+  ? "password"
+  : "text";
+
+passwordToggle.textContent =
+visible
+  ? "SHOW"
+  : "HIDE";
+
+}
+);
+
+}
+
+
+/* =========================================================
+   SIGNUP
+   ========================================================= */
+
+if(signupForm){
+
+signupForm.addEventListener(
+"submit",
+async function(event){
+
+event.preventDefault();
+
+
+/* ---------------------------------------------
+   GET VALUES
+   --------------------------------------------- */
+
+const name =
+signupName.value.trim();
+
+const email =
+signupEmail.value
+.trim()
+.toLowerCase();
+
+const phone =
+signupPhone.value.trim();
+
+const password =
+signupPassword.value;
+
+const terms =
+signupTerms.checked;
+
+
+/* ---------------------------------------------
+   VALIDATION
+   --------------------------------------------- */
+
+if(!name){
+
+showStatus(
+"Please enter your full name."
+);
+
+signupName.focus();
+
+return;
+
+}
+
+
+if(!email){
+
+showStatus(
+"Please enter your email address."
+);
+
+signupEmail.focus();
+
+return;
+
+}
+
+
+if(!phone){
+
+showStatus(
+"Please enter your phone or WhatsApp number."
+);
+
+signupPhone.focus();
+
+return;
+
+}
+
+
+if(password.length < 8){
+
+showStatus(
+"Your password must contain at least 8 characters."
+);
+
+signupPassword.focus();
+
+return;
+
+}
+
+
+if(!terms){
+
+showStatus(
+"Please accept the site's terms before continuing."
+);
+
+return;
+
+}
+
+
+/* ---------------------------------------------
+   LOADING
+   --------------------------------------------- */
+
+signupButton.disabled =
+true;
+
+signupButton.textContent =
+"CREATING ACCOUNT...";
+
+showStatus(
+"Creating your account...",
+true
+);
+
+
+try{
+
+
+/* -------------------------------------------
+   SUPABASE SIGNUP
+   ------------------------------------------- */
+
+const {
+  data,
+  error
+} =
+await supabase.auth.signUp({
+
+email:email,
+
+password:password,
+
+options:{
+
+data:{
+  full_name:name,
+  phone:phone
+},
+
+emailRedirectTo:
+window.location.origin +
+"/templates/signin.html"
+
+}
+
+});
+
+
+if(error){
+
+throw error;
+
+}
+
+
+/* -------------------------------------------
+   USER CREATED
+   ------------------------------------------- */
+
+if(data && data.user){
+
+
+/*
+ * The database trigger:
+ *
+ * auth.users
+ *     ↓
+ * profiles
+ *     ↓
+ * community_members
+ *
+ * automatically handles the user's
+ * Zakmolanitech Community membership.
+ */
+
+
+/* -----------------------------------------
+   EMAIL CONFIRMATION ENABLED
+   ----------------------------------------- */
+
+if(!data.session){
+
+showStatus(
+"Account created successfully. Please check your email to confirm your account, then sign in.",
+true
+);
+
+signupForm.reset();
+
+signupButton.disabled =
+false;
+
+signupButton.textContent =
+"CREATE MY ACCOUNT";
+
+return;
+
+}
+
+
+/* -----------------------------------------
+   SESSION CREATED IMMEDIATELY
+   ----------------------------------------- */
+
+showStatus(
+"Account created successfully. Opening your dashboard...",
+true
+);
+
+
+setTimeout(
+function(){
+
+window.location.href =
+"dashboard.html";
+
+},
+700
+);
+
+}
+
+}catch(error){
+
+console.error(
+"Supabase signup error:",
+error
+);
+
+
+let message =
+"Unable to create your account. Please try again.";
+
+
+if(error && error.message){
+
+const text =
+error.message.toLowerCase();
+
+
+if(
+text.includes(
+"already registered"
+) ||
+text.includes(
+"user already registered"
+)
+){
+
+message =
+"An account with this email already exists. Please sign in instead.";
+
+}else{
+
+message =
+error.message;
+
+}
+
+}
+
+
+showStatus(message);
+
+
+signupButton.disabled =
+false;
+
+signupButton.textContent =
+"CREATE MY ACCOUNT";
+
+}
+
+}
+);
+
+}
+
+</script>
+
+</body>
+  </html>
