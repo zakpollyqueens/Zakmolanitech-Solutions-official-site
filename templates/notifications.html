@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Notifications | Zakmolanitech Solutions</title>
+<meta name="description" content="View your Zakmolanitech Solutions notifications.">
+<meta name="theme-color" content="#050b14">
+<link rel="stylesheet" href="../static/css/main.css">
+
+<style>
+.notifications-page{
+  min-height:100vh;
+  padding:100px 16px 70px;
+  background:
+    radial-gradient(circle at top left,rgba(0,180,255,.12),transparent 35%),
+    radial-gradient(circle at bottom right,rgba(120,70,255,.10),transparent 35%),
+    #050b14;
+}
+
+.notifications-wrap{
+  width:min(900px,100%);
+  margin:auto;
+}
+
+.notifications-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-bottom:25px;
+}
+
+.notifications-title h1{
+  margin:0 0 7px;
+  font-size:clamp(1.8rem,5vw,2.7rem);
+}
+
+.notifications-title p{
+  margin:0;
+  opacity:.65;
+}
+
+.back-link,
+.action-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:10px 15px;
+  border-radius:12px;
+  text-decoration:none;
+  color:inherit;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.1);
+  cursor:pointer;
+  font:inherit;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:20px;
+}
+
+.status{
+  padding:13px 16px;
+  border-radius:13px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  margin-bottom:20px;
+  opacity:.75;
+}
+
+.notification-list{
+  display:grid;
+  gap:14px;
+}
+
+.notification{
+  position:relative;
+  padding:20px;
+  border-radius:18px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.08);
+  transition:.2s ease;
+}
+
+.notification.unread{
+  background:rgba(0,180,255,.08);
+  border-color:rgba(0,180,255,.25);
+}
+
+.notification.unread::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:18px;
+  bottom:18px;
+  width:3px;
+  border-radius:3px;
+  background:rgba(0,180,255,.8);
+}
+
+.notification-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.notification-title{
+  margin:0;
+  font-size:1.1rem;
+}
+
+.notification-type{
+  padding:5px 9px;
+  border-radius:999px;
+  background:rgba(255,255,255,.07);
+  font-size:.7rem;
+  white-space:nowrap;
+  opacity:.75;
+}
+
+.notification-message{
+  margin:10px 0 0;
+  line-height:1.65;
+  opacity:.78;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+.notification-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:15px;
+}
+
+.notification-date{
+  font-size:.75rem;
+  opacity:.45;
+}
+
+.read-btn{
+  padding:7px 11px;
+  border-radius:9px;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.06);
+  color:inherit;
+  cursor:pointer;
+}
+
+.empty{
+  text-align:center;
+  padding:65px 20px;
+  border-radius:20px;
+  background:rgba(255,255,255,.04);
+  opacity:.6;
+}
+
+.error{
+  color:#ff9b9b;
+}
+
+@media(max-width:600px){
+
+  .notification-top{
+    flex-direction:column;
+  }
+
+  .notification-type{
+    align-self:flex-start;
+  }
+
+  .actions .action-btn{
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container">
+
+    <a href="../index.html" class="logo">
+      Zakmolanitech Solutions
+    </a>
+
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="communities.html">Communities</a>
+      <a href="messages.html">Messages</a>
+    </nav>
+
+  </div>
+</header>
+
+<main class="notifications-page">
+
+  <div class="notifications-wrap">
+
+    <div class="notifications-head">
+
+      <div class="notifications-title">
+        <h1>Notifications</h1>
+        <p>
+          Keep track of important updates and activity.
+        </p>
+      </div>
+
+      <a
+        href="dashboard.html"
+        class="back-link"
+      >
+        ← Dashboard
+      </a>
+
+    </div>
+
+    <div class="actions">
+
+      <button
+        type="button"
+        id="markAllButton"
+        class="action-btn"
+      >
+        ✓ Mark all as read
+      </button>
+
+      <button
+        type="button"
+        id="refreshButton"
+        class="action-btn"
+      >
+        ↻ Refresh
+      </button>
+
+    </div>
+
+    <div id="status" class="status">
+      Loading notifications...
+    </div>
+
+    <section
+      id="notificationList"
+      class="notification-list"
+    >
+      <div class="empty">
+        Loading...
+      </div>
+    </section>
+
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>
+      © <span id="year"></span>
+      Zakmolanitech Solutions. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+  "https://julhswsijtcoyjrjrobk.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_a0qKsqBB0hR9BOWpP3dkwg_7nUOmXYC";
+
+const supabase =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+const statusBox =
+  document.getElementById("status");
+
+const list =
+  document.getElementById("notificationList");
+
+const markAllButton =
+  document.getElementById("markAllButton");
+
+const refreshButton =
+  document.getElementById("refreshButton");
+
+document.getElementById("year").textContent =
+  new Date().getFullYear();
+
+let currentUserId = null;
+let notifications = [];
+let notificationChannel = null;
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function formatDate(value){
+
+  return new Date(value).toLocaleString(
+    undefined,
+    {
+      dateStyle:"medium",
+      timeStyle:"short"
+    }
+  );
+
+}
+
+function readableType(type){
+
+  if(!type) return "General";
+
+  return String(type)
+    .replace(/[_-]+/g," ")
+    .replace(/\b\w/g,
+      character => character.toUpperCase()
+    );
+
+}
+
+async function initialise(){
+
+  try{
+
+    const {
+      data,
+      error
+    } = await supabase.auth.getSession();
+
+    if(error) throw error;
+
+    if(!data.session){
+
+      location.replace("signin.html");
+      return;
+
+    }
+
+    currentUserId =
+      data.session.user.id;
+
+    await loadNotifications();
+
+    subscribeToNotifications();
+
+  }catch(error){
+
+    console.error(error);
+
+    statusBox.textContent =
+      "Unable to load notifications.";
+
+    statusBox.classList.add("error");
+
+    list.innerHTML = `
+      <div class="empty error">
+        Something went wrong while loading
+        your notifications.
+        Please refresh and try again.
+      </div>
+    `;
+
+  }
+
+}
+
+async function loadNotifications(){
+
+  statusBox.textContent =
+    "Loading notifications...";
+
+  const {
+    data,
+    error
+  } = await supabase
+    .from("notifications")
+    .select(`
+      id,
+      title,
+      message,
+      notification_type,
+      related_message_id,
+      related_announcement_id,
+      is_read,
+      created_at
+    `)
+    .eq("user_id",currentUserId)
+    .order("created_at",{ascending:false});
+
+  if(error) throw error;
+
+  notifications =
+    data || [];
+
+  renderNotifications();
+
+}
+
+function renderNotifications(){
+
+  const unreadCount =
+    notifications.filter(
+      notification =>
+        notification.is_read === false
+    ).length;
+
+  statusBox.textContent =
+    `${notifications.length} notification${
+      notifications.length === 1 ? "" : "s"
+    } • ${unreadCount} unread`;
+
+  markAllButton.disabled =
+    unreadCount === 0;
+
+  if(!notifications.length){
+
+    list.innerHTML = `
+      <div class="empty">
+        <div style="font-size:2rem;margin-bottom:10px;">
+          🔔
+        </div>
+
+        You're all caught up.
+        <br>
+        No notifications yet.
+      </div>
+    `;
+
+    return;
+  }
+
+  list.innerHTML =
+    notifications.map(notification=>`
+
+      <article
+        class="notification ${
+          notification.is_read
+            ? ""
+            : "unread"
+        }"
+        data-id="${escapeHtml(notification.id)}"
+      >
+
+        <div class="notification-top">
+
+          <h2 class="notification-title">
+            ${escapeHtml(notification.title)}
+          </h2>
+
+          <span class="notification-type">
+            ${escapeHtml(
+              readableType(
+                notification.notification_type
+              )
+            )}
+          </span>
+
+        </div>
+
+        <div class="notification-message">
+          ${escapeHtml(notification.message)}
+        </div>
+
+        <div class="notification-bottom">
+
+          <span class="notification-date">
+            ${formatDate(
+              notification.created_at
+            )}
+          </span>
+
+          ${
+            notification.is_read
+              ? `<span class="notification-date">
+                   Read
+                 </span>`
+              : `
+                <button
+                  type="button"
+                  class="read-btn"
+                  data-read-id="${escapeHtml(
+                    notification.id
+                  )}"
+                >
+                  Mark as read
+                </button>
+              `
+          }
+
+        </div>
+
+      </article>
+
+    `).join("");
+
+}
+
+list.addEventListener(
+  "click",
+  async event=>{
+
+    const button =
+      event.target.closest("[data-read-id]");
+
+    if(!button) return;
+
+    const notificationId =
+      button.dataset.readId;
+
+    button.disabled = true;
+    button.textContent = "Updating...";
+
+    try{
+
+      const {
+        error
+      } = await supabase
+        .from("notifications")
+        .update({
+          is_read:true
+        })
+        .eq("id",notificationId)
+        .eq("user_id",currentUserId);
+
+      if(error) throw error;
+
+      const item =
+        notifications.find(
+          notification =>
+            notification.id ===
+            notificationId
+        );
+
+      if(item){
+
+        item.is_read = true;
+
+      }
+
+      renderNotifications();
+
+    }catch(error){
+
+      console.error(error);
+
+      button.disabled = false;
+      button.textContent =
+        "Mark as read";
+
+      statusBox.textContent =
+        "Unable to update notification.";
+
+      statusBox.classList.add("error");
+
+    }
+
+  }
+);
+
+markAllButton.addEventListener(
+  "click",
+  async ()=>{
+
+    const unread =
+      notifications.filter(
+        notification =>
+          !notification.is_read
+      );
+
+    if(!unread.length) return;
+
+    markAllButton.disabled = true;
+    markAllButton.textContent =
+      "Updating...";
+
+    try{
+
+      const {
+        error
+      } = await supabase
+        .from("notifications")
+        .update({
+          is_read:true
+        })
+        .eq("user_id",currentUserId)
+        .eq("is_read",false);
+
+      if(error) throw error;
+
+      notifications.forEach(
+        notification=>{
+          notification.is_read = true;
+        }
+      );
+
+      renderNotifications();
+
+    }catch(error){
+
+      console.error(error);
+
+      statusBox.textContent =
+        "Unable to mark notifications as read.";
+
+      statusBox.classList.add("error");
+
+    }finally{
+
+      markAllButton.textContent =
+        "✓ Mark all as read";
+
+      renderNotifications();
+
+    }
+
+  }
+);
+
+refreshButton.addEventListener(
+  "click",
+  async ()=>{
+
+    refreshButton.disabled = true;
+    refreshButton.textContent =
+      "Refreshing...";
+
+    try{
+
+      await loadNotifications();
+
+    }catch(error){
+
+      console.error(error);
+
+      statusBox.textContent =
+        "Unable to refresh notifications.";
+
+      statusBox.classList.add("error");
+
+    }finally{
+
+      refreshButton.disabled = false;
+      refreshButton.textContent =
+        "↻ Refresh";
+
+    }
+
+  }
+);
+
+function subscribeToNotifications(){
+
+  if(notificationChannel){
+
+    supabase.removeChannel(
+      notificationChannel
+    );
+
+  }
+
+  notificationChannel =
+    supabase
+      .channel(
+        "notifications-" +
+        currentUserId
+      )
+      .on(
+        "postgres_changes",
+        {
+          event:"*",
+          schema:"public",
+          table:"notifications",
+          filter:
+            "user_id=eq." +
+            currentUserId
+        },
+        async ()=>{
+
+          await loadNotifications();
+
+        }
+      )
+      .subscribe();
+
+}
+
+supabase.auth.onAuthStateChange(
+  (event,session)=>{
+
+    if(
+      event === "SIGNED_OUT" ||
+      !session
+    ){
+
+      location.replace("signin.html");
+
+    }
+
+  }
+);
+
+window.addEventListener(
+  "beforeunload",
+  ()=>{
+
+    if(notificationChannel){
+
+      supabase.removeChannel(
+        notificationChannel
+      );
+
+    }
+
+  }
+);
+
+initialise();
+</script>
+
+</body>
+  </html>
