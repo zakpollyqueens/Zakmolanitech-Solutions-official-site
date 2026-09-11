@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Create Account | Zakmolanitech Solutions</title>
+<meta name="description" content="Create your Zakmolanitech Solutions account.">
+<meta name="theme-color" content="#050b14">
+<link rel="stylesheet" href="../static/css/main.css">
+
+<style>
+.account-page{
+  min-height:100vh;
+  padding:105px 20px 60px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.account-wrap{
+  width:min(560px,100%);
+}
+.account-logo{
+  text-align:center;
+  margin-bottom:25px;
+}
+.account-logo img{
+  width:72px;
+  height:72px;
+  object-fit:contain;
+  border-radius:18px;
+}
+.account-card{
+  padding:38px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:linear-gradient(145deg,rgba(9,25,43,.9),rgba(5,14,25,.82));
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(18px);
+}
+.account-card h1{
+  font-size:clamp(32px,6vw,48px);
+  letter-spacing:-2px;
+  line-height:1;
+}
+.account-card .intro{
+  margin:12px 0 28px;
+  color:var(--muted);
+}
+.form-field{
+  margin-bottom:18px;
+}
+.form-field label{
+  display:block;
+  margin-bottom:8px;
+  color:var(--text);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+.form-field input{
+  width:100%;
+  padding:14px 16px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(5,11,20,.7);
+  color:var(--text);
+  outline:0;
+}
+.form-field input:focus{
+  border-color:var(--line-bright);
+  box-shadow:0 0 0 3px rgba(70,230,255,.08);
+}
+.submit-btn{
+  width:100%;
+  margin-top:5px;
+  cursor:pointer;
+}
+.status{
+  display:none;
+  margin:16px 0 0;
+  padding:13px 15px;
+  border-radius:12px;
+  font-size:13px;
+  line-height:1.5;
+}
+.status.show{display:block}
+.status.error{
+  border:1px solid rgba(255,90,90,.3);
+  background:rgba(255,60,60,.08);
+  color:#ffb0b0;
+}
+.status.success{
+  border:1px solid rgba(80,227,154,.3);
+  background:rgba(80,227,154,.08);
+  color:#9ff2c4;
+}
+.account-footer{
+  margin-top:24px;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+}
+.account-footer a{
+  color:var(--cyan);
+  font-weight:700;
+}
+.back-home{
+  display:inline-flex;
+  margin-bottom:18px;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+.back-home:hover{color:var(--cyan)}
+.password-note{
+  margin-top:-8px;
+  margin-bottom:18px;
+  color:var(--muted);
+  font-size:11px;
+}
+@media(max-width:600px){
+  .account-page{padding:90px 15px 40px}
+  .account-card{padding:27px 20px}
+}
+</style>
+</head>
+
+<body>
+
+<main class="account-page">
+  <div class="account-wrap">
+
+    <a class="back-home" href="../index.html">← Back to home</a>
+
+    <div class="account-logo">
+      <img src="../static/assets/logo.png" alt="Zakmolanitech Solutions">
+    </div>
+
+    <section class="account-card">
+      <span class="eyebrow">NEW ACCOUNT</span>
+
+      <h1>Create your account</h1>
+
+      <p class="intro">
+        Join Zakmolanitech Solutions and access your personal account area.
+      </p>
+
+      <form id="signupForm" novalidate>
+
+        <div class="form-field">
+          <label for="fullName">Full name</label>
+          <input
+            id="fullName"
+            name="fullName"
+            type="text"
+            autocomplete="name"
+            placeholder="Enter your full name"
+            required
+          >
+        </div>
+
+        <div class="form-field">
+          <label for="email">Email address</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            placeholder="you@example.com"
+            required
+          >
+        </div>
+
+        <div class="form-field">
+          <label for="phone">Phone number</label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            autocomplete="tel"
+            placeholder="+256 ..."
+          >
+        </div>
+
+        <div class="form-field">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autocomplete="new-password"
+            placeholder="Create a password"
+            minlength="6"
+            required
+          >
+        </div>
+
+        <p class="password-note">
+          Your password must contain at least 6 characters.
+        </p>
+
+        <div class="form-field">
+          <label for="confirmPassword">Confirm password</label>
+          <input
+            id="confirmPassword"
+            type="password"
+            autocomplete="new-password"
+            placeholder="Enter your password again"
+            minlength="6"
+            required
+          >
+        </div>
+
+        <button id="signupButton" class="btn btn-primary submit-btn" type="submit">
+          Create Account
+        </button>
+
+        <div id="status" class="status" role="alert"></div>
+
+      </form>
+
+      <div class="account-footer">
+        Already have an account?
+        <a href="signin.html">Sign in</a>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://julhswsijtcoyjrjrobk.supabase.co";
+const SUPABASE_KEY = "sb_publishable_a0qKsqBB0hR9BOWpP3dkwg_7nUOmXYC";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+const form = document.getElementById("signupForm");
+const button = document.getElementById("signupButton");
+const statusBox = document.getElementById("status");
+
+function showStatus(message, type){
+  statusBox.textContent = message;
+  statusBox.className = "status show " + type;
+}
+
+form.addEventListener("submit", async function(event){
+  event.preventDefault();
+
+  const fullName = document.getElementById("fullName").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+  if(!fullName){
+    showStatus("Please enter your full name.", "error");
+    return;
+  }
+
+  if(!email){
+    showStatus("Please enter your email address.", "error");
+    return;
+  }
+
+  if(password.length < 6){
+    showStatus("Your password must contain at least 6 characters.", "error");
+    return;
+  }
+
+  if(password !== confirmPassword){
+    showStatus("The passwords do not match.", "error");
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "Creating account...";
+
+  try{
+    const { data, error } = await supabaseClient.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          full_name: fullName,
+          phone: phone
+        },
+        emailRedirectTo:
+          window.location.origin +
+          "/Zakmolanitech-Solutions-official-site/templates/signin.html"
+      }
+    });
+
+    if(error){
+      throw error;
+    }
+
+    if(data.session){
+      window.location.replace("dashboard.html");
+      return;
+    }
+
+    showStatus(
+      "Account created successfully. Please check your email to confirm your account, then sign in.",
+      "success"
+    );
+
+    form.reset();
+
+  }catch(error){
+    showStatus(
+      error.message || "Unable to create the account. Please try again.",
+      "error"
+    );
+  }finally{
+    button.disabled = false;
+    button.textContent = "Create Account";
+  }
+});
+</script>
+
+</body>
+  </html>
+  
