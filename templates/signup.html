@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account | Zakmolanitech Solutions</title>
+<meta name="description" content="Create your Zakmolanitech Solutions account.">
+<meta name="theme-color" content="#050b14">
+<link rel="stylesheet" href="../static/css/main.css">
+<style>
+.account-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:90px 20px 50px;background:radial-gradient(circle at top left,rgba(0,200,255,.12),transparent 35%),radial-gradient(circle at bottom right,rgba(0,255,150,.08),transparent 35%),#050b14}
+.account-card{width:100%;max-width:520px;padding:34px;border:1px solid rgba(255,255,255,.09);border-radius:22px;background:rgba(10,18,30,.94);box-shadow:0 25px 70px rgba(0,0,0,.4)}
+.account-logo{text-align:center;margin-bottom:25px}.account-logo h1{margin:0;font-size:28px;color:#fff}.account-logo p{margin:8px 0 0;color:#9caabd;font-size:14px}
+.form-group{margin-bottom:18px}.form-group label{display:block;margin-bottom:7px;color:#dbe7f5;font-size:14px;font-weight:600}.form-group input{width:100%;box-sizing:border-box;padding:13px 14px;border:1px solid rgba(255,255,255,.12);border-radius:10px;outline:none;background:#091321;color:#fff;font-size:15px}.form-group input:focus{border-color:#00c8ff;box-shadow:0 0 0 3px rgba(0,200,255,.08)}.form-group input::placeholder{color:#64748b}
+.password-note{margin-top:6px;color:#7f8da1;font-size:12px}.signup-button{width:100%;margin-top:8px;cursor:pointer}.signup-button:disabled{opacity:.6;cursor:not-allowed}
+.status{display:none;margin-bottom:18px;padding:12px 14px;border-radius:10px;font-size:14px;line-height:1.5}.status.show{display:block}.status.success{color:#b9ffd9;background:rgba(0,200,120,.1);border:1px solid rgba(0,220,130,.25)}.status.error{color:#ffd0d0;background:rgba(255,70,70,.1);border:1px solid rgba(255,70,70,.25)}
+.account-footer{text-align:center;margin-top:24px;color:#8d9bad;font-size:14px}.account-footer a{color:#00c8ff;text-decoration:none;font-weight:600}.account-footer a:hover{text-decoration:underline}.back-home{display:block;text-align:center;margin-top:18px;color:#718096;text-decoration:none;font-size:13px}.back-home:hover{color:#00c8ff}
+@media(max-width:600px){.account-page{padding:70px 14px 30px}.account-card{padding:25px 20px;border-radius:18px}.account-logo h1{font-size:24px}}
+</style>
+</head>
+<body>
+<main class="account-page">
+<section class="account-card">
+<div class="account-logo"><h1>Create Your Account</h1><p>Join Zakmolanitech Solutions</p></div>
+<div id="status" class="status"></div>
+<form id="signupForm" autocomplete="on">
+<div class="form-group"><label for="fullName">Full Name</label><input type="text" id="fullName" name="fullName" placeholder="Enter your full name" autocomplete="name" required></div>
+<div class="form-group"><label for="email">Email Address</label><input type="email" id="email" name="email" placeholder="Enter your email" autocomplete="email" required></div>
+<div class="form-group"><label for="phone">Phone Number</label><input type="tel" id="phone" name="phone" placeholder="Enter your phone number" autocomplete="tel" required></div>
+<div class="form-group"><label for="password">Password</label><input type="password" id="password" name="password" placeholder="Create a password" autocomplete="new-password" minlength="6" required><div class="password-note">At least 6 characters.</div></div>
+<div class="form-group"><label for="confirmPassword">Confirm Password</label><input type="password" id="confirmPassword" name="confirmPassword" placeholder="Enter your password again" autocomplete="new-password" minlength="6" required></div>
+<button type="submit" id="signupButton" class="btn btn-primary signup-button">Create Account</button>
+</form>
+<div class="account-footer">Already have an account? <a href="signin.html">Sign In</a></div>
+<a class="back-home" href="../index.html">← Back to Home</a>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+const client=supabase.createClient("https://julhswsijtcoyjrjrobk.supabase.co","sb_publishable_a0qKsqBB0hR9BOWpP3dkwg_7nUOmXYC"),form=document.getElementById("signupForm"),button=document.getElementById("signupButton"),status=document.getElementById("status");
+function show(message,type){status.textContent=message;status.className="status show "+type}
+form.addEventListener("submit",async e=>{
+e.preventDefault();
+const fullName=document.getElementById("fullName").value.trim(),email=document.getElementById("email").value.trim(),phone=document.getElementById("phone").value.trim(),password=document.getElementById("password").value,confirm=document.getElementById("confirmPassword").value;
+status.className="status";
+if(!fullName||!email||!phone||!password)return show("Please complete all required fields.","error");
+if(password.length<6)return show("Your password must contain at least 6 characters.","error");
+if(password!==confirm)return show("The passwords do not match.","error");
+button.disabled=true;button.textContent="Creating Account...";
+try{
+const {data,error}=await client.auth.signUp({email,password,options:{data:{full_name:fullName,phone}}});
+if(error){
+let message=error.message||"Unable to create your account.",lower=message.toLowerCase();
+if(lower.includes("already registered")||lower.includes("already been registered")||lower.includes("user already exists"))message="An account with this email already exists. Please sign in instead.";
+else if(lower.includes("rate limit")||lower.includes("too many requests"))message="Too many signup attempts. Please wait and try again.";
+show(message,"error");button.disabled=false;button.textContent="Create Account";return;
+}
+if(data?.session){
+show("Account created successfully. Opening your dashboard...","success");
+setTimeout(()=>window.location.replace(new URL("dashboard.html",location.href).href),500);return;
+}
+show("Your account was created, but email confirmation is enabled in Supabase. Please disable it in Authentication settings.","error");
+button.disabled=false;button.textContent="Create Account";
+}catch(error){
+console.error(error);show("Something went wrong. Please try again.","error");button.disabled=false;button.textContent="Create Account";
+}
+});
+})();
+</script>
+</body>
+  </html>
