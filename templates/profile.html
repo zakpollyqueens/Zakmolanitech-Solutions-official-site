@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Profile | Zakmolanitech Solutions</title>
+<meta name="description" content="Manage your Zakmolanitech Solutions profile.">
+<meta name="theme-color" content="#050b14">
+<link rel="stylesheet" href="../static/css/main.css">
+
+<style>
+.profile-page{
+  min-height:100vh;
+  padding:110px 20px 70px;
+}
+.profile-wrap{
+  width:min(850px,100%);
+  margin:auto;
+}
+.profile-head{
+  margin-bottom:28px;
+}
+.profile-head h1{
+  margin-top:6px;
+  font-size:clamp(38px,6vw,65px);
+  letter-spacing:-3px;
+  line-height:1;
+}
+.profile-head p{
+  margin-top:10px;
+  color:var(--muted);
+}
+.profile-card{
+  padding:35px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:linear-gradient(145deg,rgba(9,25,43,.9),rgba(5,14,25,.78));
+  box-shadow:var(--shadow);
+}
+.form-field{
+  margin-bottom:20px;
+}
+.form-field label{
+  display:block;
+  margin-bottom:8px;
+  color:var(--text);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+.form-field input{
+  width:100%;
+  padding:14px 16px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(5,11,20,.7);
+  color:var(--text);
+  outline:0;
+}
+.form-field input:focus{
+  border-color:var(--line-bright);
+  box-shadow:0 0 0 3px rgba(70,230,255,.08);
+}
+.form-field input:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+.form-note{
+  margin-top:-10px;
+  margin-bottom:20px;
+  color:var(--muted);
+  font-size:11px;
+}
+.actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.status{
+  display:none;
+  margin-bottom:20px;
+  padding:13px 15px;
+  border-radius:12px;
+  font-size:13px;
+}
+.status.show{display:block}
+.status.success{
+  border:1px solid rgba(80,227,154,.3);
+  background:rgba(80,227,154,.08);
+  color:#9ff2c4;
+}
+.status.error{
+  border:1px solid rgba(255,90,90,.3);
+  background:rgba(255,60,60,.08);
+  color:#ffb0b0;
+}
+.nav-links{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:22px;
+}
+.nav-links a{
+  color:var(--muted);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+.nav-links a:hover{color:var(--cyan)}
+@media(max-width:600px){
+  .profile-page{padding:95px 15px 50px}
+  .profile-card{padding:25px 20px}
+  .actions{display:grid}
+  .actions .btn{width:100%}
+}
+</style>
+</head>
+
+<body>
+
+<main class="profile-page">
+
+  <div class="profile-wrap">
+
+    <div class="nav-links">
+      <a href="dashboard.html">← Dashboard</a>
+      <a href="settings.html">Settings</a>
+    </div>
+
+    <header class="profile-head">
+      <span class="eyebrow">MY ACCOUNT</span>
+      <h1>My Profile</h1>
+      <p>Keep your account information up to date.</p>
+    </header>
+
+    <section class="profile-card">
+
+      <div id="status" class="status" role="alert"></div>
+
+      <form id="profileForm" novalidate>
+
+        <div class="form-field">
+          <label for="fullName">Full name</label>
+          <input
+            id="fullName"
+            type="text"
+            autocomplete="name"
+            placeholder="Your full name"
+            required
+          >
+        </div>
+
+        <div class="form-field">
+          <label for="email">Email address</label>
+          <input
+            id="email"
+            type="email"
+            disabled
+          >
+        </div>
+
+        <p class="form-note">
+          Your email address is managed by your authentication account.
+        </p>
+
+        <div class="form-field">
+          <label for="phone">Phone number</label>
+          <input
+            id="phone"
+            type="tel"
+            autocomplete="tel"
+            placeholder="+256 ..."
+          >
+        </div>
+
+        <div class="actions">
+          <button
+            id="saveButton"
+            class="btn btn-primary"
+            type="submit"
+          >
+            Save Changes
+          </button>
+
+          <a class="btn" href="dashboard.html">
+            Cancel
+          </a>
+        </div>
+
+      </form>
+
+    </section>
+
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://julhswsijtcoyjrjrobk.supabase.co";
+const SUPABASE_KEY = "sb_publishable_a0qKsqBB0hR9BOWpP3dkwg_7nUOmXYC";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+const form = document.getElementById("profileForm");
+const saveButton = document.getElementById("saveButton");
+const statusBox = document.getElementById("status");
+
+function showStatus(message, type){
+  statusBox.textContent = message;
+  statusBox.className = "status show " + type;
+}
+
+async function loadProfile(){
+
+  const { data, error } =
+    await supabaseClient.auth.getSession();
+
+  if(error || !data.session){
+    window.location.replace("signin.html");
+    return;
+  }
+
+  const user = data.session.user;
+  const metadata = user.user_metadata || {};
+
+  document.getElementById("fullName").value =
+    metadata.full_name ||
+    metadata.name ||
+    "";
+
+  document.getElementById("email").value =
+    user.email || "";
+
+  document.getElementById("phone").value =
+    metadata.phone ||
+    user.phone ||
+    "";
+}
+
+form.addEventListener("submit", async function(event){
+
+  event.preventDefault();
+
+  const fullName =
+    document.getElementById("fullName").value.trim();
+
+  const phone =
+    document.getElementById("phone").value.trim();
+
+  if(!fullName){
+    showStatus("Please enter your full name.", "error");
+    return;
+  }
+
+  saveButton.disabled = true;
+  saveButton.textContent = "Saving...";
+
+  try{
+
+    const { error } =
+      await supabaseClient.auth.updateUser({
+        data:{
+          full_name:fullName,
+          phone:phone
+        }
+      });
+
+    if(error){
+      throw error;
+    }
+
+    showStatus(
+      "Your profile has been updated successfully.",
+      "success"
+    );
+
+  }catch(error){
+
+    showStatus(
+      error.message || "Unable to update your profile.",
+      "error"
+    );
+
+  }finally{
+
+    saveButton.disabled = false;
+    saveButton.textContent = "Save Changes";
+
+  }
+
+});
+
+loadProfile();
+</script>
+
+</body>
+  </html>
