@@ -333,7 +333,7 @@ Explore
   class="brand"
   href="../index.html"
 >
-<span class="brand-mark">Z</span>
+<span class="brand-mark">ZAKITECH</span>
 <span class="brand-name">ZAKMOLANITECH</span>
 </a>
 
@@ -941,10 +941,8 @@ data:{
   phone:phone
 },
 
-emailRedirectTo:
-window.location.origin +
-"/templates/signin.html"
 
+emailRedirectTo: new URL("signin.html", window.location.href).href
 }
 
 });
