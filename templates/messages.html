@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Community Messages | Zakmolanitech Solutions</title>
+<meta name="description" content="Community messaging centre for Zakmolanitech Solutions.">
+<meta name="theme-color" content="#050b14">
+<link rel="stylesheet" href="../static/css/main.css">
+
+<style>
+.messages-page{
+  min-height:100vh;
+  padding:100px 16px 60px;
+  background:
+    radial-gradient(circle at top left,rgba(0,180,255,.12),transparent 35%),
+    radial-gradient(circle at bottom right,rgba(120,70,255,.10),transparent 35%),
+    #050b14;
+}
+
+.messages-wrap{
+  width:min(1000px,100%);
+  margin:auto;
+}
+
+.messages-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:20px;
+  flex-wrap:wrap;
+}
+
+.messages-title h1{
+  margin:0 0 5px;
+  font-size:clamp(1.7rem,5vw,2.5rem);
+}
+
+.messages-title p{
+  margin:0;
+  opacity:.65;
+}
+
+.back-link{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:10px 15px;
+  border-radius:12px;
+  text-decoration:none;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.1);
+}
+
+.community-selector{
+  padding:16px;
+  border-radius:18px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.09);
+  margin-bottom:18px;
+}
+
+.community-selector label{
+  display:block;
+  margin-bottom:8px;
+  font-size:.85rem;
+  opacity:.7;
+}
+
+.community-selector select{
+  width:100%;
+  padding:13px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background:#0a1320;
+  color:inherit;
+  outline:none;
+}
+
+.message-panel{
+  overflow:hidden;
+  border-radius:22px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.09);
+  backdrop-filter:blur(14px);
+}
+
+.message-status{
+  padding:13px 17px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  font-size:.88rem;
+  opacity:.7;
+}
+
+.message-list{
+  height:min(60vh,620px);
+  min-height:400px;
+  overflow-y:auto;
+  padding:20px;
+}
+
+.message-empty{
+  height:100%;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  opacity:.55;
+  padding:30px;
+}
+
+.message{
+  display:flex;
+  margin-bottom:18px;
+}
+
+.message.mine{
+  justify-content:flex-end;
+}
+
+.message-bubble{
+  max-width:min(78%,650px);
+  padding:12px 15px;
+  border-radius:17px;
+  background:rgba(255,255,255,.075);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.message.mine .message-bubble{
+  background:rgba(0,150,255,.14);
+}
+
+.message-author{
+  font-size:.76rem;
+  opacity:.6;
+  margin-bottom:5px;
+}
+
+.message-text{
+  line-height:1.55;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+.message-time{
+  margin-top:7px;
+  font-size:.7rem;
+  opacity:.45;
+}
+
+.message-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:9px;
+}
+
+.reaction-btn{
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.055);
+  color:inherit;
+  border-radius:999px;
+  padding:5px 9px;
+  cursor:pointer;
+  font-size:.78rem;
+}
+
+.reaction-btn.active{
+  border-color:rgba(0,180,255,.6);
+  background:rgba(0,180,255,.14);
+}
+
+.composer{
+  display:flex;
+  gap:10px;
+  padding:15px;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+
+.composer textarea{
+  flex:1;
+  resize:none;
+  min-height:48px;
+  max-height:140px;
+  padding:13px;
+  border-radius:13px;
+  border:1px solid rgba(255,255,255,.12);
+  background:#09121e;
+  color:inherit;
+  outline:none;
+  font:inherit;
+}
+
+.send-btn{
+  align-self:flex-end;
+  min-width:90px;
+  padding:13px 17px;
+  border:0;
+  border-radius:13px;
+  cursor:pointer;
+  font-weight:700;
+}
+
+.send-btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.notice{
+  margin-bottom:15px;
+  padding:13px 15px;
+  border-radius:13px;
+  background:rgba(255,255,255,.06);
+  display:none;
+}
+
+.notice.show{
+  display:block;
+}
+
+.notice.error{
+  color:#ff9b9b;
+}
+
+.notice.success{
+  color:#8ff0b5;
+}
+
+@media(max-width:600px){
+  .message-bubble{
+    max-width:90%;
+  }
+
+  .composer{
+    flex-direction:column;
+  }
+
+  .send-btn{
+    width:100%;
+  }
+
+  .message-list{
+    min-height:350px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="../index.html" class="logo">Zakmolanitech Solutions</a>
+
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="communities.html">Communities</a>
+    </nav>
+  </div>
+</header>
+
+<main class="messages-page">
+
+  <div class="messages-wrap">
+
+    <div class="messages-head">
+
+      <div class="messages-title">
+        <h1>Community Messages</h1>
+        <p>Connect and communicate with your community.</p>
+      </div>
+
+      <a class="back-link" href="communities.html">
+        ← Communities
+      </a>
+
+    </div>
+
+    <div id="notice" class="notice"></div>
+
+    <section class="community-selector">
+
+      <label for="communitySelect">
+        Select community
+      </label>
+
+      <select id="communitySelect">
+        <option value="">Loading communities...</option>
+      </select>
+
+    </section>
+
+    <section class="message-panel">
+
+      <div id="messageStatus" class="message-status">
+        Select a community to begin.
+      </div>
+
+      <div id="messageList" class="message-list">
+
+        <div class="message-empty">
+          <div>
+            <div style="font-size:2rem;margin-bottom:10px;">💬</div>
+            Select a community to view messages.
+          </div>
+        </div>
+
+      </div>
+
+      <form id="messageForm" class="composer">
+
+        <textarea
+          id="messageInput"
+          maxlength="2000"
+          placeholder="Write a message..."
+          aria-label="Write a message"
+          disabled
+        ></textarea>
+
+        <button
+          id="sendButton"
+          class="send-btn"
+          type="submit"
+          disabled
+        >
+          Send
+        </button>
+
+      </form>
+
+    </section>
+
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>
+      © <span id="year"></span>
+      Zakmolanitech Solutions. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+  "https://julhswsijtcoyjrjrobk.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_a0qKsqBB0hR9BOWpP3dkwg_7nUOmXYC";
+
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+const communitySelect =
+  document.getElementById("communitySelect");
+
+const messageList =
+  document.getElementById("messageList");
+
+const messageStatus =
+  document.getElementById("messageStatus");
+
+const messageForm =
+  document.getElementById("messageForm");
+
+const messageInput =
+  document.getElementById("messageInput");
+
+const sendButton =
+  document.getElementById("sendButton");
+
+const notice =
+  document.getElementById("notice");
+
+document.getElementById("year").textContent =
+  new Date().getFullYear();
+
+let session = null;
+let currentUserId = null;
+let currentCommunityId = null;
+let currentMembership = null;
+let messagesChannel = null;
+
+const REACTIONS = [
+  ["like","👍"],
+  ["love","❤️"],
+  ["laugh","😂"],
+  ["wow","😮"],
+  ["sad","😢"],
+  ["celebrate","🎉"]
+];
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function showNotice(text,type=""){
+
+  notice.textContent = text;
+
+  notice.className =
+    "notice show" +
+    (type ? " " + type : "");
+
+  clearTimeout(showNotice.timer);
+
+  showNotice.timer = setTimeout(()=>{
+    notice.className = "notice";
+  },4000);
+}
+
+function formatDate(date){
+
+  return new Date(date).toLocaleString(
+    undefined,
+    {
+      dateStyle:"medium",
+      timeStyle:"short"
+    }
+  );
+}
+
+async function initialise(){
+
+  try{
+
+    const {
+      data,
+      error
+    } = await supabase.auth.getSession();
+
+    if(error) throw error;
+
+    session = data.session;
+
+    if(!session){
+
+      location.replace("signin.html");
+      return;
+    }
+
+    currentUserId = session.user.id;
+
+    await loadCommunities();
+
+    const params =
+      new URLSearchParams(location.search);
+
+    const requestedCommunity =
+      params.get("community");
+
+    if(
+      requestedCommunity &&
+      [...communitySelect.options]
+        .some(option=>option.value === requestedCommunity)
+    ){
+
+      communitySelect.value =
+        requestedCommunity;
+
+      await selectCommunity(requestedCommunity);
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    showNotice(
+      "Unable to initialise the messaging centre.",
+      "error"
+    );
+
+  }
+
+}
+
+async function loadCommunities(){
+
+  const {
+    data: memberships,
+    error
+  } = await supabase
+    .from("community_members")
+    .select("community_id,is_muted")
+    .eq("user_id",currentUserId);
+
+  if(error) throw error;
+
+  const activeMemberships =
+    (memberships || [])
+      .filter(member => member.is_muted === false);
+
+  if(activeMemberships.length === 0){
+
+    communitySelect.innerHTML =
+      `<option value="">No active communities</option>`;
+
+    messageStatus.textContent =
+      "You are not currently an active member of a community.";
+
+    messageInput.disabled = true;
+    sendButton.disabled = true;
+
+    return;
+  }
+
+  const communityIds =
+    activeMemberships.map(
+      member => member.community_id
+    );
+
+  const {
+    data: communities,
+    error: communityError
+  } = await supabase
+    .from("communities")
+    .select("id,name")
+    .in("id",communityIds)
+    .order("name");
+
+  if(communityError) throw communityError;
+
+  communitySelect.innerHTML =
+    `<option value="">Choose a community...</option>` +
+    (communities || []).map(community => `
+      <option value="${escapeHtml(community.id)}">
+        ${escapeHtml(community.name)}
+      </option>
+    `).join("");
+
+}
+
+communitySelect.addEventListener(
+  "change",
+  async ()=>{
+
+    await selectCommunity(
+      communitySelect.value
+    );
+
+  }
+);
+
+async function selectCommunity(communityId){
+
+  if(messagesChannel){
+
+    await supabase
+      .removeChannel(messagesChannel);
+
+    messagesChannel = null;
+  }
+
+  currentCommunityId =
+    communityId || null;
+
+  currentMembership = null;
+
+  messageInput.value = "";
+
+  if(!communityId){
+
+    messageStatus.textContent =
+      "Select a community to begin.";
+
+    messageList.innerHTML = `
+      <div class="message-empty">
+        <div>
+          <div style="font-size:2rem;margin-bottom:10px;">💬</div>
+          Select a community to view messages.
+        </div>
+      </div>
+    `;
+
+    messageInput.disabled = true;
+    sendButton.disabled = true;
+
+    return;
+  }
+
+  const {
+    data: membership,
+    error: membershipError
+  } = await supabase
+    .from("community_members")
+    .select("community_id,is_muted")
+    .eq("community_id",communityId)
+    .eq("user_id",currentUserId)
+    .maybeSingle();
+
+  if(membershipError) throw membershipError;
+
+  if(!membership || membership.is_muted){
+
+    messageStatus.textContent =
+      "You do not have active access to this community.";
+
+    messageList.innerHTML = `
+      <div class="message-empty">
+        <div>
+          🔒 You are not an active member of this community.
+        </div>
+      </div>
+    `;
+
+    messageInput.disabled = true;
+    sendButton.disabled = true;
+
+    return;
+  }
+
+  currentMembership = membership;
+
+  messageInput.disabled = false;
+  sendButton.disabled = false;
+
+  await loadMessages();
+
+  subscribeToMessages();
+
+}
+
+async function loadMessages(){
+
+  messageStatus.textContent =
+    "Loading messages...";
+
+  const {
+    data: messages,
+    error
+  } = await supabase
+    .from("community_messages")
+    .select(`
+      id,
+      community_id,
+      sender_id,
+      message,
+      message_type,
+      is_deleted,
+      created_at,
+      updated_at
+    `)
+    .eq("community_id",currentCommunityId)
+    .eq("is_deleted",false)
+    .order("created_at",{ascending:true});
+
+  if(error) throw error;
+
+  const messageIds =
+    (messages || []).map(
+      message => message.id
+    );
+
+  let reactions = [];
+
+  if(messageIds.length){
+
+    const {
+      data,
+      error: reactionError
+    } = await supabase
+      .from("message_reactions")
+      .select(
+        "id,message_id,user_id,reaction"
+      )
+      .in("message_id",messageIds);
+
+    if(reactionError) throw reactionError;
+
+    reactions = data || [];
+  }
+
+  renderMessages(
+    messages || [],
+    reactions
+  );
+
+  messageStatus.textContent =
+    `${messages?.length || 0} message${messages?.length === 1 ? "" : "s"}`;
+
+  await markMessagesRead(messageIds);
+
+}
+
+function renderMessages(messages,reactions){
+
+  if(!messages.length){
+
+    messageList.innerHTML = `
+      <div class="message-empty">
+        <div>
+          <div style="font-size:2rem;margin-bottom:10px;">👋</div>
+          No messages yet.<br>
+          Be the first to start the conversation.
+        </div>
+      </div>
+    `;
+
+    return;
+  }
+
+  messageList.innerHTML =
+    messages.map(message=>{
+
+      const mine =
+        message.sender_id === currentUserId;
+
+      const messageReactions =
+        reactions.filter(
+          reaction =>
+            reaction.message_id === message.id
+        );
+
+      const reactionCounts = {};
+
+      messageReactions.forEach(reaction=>{
+
+        reactionCounts[reaction.reaction] =
+          (reactionCounts[reaction.reaction] || 0) + 1;
+
+      });
+
+      return `
+        <article
+          class="message ${mine ? "mine" : ""}"
+          data-message-id="${escapeHtml(message.id)}"
+        >
+
+          <div class="message-bubble">
+
+            <div class="message-author">
+              ${mine ? "You" : "Community member"}
+            </div>
+
+            <div class="message-text">
+              ${escapeHtml(message.message)}
+            </div>
+
+            <div class="message-time">
+              ${formatDate(message.created_at)}
+            </div>
+
+            <div class="message-actions">
+
+              ${REACTIONS.map(([type,emoji])=>{
+
+                const count =
+                  reactionCounts[type] || 0;
+
+                const userReacted =
+                  messageReactions.some(
+                    reaction =>
+                      reaction.user_id === currentUserId &&
+                      reaction.reaction === type
+                  );
+
+                return `
+                  <button
+                    type="button"
+                    class="reaction-btn ${userReacted ? "active" : ""}"
+                    data-reaction="${type}"
+                    data-message="${message.id}"
+                    title="${type}"
+                  >
+                    ${emoji}${count ? " " + count : ""}
+                  </button>
+                `;
+
+              }).join("")}
+
+            </div>
+
+          </div>
+
+        </article>
+      `;
+
+    }).join("");
+
+  messageList.scrollTop =
+    messageList.scrollHeight;
+
+}
+
+messageList.addEventListener(
+  "click",
+  async event=>{
+
+    const button =
+      event.target.closest(".reaction-btn");
+
+    if(!button) return;
+
+    const messageId =
+      button.dataset.message;
+
+    const reaction =
+      button.dataset.reaction;
+
+    await toggleReaction(
+      messageId,
+      reaction
+    );
+
+  }
+);
+
+async function toggleReaction(
+  messageId,
+  reaction
+){
+
+  try{
+
+    const {
+      data: existing,
+      error: findError
+    } = await supabase
+      .from("message_reactions")
+      .select("id")
+      .eq("message_id",messageId)
+      .eq("user_id",currentUserId)
+      .eq("reaction",reaction)
+      .maybeSingle();
+
+    if(findError) throw findError;
+
+    if(existing){
+
+      const {
+        error
+      } = await supabase
+        .from("message_reactions")
+        .delete()
+        .eq("id",existing.id);
+
+      if(error) throw error;
+
+    }else{
+
+      const {
+        error
+      } = await supabase
+        .from("message_reactions")
+        .insert({
+          message_id:messageId,
+          user_id:currentUserId,
+          reaction:reaction
+        });
+
+      if(error) throw error;
+    }
+
+    await loadMessages();
+
+  }catch(error){
+
+    console.error(error);
+
+    showNotice(
+      "Unable to update the reaction.",
+      "error"
+    );
+
+  }
+
+}
+
+messageForm.addEventListener(
+  "submit",
+  async event=>{
+
+    event.preventDefault();
+
+    const text =
+      messageInput.value.trim();
+
+    if(!text || !currentCommunityId){
+
+      return;
+    }
+
+    sendButton.disabled = true;
+    sendButton.textContent = "Sending...";
+
+    try{
+
+      const {
+        error
+      } = await supabase
+        .from("community_messages")
+        .insert({
+          community_id:currentCommunityId,
+          sender_id:currentUserId,
+          message:text,
+          message_type:"message"
+        });
+
+      if(error) throw error;
+
+      messageInput.value = "";
+
+      await loadMessages();
+
+    }catch(error){
+
+      console.error(error);
+
+      showNotice(
+        "Message could not be sent. Please try again.",
+        "error"
+      );
+
+    }finally{
+
+      sendButton.disabled =
+        !currentCommunityId ||
+        !currentMembership ||
+        currentMembership.is_muted;
+
+      sendButton.textContent =
+        "Send";
+
+    }
+
+  }
+);
+
+messageInput.addEventListener(
+  "keydown",
+  event=>{
+
+    if(
+      event.key === "Enter" &&
+      !event.shiftKey
+    ){
+
+      event.preventDefault();
+
+      messageForm.requestSubmit();
+
+    }
+
+  }
+);
+
+async function markMessagesRead(messageIds){
+
+  if(!messageIds.length) return;
+
+  const records =
+    messageIds.map(messageId=>({
+      message_id:messageId,
+      user_id:currentUserId
+    }));
+
+  const {
+    error
+  } = await supabase
+    .from("message_reads")
+    .upsert(
+      records,
+      {
+        onConflict:"message_id,user_id"
+      }
+    );
+
+  if(error){
+
+    /*
+      Reading a message should never break
+      the messaging interface.
+    */
+    console.warn(
+      "Message read tracking failed:",
+      error
+    );
+  }
+
+}
+
+function subscribeToMessages(){
+
+  if(messagesChannel){
+
+    supabase.removeChannel(
+      messagesChannel
+    );
+
+  }
+
+  messagesChannel =
+    supabase
+      .channel(
+        "community-messages-" +
+        currentCommunityId
+      )
+      .on(
+        "postgres_changes",
+        {
+          event:"*",
+          schema:"public",
+          table:"community_messages",
+          filter:
+            "community_id=eq." +
+            currentCommunityId
+        },
+        async payload=>{
+
+          await loadMessages();
+
+        }
+      )
+      .on(
+        "postgres_changes",
+        {
+          event:"*",
+          schema:"public",
+          table:"message_reactions"
+        },
+        async payload=>{
+
+          await loadMessages();
+
+        }
+      )
+      .subscribe();
+
+}
+
+supabase.auth.onAuthStateChange(
+  (event,newSession)=>{
+
+    if(
+      event === "SIGNED_OUT" ||
+      !newSession
+    ){
+
+      location.replace("signin.html");
+
+    }
+
+  }
+);
+
+window.addEventListener(
+  "beforeunload",
+  ()=>{
+
+    if(messagesChannel){
+
+      supabase.removeChannel(
+        messagesChannel
+      );
+
+    }
+
+  }
+);
+
+initialise();
+</script>
+
+</body>
+  </html> 
