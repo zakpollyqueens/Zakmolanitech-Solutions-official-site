@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Announcements | Zakmolanitech Solutions</title>
+<meta name="description" content="View announcements from Zakmolanitech Solutions communities.">
+<meta name="theme-color" content="#050b14">
+<link rel="stylesheet" href="../static/css/main.css">
+
+<style>
+.announcements-page{
+  min-height:100vh;
+  padding:100px 16px 70px;
+  background:
+    radial-gradient(circle at top left,rgba(0,180,255,.12),transparent 35%),
+    radial-gradient(circle at bottom right,rgba(120,70,255,.10),transparent 35%),
+    #050b14;
+}
+
+.announcements-wrap{
+  width:min(1050px,100%);
+  margin:auto;
+}
+
+.announcements-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-bottom:25px;
+}
+
+.announcements-title h1{
+  margin:0 0 7px;
+  font-size:clamp(1.8rem,5vw,2.7rem);
+}
+
+.announcements-title p{
+  margin:0;
+  opacity:.65;
+}
+
+.back-link{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:10px 15px;
+  border-radius:12px;
+  text-decoration:none;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.1);
+}
+
+.filters{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:20px;
+}
+
+.filters select{
+  min-width:220px;
+  padding:12px 14px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background:#09121e;
+  color:inherit;
+  outline:none;
+}
+
+.status{
+  padding:13px 16px;
+  border-radius:13px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  margin-bottom:20px;
+  opacity:.75;
+}
+
+.announcement-list{
+  display:grid;
+  gap:18px;
+}
+
+.announcement-card{
+  padding:23px;
+  border-radius:20px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.09);
+  backdrop-filter:blur(14px);
+}
+
+.announcement-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:15px;
+  margin-bottom:10px;
+}
+
+.announcement-card h2{
+  margin:0;
+  font-size:1.3rem;
+}
+
+.community-label{
+  display:inline-flex;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(0,180,255,.11);
+  font-size:.75rem;
+  white-space:nowrap;
+}
+
+.announcement-content{
+  line-height:1.7;
+  opacity:.8;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+.announcement-date{
+  margin-top:15px;
+  font-size:.78rem;
+  opacity:.45;
+}
+
+.empty{
+  text-align:center;
+  padding:60px 20px;
+  opacity:.6;
+  border-radius:20px;
+  background:rgba(255,255,255,.04);
+}
+
+.error{
+  color:#ff9b9b;
+}
+
+.loading{
+  text-align:center;
+  padding:50px;
+  opacity:.6;
+}
+
+@media(max-width:600px){
+
+  .announcement-top{
+    flex-direction:column;
+  }
+
+  .community-label{
+    white-space:normal;
+  }
+
+  .filters select{
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container">
+
+    <a href="../index.html" class="logo">
+      Zakmolanitech Solutions
+    </a>
+
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="communities.html">Communities</a>
+      <a href="messages.html">Messages</a>
+    </nav>
+
+  </div>
+</header>
+
+<main class="announcements-page">
+
+  <div class="announcements-wrap">
+
+    <div class="announcements-head">
+
+      <div class="announcements-title">
+        <h1>Announcements</h1>
+        <p>
+          Stay informed about important community updates.
+        </p>
+      </div>
+
+      <a
+        href="dashboard.html"
+        class="back-link"
+      >
+        ← Dashboard
+      </a>
+
+    </div>
+
+    <section class="filters">
+
+      <select id="communityFilter">
+        <option value="all">
+          All communities
+        </option>
+      </select>
+
+    </section>
+
+    <div id="status" class="status">
+      Loading announcements...
+    </div>
+
+    <section
+      id="announcementList"
+      class="announcement-list"
+    >
+      <div class="loading">
+        Loading...
+      </div>
+    </section>
+
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>
+      © <span id="year"></span>
+      Zakmolanitech Solutions. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+  "https://julhswsijtcoyjrjrobk.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_a0qKsqBB0hR9BOWpP3dkwg_7nUOmXYC";
+
+const supabase =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+const statusBox =
+  document.getElementById("status");
+
+const list =
+  document.getElementById("announcementList");
+
+const communityFilter =
+  document.getElementById("communityFilter");
+
+document.getElementById("year").textContent =
+  new Date().getFullYear();
+
+let communities = [];
+let announcements = [];
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function formatDate(value){
+
+  return new Date(value).toLocaleString(
+    undefined,
+    {
+      dateStyle:"medium",
+      timeStyle:"short"
+    }
+  );
+
+}
+
+async function initialise(){
+
+  try{
+
+    const {
+      data,
+      error
+    } = await supabase.auth.getSession();
+
+    if(error) throw error;
+
+    if(!data.session){
+
+      location.replace("signin.html");
+      return;
+
+    }
+
+    await loadCommunities();
+    await loadAnnouncements();
+
+    const params =
+      new URLSearchParams(location.search);
+
+    const requestedCommunity =
+      params.get("community");
+
+    if(
+      requestedCommunity &&
+      communities.some(
+        community =>
+          community.id === requestedCommunity
+      )
+    ){
+
+      communityFilter.value =
+        requestedCommunity;
+
+      renderAnnouncements();
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    statusBox.textContent =
+      "Unable to load announcements.";
+
+    statusBox.classList.add("error");
+
+    list.innerHTML = `
+      <div class="empty error">
+        Something went wrong while loading
+        the announcements. Please refresh and
+        try again.
+      </div>
+    `;
+
+  }
+
+}
+
+async function loadCommunities(){
+
+  const {
+    data,
+    error
+  } = await supabase
+    .from("communities")
+    .select("id,name")
+    .order("name");
+
+  if(error) throw error;
+
+  communities =
+    data || [];
+
+  communityFilter.innerHTML =
+    `<option value="all">
+      All communities
+    </option>` +
+    communities.map(community => `
+      <option value="${escapeHtml(community.id)}">
+        ${escapeHtml(community.name)}
+      </option>
+    `).join("");
+
+}
+
+async function loadAnnouncements(){
+
+  statusBox.textContent =
+    "Loading announcements...";
+
+  const {
+    data,
+    error
+  } = await supabase
+    .from("announcements")
+    .select(`
+      id,
+      community_id,
+      title,
+      content,
+      is_published,
+      created_at,
+      updated_at
+    `)
+    .eq("is_published",true)
+    .order("created_at",{ascending:false});
+
+  if(error) throw error;
+
+  announcements =
+    data || [];
+
+  renderAnnouncements();
+
+}
+
+function renderAnnouncements(){
+
+  const selectedCommunity =
+    communityFilter.value;
+
+  const filtered =
+    selectedCommunity === "all"
+      ? announcements
+      : announcements.filter(
+          announcement =>
+            announcement.community_id ===
+            selectedCommunity
+        );
+
+  statusBox.textContent =
+    `${filtered.length} announcement${
+      filtered.length === 1 ? "" : "s"
+    }`;
+
+  if(!filtered.length){
+
+    list.innerHTML = `
+      <div class="empty">
+        <div style="font-size:2rem;margin-bottom:10px;">
+          📢
+        </div>
+
+        No published announcements are
+        available for this selection.
+      </div>
+    `;
+
+    return;
+  }
+
+  list.innerHTML =
+    filtered.map(announcement => {
+
+      const community =
+        communities.find(
+          item =>
+            item.id ===
+            announcement.community_id
+        );
+
+      return `
+        <article class="announcement-card">
+
+          <div class="announcement-top">
+
+            <h2>
+              ${escapeHtml(announcement.title)}
+            </h2>
+
+            <span class="community-label">
+              ${escapeHtml(
+                community?.name ||
+                "Community"
+              )}
+            </span>
+
+          </div>
+
+          <div class="announcement-content">
+            ${escapeHtml(
+              announcement.content
+            )}
+          </div>
+
+          <div class="announcement-date">
+            Published
+            ${formatDate(
+              announcement.created_at
+            )}
+          </div>
+
+        </article>
+      `;
+
+    }).join("");
+
+}
+
+communityFilter.addEventListener(
+  "change",
+  renderAnnouncements
+);
+
+supabase.auth.onAuthStateChange(
+  (event,session)=>{
+
+    if(
+      event === "SIGNED_OUT" ||
+      !session
+    ){
+
+      location.replace("signin.html");
+
+    }
+
+  }
+);
+
+initialise();
+</script>
+
+</body>
+  </html>
