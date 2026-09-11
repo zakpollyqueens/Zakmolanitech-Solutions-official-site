@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Communities | Zakmolanitech Solutions</title>
+<meta name="description" content="Explore and manage your Zakmolanitech Solutions communities.">
+<meta name="theme-color" content="#050b14">
+<link rel="stylesheet" href="../static/css/main.css">
+
+<style>
+.community-page{
+  min-height:100vh;
+  padding:110px 20px 70px;
+  background:
+    radial-gradient(circle at top left,rgba(0,180,255,.12),transparent 35%),
+    radial-gradient(circle at bottom right,rgba(120,70,255,.10),transparent 35%),
+    #050b14;
+}
+
+.community-wrap{
+  width:min(1100px,100%);
+  margin:auto;
+}
+
+.community-hero{
+  text-align:center;
+  margin-bottom:35px;
+}
+
+.community-hero h1{
+  margin:0 0 10px;
+  font-size:clamp(2rem,5vw,3.2rem);
+}
+
+.community-hero p{
+  margin:0 auto;
+  max-width:700px;
+  opacity:.75;
+  line-height:1.7;
+}
+
+.community-status{
+  margin:25px auto;
+  padding:14px 18px;
+  border-radius:14px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+  text-align:center;
+}
+
+.community-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+}
+
+.community-card{
+  padding:25px;
+  border-radius:22px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.09);
+  backdrop-filter:blur(14px);
+  transition:.25s ease;
+}
+
+.community-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(0,180,255,.35);
+}
+
+.community-icon{
+  width:52px;
+  height:52px;
+  display:grid;
+  place-items:center;
+  border-radius:16px;
+  background:rgba(0,180,255,.12);
+  font-size:25px;
+  margin-bottom:18px;
+}
+
+.community-card h2{
+  margin:0 0 8px;
+  font-size:1.25rem;
+}
+
+.community-card p{
+  opacity:.72;
+  line-height:1.6;
+  min-height:50px;
+}
+
+.member-badge{
+  display:inline-flex;
+  padding:7px 11px;
+  border-radius:999px;
+  font-size:.8rem;
+  margin-top:8px;
+  background:rgba(0,200,120,.12);
+}
+
+.not-member{
+  background:rgba(255,180,0,.12);
+}
+
+.community-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:20px;
+}
+
+.community-actions a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:11px 16px;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:600;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.1);
+}
+
+.empty-state{
+  text-align:center;
+  padding:50px 20px;
+  opacity:.7;
+}
+
+.error-state{
+  color:#ff8b8b;
+}
+
+.loading{
+  text-align:center;
+  padding:50px;
+  opacity:.7;
+}
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="../index.html" class="logo">Zakmolanitech Solutions</a>
+
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+  </div>
+</header>
+
+<main class="community-page">
+
+  <div class="community-wrap">
+
+    <section class="community-hero">
+      <h1>Communities</h1>
+      <p>
+        Connect with communities, participate in discussions,
+        and stay informed through the Zakmolanitech communication centre.
+      </p>
+    </section>
+
+    <div id="status" class="community-status">
+      Loading communities...
+    </div>
+
+    <section id="communityGrid" class="community-grid"></section>
+
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>© <span id="year"></span> Zakmolanitech Solutions. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+  "https://julhswsijtcoyjrjrobk.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_a0qKsqBB0hR9BOWpP3dkwg_7nUOmXYC";
+
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+const statusBox = document.getElementById("status");
+const grid = document.getElementById("communityGrid");
+
+document.getElementById("year").textContent =
+  new Date().getFullYear();
+
+async function loadCommunities(){
+
+  try{
+
+    const {
+      data: { session },
+      error: sessionError
+    } = await supabase.auth.getSession();
+
+    if(sessionError) throw sessionError;
+
+    if(!session){
+      location.replace("signin.html");
+      return;
+    }
+
+    const userId = session.user.id;
+
+    const {
+      data: communities,
+      error: communityError
+    } = await supabase
+      .from("communities")
+      .select("id,name,description,created_at")
+      .order("created_at",{ascending:false});
+
+    if(communityError) throw communityError;
+
+    const {
+      data: memberships,
+      error: membershipError
+    } = await supabase
+      .from("community_members")
+      .select("community_id,is_muted")
+      .eq("user_id",userId);
+
+    if(membershipError) throw membershipError;
+
+    const membershipMap = {};
+
+    (memberships || []).forEach(member=>{
+      membershipMap[member.community_id] = member;
+    });
+
+    statusBox.textContent =
+      `${communities?.length || 0} communities available`;
+
+    if(!communities || communities.length === 0){
+
+      grid.innerHTML = `
+        <div class="empty-state">
+          No communities are available yet.
+        </div>
+      `;
+
+      return;
+    }
+
+    grid.innerHTML = communities.map(community=>{
+
+      const membership =
+        membershipMap[community.id];
+
+      const isMember = !!membership;
+
+      const muted =
+        membership?.is_muted === true;
+
+      return `
+        <article class="community-card">
+
+          <div class="community-icon">👥</div>
+
+          <h2>${escapeHtml(community.name)}</h2>
+
+          <p>
+            ${
+              escapeHtml(
+                community.description ||
+                "Join the conversation and stay connected."
+              )
+            }
+          </p>
+
+          ${
+            isMember
+            ? `
+              <span class="member-badge">
+                ${muted ? "🔇 Muted member" : "✓ Member"}
+              </span>
+
+              <div class="community-actions">
+                <a href="messages.html?community=${encodeURIComponent(community.id)}">
+                  Open Messages
+                </a>
+
+                <a href="announcements.html?community=${encodeURIComponent(community.id)}">
+                  Announcements
+                </a>
+              </div>
+            `
+            : `
+              <span class="member-badge not-member">
+                Not a member
+              </span>
+            `
+          }
+
+        </article>
+      `;
+
+    }).join("");
+
+  }catch(error){
+
+    console.error(error);
+
+    statusBox.textContent =
+      "Unable to load communities.";
+
+    statusBox.classList.add("error-state");
+
+    grid.innerHTML = `
+      <div class="empty-state error-state">
+        Something went wrong while loading the communities.
+        Please refresh and try again.
+      </div>
+    `;
+  }
+}
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+supabase.auth.onAuthStateChange(
+  (event,session)=>{
+
+    if(event === "SIGNED_OUT" || !session){
+      location.replace("signin.html");
+    }
+
+  }
+);
+
+loadCommunities();
+</script>
+
+</body>
+  </html>
