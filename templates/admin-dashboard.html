@@ -89,119 +89,53 @@ textarea{min-height:100px;resize:vertical}
 <button class="logout" id="logoutBtn">Logout</button>
 </header>
 
-<section class="section active" id="overview">
-<div class="grid">
-<div class="card"><h3>Website Updates</h3><div class="stat" id="statUpdates">0</div></div>
-<div class="card"><h3>Users</h3><div class="stat" id="statUsers">0</div></div>
-<div class="card"><h3>Communities</h3><div class="stat" id="statCommunities">0</div></div>
-<div class="card"><h3>Announcements</h3><div class="stat" id="statAnnouncements">0</div></div>
-</div>
-
-<div class="actions">
-<div class="card action" data-section="updates"><h3>📰 Website Updates</h3><p>Create and manage website updates.</p></div>
-<div class="card action" data-section="announcements"><h3>📢 Announcements</h3><p>Manage school/company announcements.</p></div>
-<div class="card action" data-section="communities"><h3>👥 Communities</h3><p>Manage community areas.</p></div>
-<div class="card action" data-section="messages"><h3>💬 Messages</h3><p>Review community communication.</p></div>
-<div class="card action" data-section="notifications"><h3>🔔 Notifications</h3><p>Manage user notifications.</p></div>
-<div class="card action" data-section="support"><h3>🛟 Support</h3><p>Review support conversations.</p></div>
-</div>
-</section>
-
-<section class="section" id="updates">
-<div class="card">
-<h2>Website Updates</h2>
-<p>Create updates and optionally attach an image.</p>
-
-<form class="form" id="updateForm">
-<input type="hidden" id="updateId">
-
-<input id="updateTitle" placeholder="Update title" required>
-
-<div class="row">
-<input id="updateCategory" placeholder="Category">
-<input id="updateSort" type="number" value="0" placeholder="Sort order">
-</div>
-
-<textarea id="updateDescription" placeholder="Description"></textarea>
-
-<div class="row">
-<input id="updateButtonText" placeholder="Button text">
-<input id="updateButtonUrl" placeholder="Button URL">
-</div>
-
-<div class="row">
-<input id="updateExpires" type="datetime-local">
-<input id="updateImage" type="file" accept="image/*">
-</div>
-
-<img id="imagePreview" class="preview">
-
-<label>
-<input id="updatePublished" type="checkbox">
- Publish immediately
-</label>
-
-<div class="item-actions">
-<button class="btn" type="submit">Save Update</button>
-<button class="btn secondary" type="button" id="cancelUpdate">Clear</button>
-</div>
-<div class="status" id="updateStatus"></div>
-</form>
-</div>
-
-<div class="card" style="margin-top:15px">
-<h3>Existing Updates</h3>
-<div class="update-list" id="updatesList"></div>
-</div>
-</section>
-
 <section class="section" id="announcements">
-<div class="card">
-<h2>Announcements</h2>
-<p>Announcement management module.</p>
-<div class="status">Use the Announcements admin module here.</div>
-</div>
+  <div class="card">
+    <h2>Announcements</h2>
+    <p>Manage published and draft announcements.</p>
+    <div class="status">Loading announcements...</div>
+  </div>
 </section>
 
 <section class="section" id="communities">
-<div class="card">
-<h2>Communities</h2>
-<p>Community management module.</p>
-<div class="status">Use the Communities admin module here.</div>
-</div>
+  <div class="card">
+    <h2>Communities</h2>
+    <p>View communities and membership.</p>
+    <div class="status">Loading communities...</div>
+  </div>
 </section>
 
 <section class="section" id="messages">
-<div class="card">
-<h2>Messages</h2>
-<p>Community message management.</p>
-<div class="status">Use the Messages admin module here.</div>
-</div>
+  <div class="card">
+    <h2>Messages</h2>
+    <p>Monitor community messages.</p>
+    <div class="status">Loading messages...</div>
+  </div>
 </section>
 
 <section class="section" id="notifications">
-<div class="card">
-<h2>Notifications</h2>
-<p>User notification management.</p>
-<div class="status">Use the Notifications admin module here.</div>
-</div>
+  <div class="card">
+    <h2>Notifications</h2>
+    <p>Monitor and manage user notifications.</p>
+    <div class="status">Loading notifications...</div>
+  </div>
 </section>
 
 <section class="section" id="support">
-<div class="card">
-<h2>Support</h2>
-<p>Support conversation management.</p>
-<div class="status">Use the Support admin module here.</div>
-</div>
+  <div class="card">
+    <h2>Support</h2>
+    <p>Manage user support conversations.</p>
+    <div class="status">Loading support conversations...</div>
+  </div>
 </section>
 
 <section class="section" id="users">
-<div class="card">
-<h2>Registered Users</h2>
-<div class="user-list" id="usersList"></div>
-</div>
-</section>
-
+  <div class="card">
+    <h2>Registered Users</h2>
+    <p>Manage registered user profiles.</p>
+    <div class="user-list" id="usersList"></div>
+  </div>
+ </section>
 </main>
 </div>
 
