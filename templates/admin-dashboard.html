@@ -4,19 +4,67 @@
 @media(max-width:620px){.side{position:relative;width:100%;height:auto;border-right:0;border-bottom:1px solid #1d2b3d}.app{display:block}.main{margin:0;width:100%;padding:12px}.nav{display:grid;grid-template-columns:1fr 1fr}.row{grid-template-columns:1fr}.top{align-items:flex-start}}
 </style></head><body>
 <div class="app"><aside class="side"><div class="brand">ZAKMOLANITECH<br><small>ADMIN CONTROL</small></div><nav class="nav">
-<button class="active" data-section="dashboard">📊 Dashboard</button><button data-section="updates">📰 Website Updates</button><button data-section="announcements">📢 Announcements</button><button data-section="communities">👥 Communities</button><button data-section="messages">💬 Messages</button><button data-section="notifications">🔔 Notifications</button><button data-section="support">🛟 Support</button><button data-section="users">👤 Users</button></nav><button class="logout" id="logout">Sign Out</button></aside>
+<button class="active" data-section="dashboard" onclick="showSection('dashboard',this.textContent)">📊 Dashboard</button><button data-section="updates" onclick="showSection('updates',this.textContent)">📰 Website Updates</button><button data-section="announcements" onclick="showSection('announcements',this.textContent)">📢 Announcements</button><button data-section="communities" onclick="showSection('communities',this.textContent)">👥 Communities</button><button data-section="messages" onclick="showSection('messages',this.textContent)">💬 Messages</button><button data-section="notifications" onclick="showSection('notifications',this.textContent)">🔔 Notifications</button><button data-section="support" onclick="showSection('support',this.textContent)">🛟 Support</button>
+<button data-section="telegram" onclick="showSection('telegram',this.textContent)">✈️ Telegram Bot</button>
+<button data-section="users" onclick="showSection('users',this.textContent)">👤 Users</button><button data-section="requests" onclick="showSection('requests',this.textContent)">📩 Requests</button></nav><button class="logout" id="logout">Sign Out</button></aside>
 <main class="main"><div class="top"><div><h1 id="pageTitle">Dashboard</h1><span class="status" id="adminStatus">Checking administrator access...</span></div></div>
 <section id="dashboard" class="section active"><div class="stats"><div class="stat">Users<b id="statUsers">0</b></div><div class="stat">Communities<b id="statCommunities">0</b></div><div class="stat">Messages<b id="statMessages">0</b></div><div class="stat">Support<b id="statSupport">0</b></div></div><div class="grid" style="margin-top:13px"><div class="card"><h2>Administrator Overview</h2><p class="muted">Manage website content, communities, communication, support and users.</p><div class="actions"><button class="btn" data-go="updates">Manage Website</button><button class="btn" data-go="communities">Manage Communities</button></div></div><div class="card"><h2>Recent Activity</h2><div id="recentActivity" class="list"></div></div></div></section>
 <section id="updates" class="section"><div class="card"><h2>Website Updates</h2><form id="updateForm" class="form"><input type="hidden" id="updateId"><input id="updateTitle" placeholder="Title" required><div class="row"><input id="updateCategory" placeholder="Category" required><input id="updateButtonText" placeholder="Button text"></div><textarea id="updateDescription" placeholder="Description" required></textarea><div class="row"><input id="updateButtonUrl" placeholder="Button URL"><input id="updateSort" type="number" value="0" placeholder="Sort order"></div><div class="row"><input id="updateExpires" type="datetime-local"><input id="updateImage" type="file" accept="image/*"></div><label class="check"><input id="updatePublished" type="checkbox"> Published</label><div class="actions"><button class="btn">Save Update</button><button type="button" class="btn secondary" id="clearUpdate">Clear</button></div></form></div><div class="card"><h2>Existing Updates</h2><div id="updatesList" class="list"></div></div></section>
 <section id="announcements" class="section"><div class="card"><h2>Create / Edit Announcement</h2><form id="announcementForm" class="form"><input type="hidden" id="announcementId"><select id="announcementCommunity" required></select><input id="announcementTitle" placeholder="Title" required><textarea id="announcementContent" placeholder="Announcement content" required></textarea><label class="check"><input id="announcementPublished" type="checkbox"> Published</label><div class="actions"><button class="btn">Save Announcement</button><button type="button" class="btn secondary" id="clearAnnouncement">Clear</button></div></form></div><div class="card"><h2>Announcements</h2><div id="announcementsList" class="list"></div></div></section>
 <section id="communities" class="section"><div class="grid"><div><div class="card"><h2>Community</h2><form id="communityForm" class="form"><input type="hidden" id="communityId"><input id="communityName" placeholder="Community name" required><textarea id="communityDescription" placeholder="Description"></textarea><div class="actions"><button class="btn">Save Community</button><button type="button" class="btn secondary" id="clearCommunity">Clear</button></div></form></div><div class="card"><h2>Invite Member</h2><form id="inviteForm" class="form"><select id="inviteCommunity" required></select><select id="inviteUser" required></select><button class="btn">Send Invitation</button></form></div></div><div class="card"><h2>Communities</h2><div id="communitiesList" class="list"></div></div></div><div class="card"><h2>Community Members</h2><div id="membersList" class="list"></div></div><div class="card"><h2>Community Invitations</h2><div id="invitesList" class="list"></div></div></section>
 <section id="messages" class="section"><div class="card"><h2>Community Messages</h2><div class="row"><select id="messageCommunityFilter"></select><select id="messageDeletedFilter"><option value="all">All Messages</option><option value="active">Active Only</option><option value="deleted">Deleted Only</option></select></div><div id="messagesList" class="list" style="margin-top:11px"></div></div></section>
-<section id="notifications" class="section"><div class="grid"><div class="card"><h2>Send Notification</h2><form id="notificationForm" class="form"><select id="notificationUser" required></select><input id="notificationTitle" placeholder="Title" required><textarea id="notificationMessage" placeholder="Message" required></textarea><select id="notificationType"><option value="general">General</option><option value="announcement">Announcement</option><option value="message">Message</option><option value="system">System</option></select><button class="btn">Send Notification</button></form></div><div class="card"><h2>Notifications</h2><div id="notificationsList" class="list"></div></div></div>
-<div class="telegram-box"><h3>✈️ Telegram Bot</h3><textarea id="telegramMessage" placeholder="Type your Telegram message..."></textarea><button id="sendTelegramBtn">Send to Telegram</button><p id="telegramStatus"></p></div><script>document.getElementById("sendTelegramBtn").onclick=async()=>{const m=document.getElementById("telegramMessage").value.trim(),s=document.getElementById("telegramStatus");if(!m)return s.textContent="Enter a message first.";s.textContent="Sending...";try{await ZakTelegram.send(m);s.textContent="✅ Telegram message sent.";document.getElementById("telegramMessage").value="";}catch(e){s.textContent="❌ "+e.message;}};</script>
-</section>
+<section id="notifications" class="section"><div class="grid"><div class="card"><h2>Send Notification</h2><form id="notificationForm" class="form"><select id="notificationUser" required></select><input id="notificationTitle" placeholder="Title" required><textarea id="notificationMessage" placeholder="Message" required></textarea><select id="notificationType"><option value="general">General</option><option value="announcement">Announcement</option><option value="message">Message</option><option value="system">System</option></select><button class="btn">Send Notification</button></form></div><div class="card"><h2>Notifications</h2><div id="notificationsList" class="list"></div></div></div></section>
 <section id="support" class="section"><div class="grid"><div class="card"><h2>Support Conversations</h2><div id="supportList" class="list"></div></div><div class="card"><h2>Conversation</h2><div id="supportInfo" class="notice">Select a conversation.</div><div id="supportMessages" class="list"></div><form id="supportReplyForm" class="form" style="margin-top:11px"><input type="hidden" id="supportConversationId"><textarea id="supportReply" placeholder="Reply to user"></textarea><div class="actions"><button class="btn">Send Reply</button><button type="button" class="btn warn" id="closeSupport">Close Conversation</button><button type="button" class="btn success" id="reopenSupport">Reopen Conversation</button><button type="button" class="btn secondary" id="assignSupport">Assign To Me</button></div></form></div></div></section>
-<section id="users" class="section"><div class="card"><h2>Users</h2><div id="usersList" class="list"></div></div></section>
+<section id="telegram" class="section">
+  <div class="card">
+    <h2>✈️ Telegram Bot</h2>
+    <p>Send an administrator message directly to the Zakitech Telegram group.</p>
+
+    <textarea
+      id="telegramText"
+      rows="6"
+      placeholder="Write your Telegram message..."
+    ></textarea>
+
+    <div style="margin-top:12px">
+      <button type="button" class="btn" id="sendTelegramBtn">
+        ✈️ Send to Telegram
+      </button>
+    </div>
+
+    <div id="telegramStatus" style="margin-top:10px"></div>
+  </div>
+</section>
+<section id="users" class="section"><div class="card"><h2>Users</h2><div id="usersList" class="list"></div></div></section><section id="requests" class="section">
+<div class="grid">
+<div class="card">
+<h2>Contact Messages</h2>
+<div class="row">
+<select id="contactStatusFilter">
+<option value="all">All</option>
+<option value="new">New</option>
+<option value="in_progress">In Progress</option>
+<option value="resolved">Resolved</option>
+</select>
+</div>
+<div id="contactMessagesList" class="list" style="margin-top:11px"></div>
+</div>
+
+<div class="card">
+<h2>Service Requests</h2>
+<div class="row">
+<select id="serviceStatusFilter">
+<option value="all">All</option>
+<option value="new">New</option>
+<option value="in_progress">In Progress</option>
+<option value="resolved">Resolved</option>
+</select>
+</div>
+<div id="serviceRequestsList" class="list" style="margin-top:11px"></div>
+</div>
+</div>
+</section>
 </main></div>
-       
- <script src="../static/js/telegram.js"></script>
-  <script src="../static/js/admin-dashboard.js"></script></body></html>
+<script src="../static/js/telegram.js"></script>
+<script src="../static/js/admin-dashboard.js?v=20260915"></script>
+</body></html>

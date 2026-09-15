@@ -1,11 +1,104 @@
 const{createClient}=supabase,db=createClient("https://julhswsijtcoyjrjrobk.supabase.co","sb_publishable_a0qKsqBB0hR9BOWpP3dkwg_7nUOmXYC");
-let admin=null,communities=[],profiles=[],selectedSupport=null,updates=[],announcements=[],messages=[],supportConversations=[];
+let admin=null,communities=[],profiles=[],selectedSupport=null,updates=[],announcements=[],messages=[],supportConversations=[],contactMessages=[],serviceRequests=[];
 const $=id=>document.getElementById(id),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c])),err=e=>alert(e?.message||e||"Something went wrong"),now=()=>new Date().toISOString(),userName=id=>{const u=profiles.find(x=>x.id===id);return u?.full_name||u?.email||id||"User"},communityName=id=>communities.find(x=>x.id===id)?.name||"Community",fmt=d=>d?new Date(d).toLocaleString():"";
 
-async function init(){const{data:{session}}=await db.auth.getSession();if(!session)return location.href="admin-login.html";admin=session.user;const r=await db.rpc("is_admin");if(r.error||!r.data)return location.href="dashboard.html";$("adminStatus").textContent=admin.email||"Administrator";bind();await loadAll()}
-function bind(){$(".nav").addEventListener("click",e=>{const b=e.target.closest("button[data-section]");if(b)showSection(b.dataset.section,b.textContent)});document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>showSection(b.dataset.go));$("logout").onclick=async()=>{await db.auth.signOut();location.href="admin-login.html"};$("updateForm").onsubmit=saveUpdate;$("announcementForm").onsubmit=saveAnnouncement;$("communityForm").onsubmit=saveCommunity;$("inviteForm").onsubmit=sendInvite;$("notificationForm").onsubmit=saveNotification;$("supportReplyForm").onsubmit=sendSupport;$("messageCommunityFilter").onchange=loadMessages;$("messageDeletedFilter").onchange=loadMessages;$("clearUpdate").onclick=clearUpdate;$("clearAnnouncement").onclick=clearAnnouncement;$("clearCommunity").onclick=clearCommunity;$("closeSupport").onclick=()=>setSupportStatus("closed");$("reopenSupport").onclick=()=>setSupportStatus("open");$("assignSupport").onclick=assignSupport}
-function showSection(id,title){document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.section===id));document.querySelectorAll(".section").forEach(x=>x.classList.toggle("active",x.id===id));$("pageTitle").textContent=(title||id).replace(/^[^\w]+/,"").trim()}
-async function loadAll(){await loadUsers();await loadCommunities();await Promise.all([loadUpdates(),loadAnnouncements(),loadMessages(),loadNotifications(),loadSupport(),loadInvites()]);await loadStats()}
+async function init(){
+  console.log("ADMIN DASHBOARD INIT START");
+
+  const result=await db.auth.getSession();
+
+  console.log("DASHBOARD SESSION RESULT:",result);
+
+  const session=result?.data?.session||null;
+
+  if(!session){
+    document.body.innerHTML='<div style="padding:40px;font-family:Arial;color:#fff;background:#050b14;min-height:100vh"><h2>ADMIN DEBUG</h2><p>No Supabase session is available on the dashboard.</p><pre style="white-space:pre-wrap;color:#46e6ff">getSession() returned no session.</pre><p>We have stopped the redirect so the problem can be diagnosed.</p></div>';
+    return;
+  }
+
+  admin=session.user;
+
+  const r=await db.rpc("is_admin");
+
+  console.log("DASHBOARD ADMIN RESULT:",r);
+
+  if(r.error){
+    document.body.innerHTML='<div style="padding:40px;font-family:Arial;color:#fff;background:#050b14;min-height:100vh"><h2>ADMIN DEBUG</h2><p>Session exists, but the administrator check failed.</p><pre style="white-space:pre-wrap;color:#ff8f8f">'+String(r.error.message).replace(/</g,"&lt;")+'</pre></div>';
+    return;
+  }
+
+  if(r.data!==true){
+    document.body.innerHTML='<div style="padding:40px;font-family:Arial;color:#fff;background:#050b14;min-height:100vh"><h2>ADMIN DEBUG</h2><p>Authentication works, but is_admin() returned:</p><pre style="color:#ff8f8f">'+String(r.data)+'</pre></div>';
+    return;
+  }
+
+  $("adminStatus").textContent=admin.email||"Administrator";
+  bind();
+  await loadAll();
+}
+function bind(){
+const on=(id,event,fn)=>{
+  const el=$(id);
+  if(el)el.addEventListener(event,fn);
+};
+
+const nav=document.querySelector(".nav");
+if(nav){
+  nav.addEventListener("click",e=>{
+    const b=e.target.closest("button[data-section]");
+    if(b)showSection(b.dataset.section,b.textContent);
+  });
+}
+
+document.querySelectorAll("[data-go]").forEach(b=>{
+  b.addEventListener("click",()=>showSection(b.dataset.go,b.textContent));
+});
+
+on("logout","click",async()=>{
+  await db.auth.signOut();
+  location.href="admin-login.html";
+});
+
+on("updateForm","submit",saveUpdate);
+on("announcementForm","submit",saveAnnouncement);
+on("communityForm","submit",saveCommunity);
+on("inviteForm","submit",sendInvite);
+on("notificationForm","submit",saveNotification);
+on("supportReplyForm","submit",sendSupport);
+
+on("messageCommunityFilter","change",loadMessages);
+on("messageDeletedFilter","change",loadMessages);
+on("contactStatusFilter","change",loadContactMessages);
+on("serviceStatusFilter","change",loadServiceRequests);
+
+on("clearUpdate","click",clearUpdate);
+on("clearAnnouncement","click",clearAnnouncement);
+on("clearCommunity","click",clearCommunity);
+
+on("closeSupport","click",()=>setSupportStatus("closed"));
+on("reopenSupport","click",()=>setSupportStatus("open"));
+on("assignSupport","click",assignSupport);
+}
+
+function showSection(id,title){
+  document.querySelectorAll(".nav button").forEach(x=>{
+    x.classList.toggle("active",x.dataset.section===id);
+  });
+
+  document.querySelectorAll(".section").forEach(x=>{
+    const active=x.id===id;
+    x.classList.toggle("active",active);
+    x.style.display=active?"block":"none";
+  });
+
+  const pageTitle=$("pageTitle");
+  if(pageTitle){
+    pageTitle.textContent=(title||id).replace(/^[^\\w]+/,"").trim();
+  }
+
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+async function loadAll(){await loadUsers();await loadCommunities();await Promise.all([loadUpdates(),loadAnnouncements(),loadMessages(),loadNotifications(),loadSupport(),loadInvites(),loadContactMessages(),loadServiceRequests()]);await loadStats()}
 async function loadStats(){$("statUsers").textContent=profiles.length;$("statCommunities").textContent=communities.length;const a=await db.from("community_messages").select("*",{count:"exact",head:true}),b=await db.from("support_conversations").select("*",{count:"exact",head:true});$("statMessages").textContent=a.count||0;$("statSupport").textContent=b.count||0;loadRecentActivity()}
 async function loadRecentActivity(){const[a,b,c]=await Promise.all([db.from("announcements").select("id,title,created_at").order("created_at",{ascending:false}).limit(4),db.from("support_conversations").select("id,subject,status,updated_at").order("updated_at",{ascending:false}).limit(4),db.from("community_messages").select("id,message,created_at").order("created_at",{ascending:false}).limit(4)]),items=[];(a.data||[]).forEach(x=>items.push({d:x.created_at,t:"📢 Announcement",s:x.title}));(b.data||[]).forEach(x=>items.push({d:x.updated_at,t:"🛟 Support",s:x.subject||"Support request"}));(c.data||[]).forEach(x=>items.push({d:x.created_at,t:"💬 Message",s:x.message}));items.sort((x,y)=>new Date(y.d)-new Date(x.d));$("recentActivity").innerHTML=items.slice(0,8).map(x=>`<div class="activity"><strong>${esc(x.t)}</strong><div class="muted">${esc(x.s)}</div><span class="small muted">${fmt(x.d)}</span></div>`).join("")||'<div class="empty">No recent activity</div>'}
 async function loadUsers(){const{data,error}=await db.from("profiles").select("*").order("created_at",{ascending:false});if(error)return err(error);profiles=data||[];const opts='<option value="">Select user</option>'+profiles.map(u=>`<option value="${u.id}">${esc(u.full_name||u.email||u.id)}${u.role==="admin"?" (Admin)":""}</option>`).join("");$("notificationUser").innerHTML=opts;$("inviteUser").innerHTML=opts;$("usersList").innerHTML=profiles.map(u=>`<div class="item"><strong>${esc(u.full_name||"Unnamed")}</strong><span class="muted">${esc(u.email||"")} · ${esc(u.phone||"")} · ${esc(u.role)} · <span class="${u.is_active?"success-text":"danger-text"}">${u.is_active?"Active":"Inactive"}</span></span><div class="actions"><button class="btn ${u.is_active?"danger":"success"}" onclick="toggleUser('${u.id}',${!u.is_active})">${u.is_active?"Deactivate":"Activate"}</button></div></div>`).join("")||'<div class="empty">No users</div>'}
@@ -40,6 +133,105 @@ async function restoreMessage(id){const{error}=await db.from("community_messages
 async function loadNotifications(){const{data,error}=await db.from("notifications").select("*").order("created_at",{ascending:false}).limit(100);if(error)return err(error);$("notificationsList").innerHTML=(data||[]).map(x=>`<div class="item"><strong>${esc(x.title)}</strong><span class="muted">${esc(userName(x.user_id))} · ${esc(x.notification_type)} · <span class="${x.is_read?"success-text":"danger-text"}">${x.is_read?"Read":"Unread"}</span></span><p>${esc(x.message)}</p><div class="actions"><button class="btn danger" onclick="deleteNotification('${x.id}')">Delete</button></div></div>`).join("")||'<div class="empty">No notifications</div>'}
 async function saveNotification(e){e.preventDefault();const user_id=$("notificationUser").value,title=$("notificationTitle").value.trim(),message=$("notificationMessage").value.trim();if(!user_id||!title||!message)return alert("Please complete the notification.");const{error}=await db.from("notifications").insert({user_id,title,message,notification_type:$("notificationType").value});if(error)return err(error);e.target.reset();loadNotifications()}
 async function deleteNotification(id){if(!confirm("Delete this notification?"))return;const{error}=await db.from("notifications").delete().eq("id",id);if(error)return err(error);loadNotifications()}
+async function loadContactMessages(){
+let q=db.from("contact_messages").select("*").order("created_at",{ascending:false}).limit(100);
+const status=$("contactStatusFilter").value;
+if(status!=="all")q=q.eq("status",status);
+const{data,error}=await q;
+if(error)return err(error);
+
+contactMessages=data||[];
+
+$("contactMessagesList").innerHTML=contactMessages.map(x=>`
+<div class="item">
+<strong>${esc(x.name)}</strong>
+<span class="muted">${esc(x.email||"No email")} · ${esc(x.phone||"No phone")} · ${fmt(x.created_at)}</span>
+<p><strong>${esc(x.subject||"No subject")}</strong></p>
+<p>${esc(x.message)}</p>
+<div class="actions">
+<select onchange="updateContactStatus('${x.id}',this.value)">
+<option value="new"${x.status==="new"?" selected":""}>New</option>
+<option value="in_progress"${x.status==="in_progress"?" selected":""}>In Progress</option>
+<option value="resolved"${x.status==="resolved"?" selected":""}>Resolved</option>
+</select>
+<button class="btn danger" onclick="deleteContactMessage('${x.id}')">Delete</button>
+</div>
+</div>`).join("")||'<div class="empty">No contact messages</div>';
+}
+
+async function updateContactStatus(id,status){
+const{error}=await db.from("contact_messages").update({status,updated_at:now()}).eq("id",id);
+if(error)return err(error);
+await loadContactMessages();
+}
+
+async function deleteContactMessage(id){
+if(!confirm("Delete this contact message?"))return;
+const{error}=await db.from("contact_messages").delete().eq("id",id);
+if(error)return err(error);
+await loadContactMessages();
+}
+
+async function loadServiceRequests(){
+let q=db.from("service_requests").select("*").order("created_at",{ascending:false}).limit(100);
+const status=$("serviceStatusFilter").value;
+if(status!=="all")q=q.eq("status",status);
+const{data,error}=await q;
+if(error)return err(error);
+
+serviceRequests=data||[];
+
+$("serviceRequestsList").innerHTML=serviceRequests.map(x=>`
+<div class="item">
+<strong>${esc(x.name)}</strong>
+<span class="muted">${esc(x.service)} · ${esc(x.email||"No email")} · ${esc(x.phone||"No phone")} · ${fmt(x.created_at)}</span>
+<p>${esc(x.message)}</p>
+<div class="actions">
+<select onchange="updateServiceStatus('${x.id}',this.value)">
+<option value="new"${x.status==="new"?" selected":""}>New</option>
+<option value="in_progress"${x.status==="in_progress"?" selected":""}>In Progress</option>
+<option value="resolved"${x.status==="resolved"?" selected":""}>Resolved</option>
+</select>
+<button class="btn danger" onclick="deleteServiceRequest('${x.id}')">Delete</button>
+</div>
+</div>`).join("")||'<div class="empty">No service requests</div>';
+}
+
+async function updateServiceStatus(id,status){
+const{error}=await db.from("service_requests").update({status,updated_at:now()}).eq("id",id);
+if(error)return err(error);
+await loadServiceRequests();
+}
+
+async function deleteServiceRequest(id){
+if(!confirm("Delete this service request?"))return;
+const{error}=await db.from("service_requests").delete().eq("id",id);
+if(error)return err(error);
+await loadServiceRequests();
+}
+
 async function loadSupport(){const{data,error}=await db.from("support_conversations").select("*").order("updated_at",{ascending:false});if(error)return err(error);supportConversations=data||[];$("supportList").innerHTML=supportConversations.map(x=>`<div class="item clickable" onclick="openSupport('${x.id}')"><strong>${esc(x.subject||"Support request")}</strong><span class="muted">${esc(userName(x.user_id))} · <span class="${x.status==="open"?"success-text":"danger-text"}">${esc(x.status)}</span> · ${fmt(x.updated_at)}</span></div>`).join("")||'<div class="empty">No support conversations</div>'}
 async function openSupport(id){selectedSupport=id;$("supportConversationId").value=id;const c=supportConversations.find(x=>x.id===id);$("supportInfo").textContent=c?`${userName(c.user_id)} · ${c.status}${c.assigned_admin_id?" · Assigned":" · Unassigned"}`:"Conversation";const{data,error}=await db.from("support_messages").select("*").eq("conversation_id",id).order("created_at");if(error)return err(error);$("supportMessages").innerHTML=(data||[]).map(x=>`<div class="item ${x.is_deleted?"msg-deleted":""}"><strong>${esc(x.sender_id===admin.id?"Administrator":userName(x.sender_id))}</strong><span class="muted">${fmt(x.created_at)}${x.is_read?" · Read":""}</span><p>${esc(x.message)}</p></div>`).join("")||'<div class="empty">No messages</div>'}
-async function sendSupport(e){e.preventDefault();const id=$("supportConversationId").value,text=$("supportReply").value.trim(
+async function sendSupport(e){e.preventDefault();const id=$("supportConversationId").value,text=$("supportReply").value.trim();if(!id||!text)return;const{error}=await db.from("support_messages").insert({conversation_id:id,sender_id:admin.id,message:text,is_read:false,is_deleted:false});if(error)return err(error);await db.from("support_conversations").update({updated_at:now()}).eq("id",id);try{const c=supportConversations.find(x=>x.id===id);await window.ZakTelegram?.send(`🛟 *Support reply*\n\nUser: ${userName(c?.user_id)}\nSubject: ${c?.subject||"Support request"}\n\n${text}`,{parseMode:"Markdown"})}catch(e){console.warn("Telegram support notification failed",e)}$("supportReply").value="";await loadSupport();await openSupport(id)}
+async function setSupportStatus(status){const id=$("supportConversationId").value;if(!id)return;const{error}=await db.from("support_conversations").update({status,updated_at:now()}).eq("id",id);if(error)return err(error);await loadSupport();await openSupport(id)}
+async function assignSupport(){const id=$("supportConversationId").value;if(!id)return;const{error}=await db.from("support_conversations").update({assigned_admin_id:admin.id,updated_at:now()}).eq("id",id);if(error)return err(error);await loadSupport();await openSupport(id)}
+
+(function(){
+  const btn=document.getElementById("sendTelegramBtn");
+  const input=document.getElementById("telegramText");
+  const status=document.getElementById("telegramStatus");
+  if(!btn||!input||!status||!window.ZakTelegram)return;
+  btn.addEventListener("click",async()=>{
+    const text=input.value.trim();
+    if(!text)return alert("Enter a Telegram message first.");
+    btn.disabled=true;status.textContent="Sending...";
+    try{
+      await window.ZakTelegram.send(text);
+      input.value="";status.textContent="Telegram message sent successfully.";
+    }catch(e){
+      console.error(e);status.textContent=e?.message||"Telegram message failed.";
+    }finally{btn.disabled=false;}
+  });
+})();
+
+init();

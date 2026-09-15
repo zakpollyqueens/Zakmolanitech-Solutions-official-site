@@ -279,18 +279,7 @@
 
 <script src="../static/js/main.js"></script>
 
-<script>
-const contactForm=document.getElementById("contactForm"),contactStatus=document.getElementById("contactFormStatus");
 
-if(contactForm&&contactStatus){
-contactForm.addEventListener("submit",e=>{
-e.preventDefault();
-contactStatus.textContent="Message received on this page. Secure backend submission will be connected in the next phase.";
-contactStatus.style.color="var(--cyan)";
-contactForm.reset();
-});
-}
-</script>
 
 </body>
                                         </html>

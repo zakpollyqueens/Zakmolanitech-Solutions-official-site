@@ -3,7 +3,7 @@
    PHASE 2B — INTERACTION SYSTEM
 ============================================================ */
 
-document.addEventListener("DOMContentLoaded",()=>{
+document.addEventListener("DOMContentLoaded",async()=>{
 
 /* ============================================================
    ELEMENTS
@@ -386,7 +386,112 @@ if(
     updatesDots
 ){
 
-    const cards=[
+    try{
+
+    if(!window.supabase){
+        await new Promise((resolve,reject)=>{
+            const script=document.createElement("script");
+            script.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+            script.onload=resolve;
+            script.onerror=reject;
+            document.head.appendChild(script);
+        });
+    }
+
+    const{createClient}=window.supabase;
+
+    const updatesDb=createClient(
+        "https://julhswsijtcoyjrjrobk.supabase.co",
+        "sb_publishable_a0qKsqBB0hR9BOWpP3dkwg_7nUOmXYC"
+    );
+
+    const{data:updates,error:updatesError}=await updatesDb
+        .from("updates")
+        .select("id,title,category,description,button_text,button_url,is_published,published_at,expires_at,sort_order,image_url")
+        .eq("is_published",true)
+        .order("sort_order",{ascending:true})
+        .order("published_at",{ascending:false});
+
+    if(updatesError)throw updatesError;
+
+    const now=Date.now();
+
+    const visibleUpdates=(updates||[]).filter(update=>
+        !update.expires_at ||
+        new Date(update.expires_at).getTime()>now
+    );
+
+    const escapeHtml=value=>String(value??"")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+    const safeUrl=value=>{
+        const url=String(value??"").trim();
+        if(!url)return "";
+        if(url.startsWith("/")||url.startsWith("#"))return url;
+        if(/^https?:\/\//i.test(url))return url;
+        return "";
+    };
+
+    if(visibleUpdates.length){
+
+        updatesTrack.innerHTML=visibleUpdates.map(update=>{
+
+            const category=escapeHtml(update.category||"UPDATE");
+            const title=escapeHtml(update.title||"Latest Update");
+            const description=escapeHtml(update.description||"");
+            const buttonText=escapeHtml(update.button_text||"Learn More");
+            const buttonUrl=safeUrl(update.button_url);
+            const imageUrl=safeUrl(update.image_url);
+
+            const imageClass=
+                String(update.category||"update")
+                .toLowerCase()
+                .replace(/[^a-z0-9_-]/g,"-");
+
+            const imageStyle=imageUrl
+                ?` style="background-image:url('${imageUrl}');background-size:cover;background-position:center;"`
+                :"";
+
+            return `<article class="update-card">
+                <div class="update-image update-${imageClass}"${imageStyle}>
+                    <span>${category}</span>
+                </div>
+                <div class="update-content">
+                    <small>${category}</small>
+                    <h3>${title}</h3>
+                    <p>${description}</p>
+                    ${buttonUrl
+                        ?`<a href="${buttonUrl}" class="card-link">${buttonText} →</a>`
+                        :""}
+                </div>
+            </article>`;
+
+        }).join("");
+
+    }else{
+
+        updatesTrack.innerHTML=`<article class="update-card">
+            <div class="update-image update-software"><span>UPDATES</span></div>
+            <div class="update-content">
+                <small>UPDATES</small>
+                <h3>No new updates yet.</h3>
+                <p>Check back soon for the latest news, services, projects and technology announcements.</p>
+            </div>
+        </article>`;
+
+    }
+
+}catch(error){
+
+    console.error("Homepage updates error:",error);
+
+}
+
+const cards=[
         ...updatesTrack.querySelectorAll(".update-card")
     ];
 
@@ -609,39 +714,154 @@ if(
 
 
 /* ============================================================
-   SERVICE REQUEST FORM
+   CONTACT FORM
 ============================================================ */
+const contactForm=document.getElementById("contactForm");
+const contactStatus=document.getElementById("contactFormStatus");
 
-const serviceForm=
-        document.getElementById(
-            "serviceRequestForm"
-        ),
+if(contactForm&&contactStatus){
 
-      serviceStatus=
-        document.getElementById(
-            "serviceFormStatus"
-        );
+contactForm.addEventListener("submit",async event=>{
+event.preventDefault();
 
+const name=document.getElementById("contactName")?.value.trim()||"";
+const phone=document.getElementById("contactPhone")?.value.trim()||"";
+const email=document.getElementById("contactEmail")?.value.trim()||"";
+const subject=document.getElementById("contactSubject")?.value.trim()||"";
+const message=document.getElementById("contactMessage")?.value.trim()||"";
 
-if(serviceForm&&serviceStatus){
+if(!name||!phone||!email||!subject||!message){
+contactStatus.textContent="Please complete all required fields before submitting.";
+contactStatus.style.color="var(--danger,#ff6b6b)";
+return;
+}
 
-    serviceForm.addEventListener(
-        "submit",
-        event=>{
+contactStatus.textContent="Sending your message...";
+contactStatus.style.color="var(--cyan)";
 
-            event.preventDefault();
+const submit=contactForm.querySelector('button[type="submit"]');
+if(submit)submit.disabled=true;
 
-            serviceStatus.textContent=
-                "Service request received on this page. Backend submission will be connected in the next phase.";
+try{
 
-            serviceStatus.style.color=
-                "var(--cyan)";
+if(!window.supabase){
+await new Promise((resolve,reject)=>{
+const script=document.createElement("script");
+script.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+script.onload=resolve;
+script.onerror=reject;
+document.head.appendChild(script);
+});
+}
 
-            serviceForm.reset();
+const{createClient}=window.supabase;
 
-        }
-    );
+const db=createClient(
+"https://julhswsijtcoyjrjrobk.supabase.co",
+"sb_publishable_a0qKsqBB0hR9BOWpP3dkwg_7nUOmXYC"
+);
+
+const{error}=await db.from("contact_messages").insert([{
+name,
+phone,
+email,
+subject,
+message
+}]);
+
+if(error)throw error;
+
+contactStatus.textContent=
+"Your message has been sent successfully. We will get back to you soon.";
+contactStatus.style.color="var(--cyan)";
+contactForm.reset();
+
+}catch(error){
+
+console.error("Contact form submission error:",error);
+
+contactStatus.textContent=
+"Sorry, your message could not be sent right now. Please try again.";
+contactStatus.style.color="var(--danger,#ff6b6b)";
+
+}finally{
+
+if(submit)submit.disabled=false;
 
 }
+
+});
+}
+
+/* ============================================================
+   SERVICE REQUEST FORM
+============================================================ */
+const serviceForm=document.getElementById("serviceRequestForm");
+const serviceStatus=document.getElementById("serviceFormStatus");
+
+if(serviceForm&&serviceStatus){
+serviceForm.addEventListener("submit",async event=>{
+event.preventDefault();
+
+const name=document.getElementById("serviceName")?.value.trim()||"";
+const phone=document.getElementById("servicePhone")?.value.trim()||"";
+const email=document.getElementById("serviceEmail")?.value.trim()||"";
+const service=document.getElementById("serviceType")?.value.trim()||"";
+const message=document.getElementById("serviceMessage")?.value.trim()||"";
+
+if(!name||!service||!message){
+serviceStatus.textContent="Please complete the required fields before submitting.";
+serviceStatus.style.color="var(--danger,#ff6b6b)";
+return;
+}
+
+serviceStatus.textContent="Sending your service request...";
+serviceStatus.style.color="var(--cyan)";
+
+const submit=serviceForm.querySelector('button[type="submit"]');
+if(submit)submit.disabled=true;
+
+try{
+if(!window.supabase){
+await new Promise((resolve,reject)=>{
+const script=document.createElement("script");
+script.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+script.onload=resolve;
+script.onerror=reject;
+document.head.appendChild(script);
+});
+}
+
+const{createClient}=window.supabase;
+
+const db=createClient(
+"https://julhswsijtcoyjrjrobk.supabase.co",
+"sb_publishable_a0qKsqBB0hR9BOWpP3dkwg_7nUOmXYC"
+);
+
+const{error}=await db.from("service_requests").insert([{
+name,
+phone,
+email,
+service,
+message
+}]);
+
+if(error)throw error;
+
+serviceStatus.textContent="Your service request has been sent successfully. We will get back to you soon.";
+serviceStatus.style.color="var(--cyan)";
+serviceForm.reset();
+
+}catch(error){
+console.error("Service request submission error:",error);
+serviceStatus.textContent="Sorry, your request could not be sent right now. Please try again.";
+serviceStatus.style.color="var(--danger,#ff6b6b)";
+}finally{
+if(submit)submit.disabled=false;
+}
+});
+}
+
 
 });
