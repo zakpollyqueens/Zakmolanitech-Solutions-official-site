@@ -247,3 +247,589 @@ section{position:relative}
 @media(prefers-reduced-motion:reduce){
  *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
   }
+
+
+/* =========================================================
+   ZAKMOLANITECH HOMEPAGE OPENING EXPERIENCE
+========================================================= */
+
+#zak-home-intro{
+ position:fixed;
+ inset:0;
+ z-index:9999;
+ display:grid;
+ place-items:center;
+ overflow:hidden;
+ background:
+   radial-gradient(circle at 50% 35%,rgba(70,230,255,.13),transparent 28%),
+   radial-gradient(circle at 20% 80%,rgba(66,135,255,.10),transparent 30%),
+   #030811;
+ transition:opacity .9s ease,visibility .9s ease,transform .9s ease;
+}
+
+#zak-home-intro.zak-intro-hidden{
+ opacity:0;
+ visibility:hidden;
+ pointer-events:none;
+ transform:scale(1.035);
+}
+
+.zak-intro-content{
+ position:relative;
+ z-index:5;
+ width:min(520px,88vw);
+ text-align:center;
+}
+
+.zak-intro-logo{
+ width:92px;
+ height:92px;
+ margin:0 auto 18px;
+ display:grid;
+ place-items:center;
+ border:1px solid rgba(70,230,255,.35);
+ border-radius:24px;
+ background:rgba(8,22,38,.75);
+ box-shadow:0 0 70px rgba(70,230,255,.18);
+ animation:zakIntroFloat 3s ease-in-out infinite;
+}
+
+.zak-intro-logo img{
+ width:78%;
+ height:78%;
+ object-fit:contain;
+}
+
+.zak-intro-line{
+ width:120px;
+ height:1px;
+ margin:0 auto 18px;
+ background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+ box-shadow:0 0 18px rgba(70,230,255,.55);
+}
+
+.zak-intro-brand{
+ color:var(--text);
+ font-size:clamp(16px,3vw,24px);
+ font-weight:900;
+ letter-spacing:5px;
+}
+
+.zak-intro-brand span{
+ display:block;
+ margin-top:3px;
+ color:var(--cyan);
+ font-size:9px;
+ letter-spacing:4px;
+}
+
+.zak-countdown{
+ margin:25px auto 8px;
+ font-size:clamp(70px,14vw,125px);
+ line-height:.85;
+ font-weight:950;
+ letter-spacing:-8px;
+ background:linear-gradient(180deg,#fff,var(--cyan),var(--blue));
+ -webkit-background-clip:text;
+ background-clip:text;
+ color:transparent;
+ filter:drop-shadow(0 0 25px rgba(70,230,255,.22));
+ animation:zakCountdownPulse 1s ease-in-out infinite;
+}
+
+.zak-intro-status{
+ color:var(--muted);
+ font-size:10px;
+ letter-spacing:2px;
+ text-transform:uppercase;
+}
+
+.zak-intro-water{
+ position:absolute;
+ inset:0;
+ z-index:2;
+ overflow:hidden;
+ pointer-events:none;
+}
+
+.zak-drop{
+ position:absolute;
+ top:-45px;
+ width:4px;
+ height:28px;
+ border-radius:50% 50% 55% 55%;
+ background:linear-gradient(180deg,transparent,var(--cyan));
+ box-shadow:0 0 14px rgba(70,230,255,.65);
+ opacity:.75;
+ animation:zakDropFall 2.7s linear infinite;
+}
+
+.zak-drop:after{
+ content:"";
+ position:absolute;
+ left:50%;
+ bottom:-4px;
+ width:9px;
+ height:9px;
+ transform:translateX(-50%);
+ border-radius:50%;
+ background:rgba(70,230,255,.75);
+ filter:blur(1px);
+}
+
+.zak-drop.d1{left:12%;animation-delay:-.4s}
+.zak-drop.d2{left:27%;animation-delay:-1.5s}
+.zak-drop.d3{left:43%;animation-delay:-2.2s}
+.zak-drop.d4{left:62%;animation-delay:-.9s}
+.zak-drop.d5{left:79%;animation-delay:-1.9s}
+.zak-drop.d6{left:92%;animation-delay:-.1s}
+
+.zak-water-ripple{
+ position:absolute;
+ left:50%;
+ bottom:8%;
+ width:180px;
+ height:34px;
+ border:1px solid rgba(70,230,255,.38);
+ border-radius:50%;
+ transform:translateX(-50%) scale(.4);
+ opacity:0;
+ animation:zakRipple 2.8s ease-out infinite;
+}
+
+.zak-water-ripple.r2{animation-delay:-1s}
+.zak-water-ripple.r3{animation-delay:-2s}
+
+.zak-intro-particles{
+ position:absolute;
+ inset:0;
+ z-index:1;
+ pointer-events:none;
+}
+
+.zak-intro-particles i{
+ position:absolute;
+ width:3px;
+ height:3px;
+ border-radius:50%;
+ background:var(--cyan);
+ box-shadow:0 0 12px var(--cyan);
+ animation:zakParticleFloat 4s ease-in-out infinite;
+}
+
+.zak-intro-particles i:nth-child(1){left:9%;top:25%}
+.zak-intro-particles i:nth-child(2){left:22%;top:67%;animation-delay:-1s}
+.zak-intro-particles i:nth-child(3){left:37%;top:18%;animation-delay:-2s}
+.zak-intro-particles i:nth-child(4){left:55%;top:75%;animation-delay:-.5s}
+.zak-intro-particles i:nth-child(5){left:71%;top:22%;animation-delay:-1.7s}
+.zak-intro-particles i:nth-child(6){left:88%;top:58%;animation-delay:-2.4s}
+.zak-intro-particles i:nth-child(7){left:16%;top:44%;animation-delay:-3s}
+.zak-intro-particles i:nth-child(8){left:47%;top:88%;animation-delay:-1.2s}
+.zak-intro-particles i:nth-child(9){left:78%;top:78%;animation-delay:-2.7s}
+.zak-intro-particles i:nth-child(10){left:94%;top:34%;animation-delay:-.7s}
+
+
+/* =========================================================
+   FOUNDER / CEO SECTION
+========================================================= */
+
+.zak-founder-section{
+ position:relative;
+ width:min(var(--max-width),calc(100% - 40px));
+ margin:auto;
+ padding:100px 0;
+ overflow:hidden;
+}
+
+.zak-founder-inner{
+ position:relative;
+ z-index:3;
+}
+
+.zak-founder-heading{
+ max-width:760px;
+ margin-bottom:42px;
+}
+
+.zak-founder-heading h2{
+ font-size:clamp(38px,5.5vw,70px);
+ line-height:.98;
+ letter-spacing:-3px;
+}
+
+.zak-founder-heading h2 span{
+ background:linear-gradient(90deg,var(--cyan),#fff,var(--blue));
+ -webkit-background-clip:text;
+ background-clip:text;
+ color:transparent;
+}
+
+.zak-founder-heading p{
+ max-width:650px;
+ margin-top:18px;
+ color:var(--muted);
+ line-height:1.8;
+}
+
+.zak-founder-card{
+ position:relative;
+ display:grid;
+ grid-template-columns:minmax(300px,.85fr) 1.15fr;
+ gap:55px;
+ align-items:center;
+ padding:45px;
+ overflow:hidden;
+ border:1px solid var(--line-bright);
+ border-radius:30px;
+ background:
+   radial-gradient(circle at 20% 20%,rgba(70,230,255,.11),transparent 32%),
+   radial-gradient(circle at 90% 80%,rgba(66,135,255,.10),transparent 35%),
+   rgba(7,17,31,.78);
+ box-shadow:var(--shadow);
+ backdrop-filter:blur(18px);
+}
+
+.zak-founder-card:before{
+ content:"";
+ position:absolute;
+ inset:0;
+ background:linear-gradient(120deg,transparent,rgba(70,230,255,.045),transparent);
+ transform:translateX(-100%);
+ animation:zakFounderSweep 6s ease-in-out infinite;
+ pointer-events:none;
+}
+
+.zak-founder-photo-wrap{
+ position:relative;
+ width:min(390px,100%);
+ aspect-ratio:1/1;
+ margin:auto;
+ display:grid;
+ place-items:center;
+}
+
+.zak-founder-photo{
+ position:relative;
+ z-index:3;
+ width:72%;
+ aspect-ratio:1/1;
+ padding:8px;
+ border:1px solid rgba(70,230,255,.45);
+ border-radius:28px;
+ background:linear-gradient(145deg,rgba(70,230,255,.14),rgba(66,135,255,.05));
+ box-shadow:
+   0 0 70px rgba(70,230,255,.14),
+   inset 0 0 35px rgba(70,230,255,.05);
+ transform:rotate(-2deg);
+ transition:.5s ease;
+}
+
+.zak-founder-card:hover .zak-founder-photo{
+ transform:rotate(0) scale(1.025);
+}
+
+.zak-photo-placeholder{
+ width:100%;
+ height:100%;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:8px;
+ border:1px dashed rgba(70,230,255,.4);
+ border-radius:21px;
+ background:
+   radial-gradient(circle at 50% 35%,rgba(70,230,255,.12),transparent 38%),
+   rgba(4,12,23,.8);
+ text-align:center;
+}
+
+.zak-photo-icon{
+ font-size:55px;
+ filter:drop-shadow(0 0 20px rgba(70,230,255,.3));
+}
+
+.zak-photo-placeholder strong{
+ color:var(--text);
+ font-size:12px;
+ letter-spacing:2px;
+}
+
+.zak-photo-placeholder small{
+ color:var(--cyan);
+ font-size:9px;
+ letter-spacing:1.5px;
+ text-transform:uppercase;
+}
+
+.zak-founder-orbit{
+ position:absolute;
+ border:1px solid rgba(70,230,255,.18);
+ border-radius:50%;
+ animation:spin 15s linear infinite;
+}
+
+.zak-founder-orbit:after{
+ content:"";
+ position:absolute;
+ top:50%;
+ left:-4px;
+ width:8px;
+ height:8px;
+ border-radius:50%;
+ background:var(--cyan);
+ box-shadow:0 0 18px var(--cyan);
+}
+
+.orbit-a{
+ width:92%;
+ height:92%;
+}
+
+.orbit-b{
+ width:78%;
+ height:78%;
+ animation-duration:10s;
+ animation-direction:reverse;
+ border-color:rgba(66,135,255,.18);
+}
+
+.orbit-b:after{
+ background:var(--blue);
+ box-shadow:0 0 18px var(--blue);
+ left:auto;
+ right:-4px;
+}
+
+.zak-photo-label{
+ position:absolute;
+ z-index:4;
+ right:0;
+ bottom:9%;
+ padding:9px 12px;
+ border:1px solid var(--line-bright);
+ border-radius:999px;
+ background:rgba(5,15,28,.92);
+ color:var(--cyan);
+ font-size:9px;
+ font-weight:900;
+ letter-spacing:1.5px;
+ box-shadow:0 0 25px rgba(70,230,255,.12);
+}
+
+.zak-founder-copy{
+ position:relative;
+ z-index:2;
+}
+
+.zak-founder-status{
+ display:flex;
+ align-items:center;
+ gap:8px;
+ color:var(--cyan);
+ font-size:9px;
+ font-weight:900;
+ letter-spacing:2px;
+}
+
+.zak-founder-status i{
+ width:7px;
+ height:7px;
+ border-radius:50%;
+ background:var(--green);
+ box-shadow:0 0 12px var(--green);
+ animation:zakStatusBlink 1.8s ease-in-out infinite;
+}
+
+.zak-founder-copy h3{
+ margin-top:16px;
+ font-size:clamp(36px,5vw,62px);
+ letter-spacing:-2px;
+}
+
+.zak-founder-role{
+ margin-top:4px;
+ color:var(--cyan);
+ font-size:11px;
+ font-weight:900;
+ letter-spacing:2px;
+ text-transform:uppercase;
+}
+
+.zak-founder-copy p{
+ max-width:650px;
+ margin-top:20px;
+ color:var(--muted);
+ line-height:1.8;
+}
+
+.zak-founder-tags{
+ display:flex;
+ flex-wrap:wrap;
+ gap:9px;
+ margin-top:25px;
+}
+
+.zak-founder-tags span{
+ padding:8px 11px;
+ border:1px solid var(--line);
+ border-radius:999px;
+ background:rgba(70,230,255,.035);
+ color:#c5d7e5;
+ font-size:9px;
+ font-weight:800;
+ letter-spacing:1px;
+ text-transform:uppercase;
+}
+
+.zak-founder-water{
+ position:absolute;
+ inset:0;
+ z-index:1;
+ overflow:hidden;
+ pointer-events:none;
+ opacity:.65;
+}
+
+.zak-founder-drop{
+ position:absolute;
+ top:-35px;
+ width:3px;
+ height:24px;
+ border-radius:50%;
+ background:linear-gradient(180deg,transparent,var(--cyan));
+ box-shadow:0 0 12px rgba(70,230,255,.5);
+ animation:zakFounderDrop 4.5s linear infinite;
+}
+
+.zak-founder-drop.fd1{left:12%;animation-delay:-2s}
+.zak-founder-drop.fd2{left:30%;animation-delay:-3.4s}
+.zak-founder-drop.fd3{left:52%;animation-delay:-1.2s}
+.zak-founder-drop.fd4{left:76%;animation-delay:-4s}
+.zak-founder-drop.fd5{left:91%;animation-delay:-2.7s}
+
+.zak-founder-ripple{
+ position:absolute;
+ left:50%;
+ bottom:4%;
+ width:260px;
+ height:42px;
+ border:1px solid rgba(70,230,255,.2);
+ border-radius:50%;
+ transform:translateX(-50%) scale(.4);
+ opacity:0;
+ animation:zakFounderRipple 4s ease-out infinite;
+}
+
+.zak-founder-ripple.fr2{animation-delay:-2s}
+
+
+/* KEYFRAMES */
+
+@keyframes zakIntroFloat{
+ 0%,100%{transform:translateY(0)}
+ 50%{transform:translateY(-9px)}
+}
+
+@keyframes zakCountdownPulse{
+ 0%,100%{transform:scale(1);opacity:.82}
+ 50%{transform:scale(1.07);opacity:1}
+}
+
+@keyframes zakDropFall{
+ 0%{transform:translateY(-40px);opacity:0}
+ 10%{opacity:.8}
+ 78%{opacity:.75}
+ 100%{transform:translateY(115vh);opacity:0}
+}
+
+@keyframes zakRipple{
+ 0%{transform:translateX(-50%) scale(.25);opacity:0}
+ 15%{opacity:.65}
+ 100%{transform:translateX(-50%) scale(2.2);opacity:0}
+}
+
+@keyframes zakParticleFloat{
+ 0%,100%{transform:translateY(0);opacity:.2}
+ 50%{transform:translateY(-25px);opacity:.9}
+}
+
+@keyframes zakFounderSweep{
+ 0%,20%{transform:translateX(-110%)}
+ 55%,100%{transform:translateX(110%)}
+}
+
+@keyframes zakFounderDrop{
+ 0%{transform:translateY(-30px);opacity:0}
+ 10%{opacity:.65}
+ 85%{opacity:.55}
+ 100%{transform:translateY(500px);opacity:0}
+}
+
+@keyframes zakFounderRipple{
+ 0%{transform:translateX(-50%) scale(.3);opacity:0}
+ 15%{opacity:.45}
+ 100%{transform:translateX(-50%) scale(2.4);opacity:0}
+}
+
+@keyframes zakStatusBlink{
+ 0%,100%{opacity:.55}
+ 50%{opacity:1}
+}
+
+
+/* RESPONSIVE FOUNDER */
+@media(max-width:900px){
+ .zak-founder-card{
+   grid-template-columns:1fr;
+   gap:35px;
+   padding:32px;
+ }
+ .zak-founder-photo-wrap{
+   max-width:360px;
+ }
+}
+
+@media(max-width:680px){
+ .zak-founder-section{
+   width:min(100% - 36px,var(--max-width));
+   padding:70px 0;
+ }
+ .zak-founder-heading h2{
+   font-size:38px;
+   letter-spacing:-1.5px;
+ }
+ .zak-founder-card{
+   padding:24px 18px;
+   border-radius:22px;
+ }
+ .zak-founder-photo-wrap{
+   max-width:300px;
+ }
+ .zak-photo-label{
+   right:-3px;
+   bottom:6%;
+ }
+ .zak-founder-copy h3{
+   font-size:38px;
+ }
+ .zak-founder-copy p{
+   font-size:14px;
+ }
+ .zak-founder-tags{
+   gap:7px;
+ }
+ .zak-founder-tags span{
+   font-size:8px;
+ }
+}
+
+@media(prefers-reduced-motion:reduce){
+ #zak-home-intro *,
+ .zak-founder-section *{
+   animation:none!important;
+ }
+ #zak-home-intro{
+   transition:none;
+ }
+}
