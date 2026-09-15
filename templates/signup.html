@@ -57,16 +57,461 @@ else if(lower.includes("rate limit")||lower.includes("too many requests"))messag
 show(message,"error");button.disabled=false;button.textContent="Create Account";return;
 }
 if(data?.session){
-show("Account created successfully. Opening your dashboard...","success");
-setTimeout(()=>window.location.replace(new URL("dashboard.html",location.href).href),500);return;
+button.textContent="Account Created!";
+window.ZakSignupCelebration.show(fullName,false);
+return;
 }
-show("Your account was created, but email confirmation is enabled in Supabase. Please disable it in Authentication settings.","error");
-button.disabled=false;button.textContent="Create Account";
+button.disabled=false;
+button.textContent="Create Account";
+window.ZakSignupCelebration.show(fullName,true);
 }catch(error){
 console.error(error);show("Something went wrong. Please try again.","error");button.disabled=false;button.textContent="Create Account";
 }
 });
 })();
 </script>
+
+<style>
+#zak-celebration-overlay{
+position:fixed;inset:0;z-index:99999;display:none;overflow:auto;
+background:
+radial-gradient(circle at 15% 20%,rgba(0,200,255,.18),transparent 30%),
+radial-gradient(circle at 85% 25%,rgba(120,80,255,.2),transparent 32%),
+radial-gradient(circle at 50% 100%,rgba(0,255,170,.12),transparent 38%),
+#030711;color:#fff;isolation:isolate;
+}
+#zak-celebration-overlay.active{display:block;animation:zakFade .5s ease both}
+@keyframes zakFade{from{opacity:0}to{opacity:1}}
+
+#zak-fireworks{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+
+.zak-light-orb{
+position:absolute;width:180px;height:180px;border-radius:50%;
+filter:blur(45px);opacity:.25;pointer-events:none;
+animation:zakOrb 7s ease-in-out infinite;
+}
+.zak-orb-one{top:8%;left:4%;background:#00c8ff}
+.zak-orb-two{top:30%;right:5%;background:#8b5cf6;animation-delay:-2s}
+.zak-orb-three{bottom:5%;left:35%;background:#00e676;animation-delay:-4s}
+@keyframes zakOrb{
+0%,100%{transform:translate3d(0,0,0) scale(1)}
+50%{transform:translate3d(25px,-35px,0) scale(1.16)}
+}
+
+.zak-celebration-shell{
+position:relative;z-index:5;min-height:100dvh;
+box-sizing:border-box;display:flex;align-items:center;
+justify-content:center;padding:42px 18px;
+}
+
+.zak-celebration-card{
+position:relative;width:min(680px,100%);box-sizing:border-box;
+padding:46px 42px 40px;text-align:center;
+border:1px solid rgba(255,255,255,.15);border-radius:30px;
+background:linear-gradient(145deg,rgba(15,28,48,.92),rgba(5,12,25,.84));
+backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+box-shadow:0 30px 100px rgba(0,0,0,.58),0 0 70px rgba(0,200,255,.09);
+overflow:hidden;animation:zakCard .9s cubic-bezier(.16,1,.3,1) both;
+}
+.zak-celebration-card:before{
+content:"";position:absolute;inset:-2px;z-index:-1;border-radius:32px;
+background:conic-gradient(from 0deg,transparent,rgba(0,200,255,.45),
+transparent 25%,rgba(139,92,246,.4),transparent 52%,
+rgba(0,255,170,.4),transparent 78%);
+animation:zakSpin 8s linear infinite;
+}
+@keyframes zakSpin{to{transform:rotate(360deg)}}
+@keyframes zakCard{
+from{opacity:0;transform:translateY(35px) scale(.94)}
+to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+.zak-success-icon{
+width:94px;height:94px;margin:0 auto 25px;display:grid;place-items:center;
+border-radius:50%;font-size:45px;
+background:linear-gradient(145deg,#00d9ff,#4267ff 55%,#8b5cf6);
+box-shadow:0 0 30px rgba(0,200,255,.45),0 0 70px rgba(94,92,246,.25);
+animation:zakPop .8s cubic-bezier(.16,1,.3,1) both,zakPulse 2.8s ease-in-out 1s infinite;
+}
+@keyframes zakPop{
+0%{transform:scale(0) rotate(-30deg)}
+70%{transform:scale(1.12) rotate(8deg)}
+100%{transform:scale(1) rotate(0)}
+}
+@keyframes zakPulse{
+0%,100%{box-shadow:0 0 30px rgba(0,200,255,.45),0 0 70px rgba(94,92,246,.25)}
+50%{box-shadow:0 0 48px rgba(0,220,255,.75),0 0 100px rgba(94,92,246,.38)}
+}
+
+.zak-celebration-eyebrow{
+margin:0 0 9px;color:#61ddff;font-size:12px;font-weight:800;
+letter-spacing:.18em;text-transform:uppercase;
+}
+.zak-celebration-title{
+margin:0;font-size:clamp(32px,6vw,58px);line-height:1.05;
+font-weight:900;letter-spacing:-.035em;
+background:linear-gradient(90deg,#fff,#7eeaff,#b8a7ff,#fff);
+background-size:250% auto;-webkit-background-clip:text;background-clip:text;
+color:transparent;animation:zakShine 4s linear infinite;
+}
+@keyframes zakShine{to{background-position:250% center}}
+
+.zak-celebration-name{
+margin:15px 0 0;color:#fff;font-size:clamp(20px,4vw,28px);font-weight:700;
+}
+.zak-celebration-message{
+max-width:540px;margin:16px auto 0;color:#aebdd0;font-size:15px;line-height:1.75;
+}
+.zak-celebration-divider{
+width:min(330px,70%);height:1px;margin:28px auto;
+background:linear-gradient(90deg,transparent,rgba(0,200,255,.65),rgba(139,92,246,.65),transparent);
+}
+.zak-celebration-actions{
+display:flex;justify-content:center;gap:13px;flex-wrap:wrap;
+}
+.zak-celebration-button{
+position:relative;min-width:210px;min-height:52px;padding:13px 22px;
+border:0;border-radius:14px;cursor:pointer;font:inherit;font-weight:800;color:#fff;
+transition:transform .25s ease,box-shadow .25s ease,filter .25s ease;
+animation:zakButtonFloat 3s ease-in-out infinite;
+}
+.zak-celebration-button:hover{
+transform:translateY(-5px) scale(1.02);filter:brightness(1.1);
+}
+.zak-celebration-button:active{transform:translateY(0) scale(.98)}
+.zak-dashboard-button{
+background:linear-gradient(135deg,#00bfff,#4169ff 58%,#7c3aed);
+box-shadow:0 12px 30px rgba(0,150,255,.25),0 0 28px rgba(0,200,255,.18);
+}
+.zak-home-button{
+background:rgba(255,255,255,.055);
+border:1px solid rgba(255,255,255,.13);color:#cbd7e6;
+animation-delay:-1s;
+}
+@keyframes zakButtonFloat{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-5px)}
+}
+
+.zak-celebration-hint{
+margin:20px 0 0;color:#65758a;font-size:12px;
+}
+
+.zak-floating-spark{
+position:absolute;z-index:2;width:5px;height:5px;border-radius:50%;
+background:#fff;box-shadow:0 0 8px #fff,0 0 18px #00c8ff;
+animation:zakSpark 4s ease-in-out infinite;pointer-events:none;
+}
+.zak-spark-a{left:12%;top:25%;animation-delay:-1s}
+.zak-spark-b{left:22%;bottom:18%;animation-delay:-2.2s}
+.zak-spark-c{right:16%;top:18%;animation-delay:-.5s}
+.zak-spark-d{right:25%;bottom:25%;animation-delay:-3s}
+@keyframes zakSpark{
+0%,100%{opacity:.25;transform:translateY(0) scale(.7)}
+50%{opacity:1;transform:translateY(-28px) scale(1.45)}
+}
+
+.zak-celebration-confetti{
+position:absolute;z-index:3;width:7px;height:13px;border-radius:2px;
+pointer-events:none;animation:zakConfetti var(--fall,4s) linear infinite;
+animation-delay:var(--delay,0s);opacity:0;
+}
+@keyframes zakConfetti{
+0%{opacity:0;transform:translate3d(0,-20px,0) rotate(0)}
+10%,90%{opacity:1}
+100%{opacity:0;transform:translate3d(var(--drift),110vh,0) rotate(720deg)}
+}
+
+.zak-confirm-note{
+display:none;margin:20px auto 0;padding:13px 15px;max-width:520px;
+border:1px solid rgba(0,200,255,.15);border-radius:12px;
+background:rgba(0,200,255,.055);color:#a9dff0;font-size:13px;line-height:1.6;
+}
+.zak-confirm-mode .zak-confirm-note{display:block}
+.zak-confirm-mode .zak-dashboard-button{display:none}
+
+@media(max-width:700px){
+.zak-celebration-shell{align-items:flex-start;padding:28px 14px}
+.zak-celebration-card{margin:auto 0;padding:35px 20px 28px;border-radius:24px}
+.zak-success-icon{width:78px;height:78px;font-size:36px;margin-bottom:20px}
+.zak-celebration-message{font-size:14px;line-height:1.65}
+.zak-celebration-actions{flex-direction:column;align-items:stretch}
+.zak-celebration-button{width:100%;min-width:0}
+.zak-light-orb{width:120px;height:120px;filter:blur(35px)}
+}
+@media(prefers-reduced-motion:reduce){
+#zak-celebration-overlay *,
+#zak-celebration-overlay *:before,
+#zak-celebration-overlay *:after{
+animation-duration:.001ms!important;animation-iteration-count:1!important;
+}
+}
+
+</style>
+
+<div id="zak-celebration-overlay" aria-hidden="true">
+<canvas id="zak-fireworks"></canvas>
+
+<div class="zak-light-orb zak-orb-one"></div>
+<div class="zak-light-orb zak-orb-two"></div>
+<div class="zak-light-orb zak-orb-three"></div>
+
+<span class="zak-floating-spark zak-spark-a"></span>
+<span class="zak-floating-spark zak-spark-b"></span>
+<span class="zak-floating-spark zak-spark-c"></span>
+<span class="zak-floating-spark zak-spark-d"></span>
+
+<div id="zak-confetti-layer"></div>
+
+<div class="zak-celebration-shell">
+<section class="zak-celebration-card" id="zak-celebration-card"
+role="dialog" aria-modal="true" aria-labelledby="zak-celebration-title">
+
+<div class="zak-success-icon" aria-hidden="true">✓</div>
+
+<p class="zak-celebration-eyebrow">ZAKMOLANITECH SOLUTIONS</p>
+
+<h1 class="zak-celebration-title" id="zak-celebration-title">
+Congratulations! 🎉
+</h1>
+
+<div class="zak-celebration-name" id="zak-celebration-name">
+Welcome!
+</div>
+
+<p class="zak-celebration-message" id="zak-celebration-message">
+Your account has been created successfully.
+Welcome to the Zakmolanitech Solutions community.
+</p>
+
+<div class="zak-celebration-divider"></div>
+
+<div class="zak-celebration-actions">
+
+<button type="button" id="zakContinueButton"
+class="zak-celebration-button zak-dashboard-button">
+🚀 Continue to Dashboard
+</button>
+
+<button type="button" id="zakHomeButton"
+class="zak-celebration-button zak-home-button">
+🏠 Back to Home
+</button>
+
+</div>
+
+<div class="zak-confirm-note" id="zakConfirmNote">
+Your account was created successfully. Please check your email
+for the confirmation link before signing in.
+</div>
+
+<p class="zak-celebration-hint" id="zakCelebrationHint">
+Your dashboard is ready for you.
+</p>
+
+</section>
+</div>
+</div>
+
+<script>
+(function(){
+
+const overlay=document.getElementById("zak-celebration-overlay");
+const card=document.getElementById("zak-celebration-card");
+const nameEl=document.getElementById("zak-celebration-name");
+const messageEl=document.getElementById("zak-celebration-message");
+const continueBtn=document.getElementById("zakContinueButton");
+const homeBtn=document.getElementById("zakHomeButton");
+const hint=document.getElementById("zakCelebrationHint");
+const canvas=document.getElementById("zak-fireworks");
+const ctx=canvas.getContext("2d");
+const confettiLayer=document.getElementById("zak-confetti-layer");
+
+let animationFrame=0;
+let fireworks=[];
+let particles=[];
+let running=false;
+
+function resizeCanvas(){
+const ratio=Math.min(window.devicePixelRatio||1,2);
+canvas.width=Math.floor(window.innerWidth*ratio);
+canvas.height=Math.floor(window.innerHeight*ratio);
+canvas.style.width=window.innerWidth+"px";
+canvas.style.height=window.innerHeight+"px";
+ctx.setTransform(ratio,0,0,ratio,0,0);
+}
+
+window.addEventListener("resize",resizeCanvas,{passive:true});
+resizeCanvas();
+
+function random(min,max){
+return Math.random()*(max-min)+min;
+}
+
+function makeConfetti(){
+confettiLayer.innerHTML="";
+const total=window.innerWidth<600?26:46;
+
+for(let i=0;i<total;i++){
+const piece=document.createElement("span");
+piece.className="zak-celebration-confetti";
+piece.style.left=random(2,98)+"%";
+piece.style.top=random(-25,15)+"px";
+piece.style.setProperty("--drift",random(-130,130)+"px");
+piece.style.setProperty("--fall",random(3.5,6)+"s");
+piece.style.setProperty("--delay",random(-6,0)+"s");
+
+const shapes=[
+"linear-gradient(135deg,#00d9ff,#3b82f6)",
+"linear-gradient(135deg,#8b5cf6,#c084fc)",
+"linear-gradient(135deg,#00e676,#22c55e)",
+"linear-gradient(135deg,#fff,#60a5fa)"
+];
+
+piece.style.background=shapes[i%shapes.length];
+piece.style.transform="rotate("+random(0,360)+"deg)";
+confettiLayer.appendChild(piece);
+}
+}
+
+function burst(x,y){
+const count=window.innerWidth<600?34:52;
+
+for(let i=0;i<count;i++){
+const angle=(Math.PI*2*i)/count+random(-.12,.12);
+const speed=random(1.8,4.6);
+
+particles.push({
+x:x,y:y,
+vx:Math.cos(angle)*speed,
+vy:Math.sin(angle)*speed,
+life:1,
+size:random(1.5,3.5),
+hue:Math.floor(random(180,300))
+});
+}
+}
+
+function launchFirework(){
+fireworks.push({
+x:random(window.innerWidth*.15,window.innerWidth*.85),
+y:window.innerHeight+10,
+targetY:random(window.innerHeight*.12,window.innerHeight*.48),
+speed:random(5,8),
+hue:Math.floor(random(180,310))
+});
+}
+
+function animate(){
+if(!running)return;
+
+ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+
+if(Math.random()<.045)launchFirework();
+
+for(let i=fireworks.length-1;i>=0;i--){
+const f=fireworks[i];
+
+f.y-=f.speed;
+
+ctx.beginPath();
+ctx.arc(f.x,f.y,2.2,0,Math.PI*2);
+ctx.fillStyle="hsl("+f.hue+",100%,70%)";
+ctx.shadowBlur=18;
+ctx.shadowColor=ctx.fillStyle;
+ctx.fill();
+
+if(f.y<=f.targetY){
+burst(f.x,f.y);
+fireworks.splice(i,1);
+}
+}
+
+ctx.shadowBlur=0;
+
+for(let i=particles.length-1;i>=0;i--){
+const p=particles[i];
+
+p.x+=p.vx;
+p.y+=p.vy;
+p.vy+=.035;
+p.vx*=.985;
+p.vy*=.985;
+p.life-=.018;
+
+ctx.globalAlpha=Math.max(0,p.life);
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+ctx.fillStyle="hsl("+p.hue+",100%,65%)";
+ctx.fill();
+
+if(p.life<=0)particles.splice(i,1);
+}
+
+ctx.globalAlpha=1;
+animationFrame=requestAnimationFrame(animate);
+}
+
+function startCelebration(fullName,confirmationMode){
+nameEl.textContent="Welcome, "+fullName+"!";
+
+if(confirmationMode){
+card.classList.add("zak-confirm-mode");
+messageEl.textContent=
+"Your Zakmolanitech Solutions account has been created. "+
+"One more step: confirm your email, then sign in to access your dashboard.";
+hint.textContent="Check your inbox for the confirmation email.";
+}else{
+card.classList.remove("zak-confirm-mode");
+messageEl.textContent=
+"Your account has been created successfully. "+
+"Welcome to the Zakmolanitech Solutions community. "+
+"Your dashboard is ready for you.";
+hint.textContent="Your dashboard is ready for you.";
+}
+
+overlay.style.display="block";
+overlay.setAttribute("aria-hidden","false");
+
+requestAnimationFrame(function(){
+overlay.classList.add("active");
+});
+
+makeConfetti();
+
+running=true;
+cancelAnimationFrame(animationFrame);
+resizeCanvas();
+ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+animate();
+
+if(!confirmationMode){
+continueBtn.focus({preventScroll:true});
+}
+}
+
+function dashboard(){
+continueBtn.disabled=true;
+continueBtn.textContent="Opening Dashboard...";
+window.location.replace(
+new URL("dashboard.html",location.href).href
+);
+}
+
+continueBtn.addEventListener("click",dashboard);
+
+homeBtn.addEventListener("click",function(){
+window.location.replace(
+new URL("../index.html",location.href).href
+);
+});
+
+window.ZakSignupCelebration={
+show:startCelebration
+};
+
+})();
+</script>
+
 </body>
   </html>
