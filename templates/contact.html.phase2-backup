@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contact | Zakmolanitech Solutions</title>
+<meta name="description" content="Contact Zakmolanitech Solutions for web development, cybersecurity, IT support, training and digital solutions.">
+<meta name="theme-color" content="#050b14">
+<link rel="stylesheet" href="../static/css/main.css">
+</head>
+<body>
+
+<header class="site-header">
+<button class="explore-toggle" id="exploreToggle" aria-expanded="false" aria-controls="explorePanel">Explore</button>
+<a class="brand" href="../index.html"><span class="brand-mark">Z</span><span class="brand-name">ZAKMOLANITECH</span></a>
+<nav class="desktop-nav" aria-label="Main navigation">
+<a href="../index.html">Home</a>
+<a href="services.html">Services</a>
+<a href="portfolio.html">Portfolio</a>
+<a href="contact.html">Contact Us</a>
+</nav>
+</header>
+
+<aside class="explore-panel" id="explorePanel" aria-hidden="true">
+<div class="explore-title">Explore Zakmolanitech</div>
+<nav class="explore-links">
+<a class="explore-link" href="../index.html"><span>01</span>Home</a>
+<a class="explore-link" href="about.html"><span>02</span>About</a>
+<a class="explore-link" href="services.html"><span>03</span>Services</a>
+<a class="explore-link" href="portfolio.html"><span>04</span>Portfolio</a>
+<a class="explore-link" href="pricing.html"><span>05</span>Pricing</a>
+<a class="explore-link" href="contact.html"><span>06</span>Contact Us</a>
+<a class="explore-link" href="donate.html"><span>07</span>Donate</a>
+<a class="explore-link" href="dashboard.html"><span>08</span>Dashboard</a>
+<a class="explore-link" href="profile.html"><span>09</span>My Profile</a>
+<a class="explore-link" href="settings.html"><span>10</span>Settings</a>
+</nav>
+</aside>
+
+<div class="navigation-backdrop" id="navigationBackdrop"></div>
+
+<main>
+
+<section class="hero">
+<div class="hero-copy reveal">
+<div class="eyebrow">06 / Contact Us</div>
+<h1>Let's build something <span>useful.</span></h1>
+<p class="hero-text">Have a technology project, technical challenge, training question or service requirement? Reach out and let's discuss it.</p>
+
+<div class="hero-actions">
+<a class="btn btn-primary" href="#contact-form">Send a Message</a>
+<a class="btn" href="https://wa.me/256742956448?text=Hi%20Zakmolanitech%2C%20I%20need%20help%20with..." target="_blank" rel="noopener">WhatsApp Us</a>
+</div>
+
+<div class="hero-meta">
+<div><strong>WhatsApp</strong>+256 742 956 448</div>
+<div><strong>WhatsApp</strong>+256 775 226 333</div>
+<div><strong>Email</strong>zakpollyqueens@gmail.com</div>
+</div>
+</div>
+
+<div class="hero-visual reveal">
+<div class="orbit-system">
+<div class="orbit-ring ring-one"></div>
+<div class="orbit-ring ring-two"></div>
+<div class="orbit-ring ring-three"></div>
+<div class="orbit-core">Z</div>
+<div class="orbit-node node-web">WEB</div>
+<div class="orbit-node node-sec">SECURITY</div>
+<div class="orbit-node node-it">IT</div>
+<div class="tech-card card-one"><small>Connect</small><strong>WhatsApp</strong></div>
+<div class="tech-card card-two"><small>Community</small><strong>Telegram</strong></div>
+<div class="tech-card card-three"><small>Support</small><strong>Email &amp; Phone</strong></div>
+</div>
+</div>
+</section>
+
+<section class="services-preview" id="contact-form">
+<div class="section-heading reveal">
+<div class="eyebrow">07 / Send a Message</div>
+<h2>Tell us what you need.</h2>
+<p>Send your details and message. Online submission will be connected to the secure backend in a later phase.</p>
+</div>
+
+<div class="account-section" style="padding:0">
+<div class="account-box reveal">
+
+<form id="contactForm" class="service-form">
+
+<div class="form-grid">
+
+<div class="form-field">
+<label for="contactName">Full Name</label>
+<input id="contactName" name="name" type="text" placeholder="Your full name" required>
+</div>
+
+<div class="form-field">
+<label for="contactPhone">WhatsApp / Phone</label>
+<input id="contactPhone" name="phone" type="tel" placeholder="Your phone number" required>
+</div>
+
+<div class="form-field">
+<label for="contactEmail">Email</label>
+<input id="contactEmail" name="email" type="email" placeholder="you@example.com" required>
+</div>
+
+<div class="form-field">
+<label for="contactSubject">Subject</label>
+<input id="contactSubject" name="subject" type="text" placeholder="What can we help with?" required>
+</div>
+
+</div>
+
+<div class="form-field">
+<label for="contactMessage">Message</label>
+<textarea id="contactMessage" name="message" rows="7" placeholder="Tell us about your project, question or technical requirement..." required></textarea>
+</div>
+
+<div class="account-actions">
+<button class="btn btn-primary" type="submit">Send Message</button>
+<a class="btn" href="mailto:zakpollyqueens@gmail.com">Email Us</a>
+</div>
+
+<p id="contactFormStatus" class="form-status" aria-live="polite"></p>
+
+</form>
+
+</div>
+</div>
+</section>
+
+<section class="services-preview">
+<div class="section-heading reveal">
+<div class="eyebrow">08 / Connect With Us</div>
+<h2>Choose how you'd like to reach us.</h2>
+<p>Contact Zakmolanitech Solutions through phone, WhatsApp, Telegram or email.</p>
+</div>
+
+<div class="service-grid">
+
+<article class="service-card reveal">
+<div class="card-number">01</div>
+<div class="service-icon">☎</div>
+<h3>Call Us</h3>
+<p>Speak directly with Zakmolanitech Solutions using either of our phone numbers.</p>
+<div class="account-actions">
+<a class="btn btn-primary" href="tel:+256742956448">Call 1</a>
+<a class="btn" href="tel:+256775226333">Call 2</a>
+</div>
+</article>
+
+<article class="service-card reveal">
+<div class="card-number">02</div>
+<div class="service-icon">◉</div>
+<h3>WhatsApp</h3>
+<p>Chat with us directly on WhatsApp for quick questions, projects and service enquiries.</p>
+<div class="account-actions">
+<a class="btn btn-primary" href="https://wa.me/256742956448" target="_blank" rel="noopener">WhatsApp 1</a>
+<a class="btn" href="https://wa.me/256775226333" target="_blank" rel="noopener">WhatsApp 2</a>
+</div>
+</article>
+
+<article class="service-card reveal">
+<div class="card-number">03</div>
+<div class="service-icon">✈</div>
+<h3>Telegram Channel</h3>
+<p>Follow the official Zakmolanitech Solutions channel for technology updates and announcements.</p>
+<a class="card-link" href="https://t.me/zakmolanitech" target="_blank" rel="noopener">Join Channel →</a>
+</article>
+
+<article class="service-card reveal">
+<div class="card-number">04</div>
+<div class="service-icon">◈</div>
+<h3>Telegram Group</h3>
+<p>Join the Zakitech Subs community and stay connected with other members.</p>
+<a class="card-link" href="https://t.me/zakmolanitechsolutions" target="_blank" rel="noopener">Join Group →</a>
+</article>
+
+<article class="service-card reveal">
+<div class="card-number">05</div>
+<div class="service-icon">@</div>
+<h3>Email</h3>
+<p>For detailed enquiries, project requirements and professional communication, contact us by email.</p>
+<a class="card-link" href="mailto:zakpollyqueens@gmail.com">Send Email →</a>
+</article>
+
+<article class="service-card reveal">
+<div class="card-number">06</div>
+<div class="service-icon">⌖</div>
+<h3>Location</h3>
+<p>Our public business information lists Kampala, Uganda.</p>
+<a class="card-link" href="#location">View Location →</a>
+</article>
+
+</div>
+</section>
+
+<section class="account-section" id="location">
+<div class="account-box reveal">
+
+<div class="eyebrow">09 / Location</div>
+<h2>Kampala, Uganda.</h2>
+<p>Zakmolanitech Solutions is publicly listed in Kampala, Uganda. The exact business location can be added when the final address is confirmed.</p>
+
+<div style="margin-top:25px;min-height:260px;border:1px solid var(--line);border-radius:20px;background:radial-gradient(circle at 50% 40%,rgba(70,230,255,.16),transparent 35%),linear-gradient(135deg,#071a2b,#080f1b);display:flex;align-items:center;justify-content:center;text-align:center;padding:30px">
+<div>
+<div style="font-size:42px;color:var(--cyan);margin-bottom:12px">⌖</div>
+<strong style="font-size:18px">Kampala, Uganda</strong>
+<p style="margin-top:8px;color:var(--muted);font-size:13px">Interactive map integration can be added when the final business location is confirmed.</p>
+</div>
+</div>
+
+</div>
+</section>
+
+<section class="services-preview">
+<div class="section-heading reveal">
+<div class="eyebrow">10 / FAQ</div>
+<h2>Common questions.</h2>
+</div>
+
+<div class="service-grid">
+
+<article class="service-card reveal">
+<div class="card-number">01</div>
+<h3>What services do you provide?</h3>
+<p>We provide web development, cybersecurity, IT support and training, cloud solutions and online IT lessons.</p>
+</article>
+
+<article class="service-card reveal">
+<div class="card-number">02</div>
+<h3>Can I request a custom solution?</h3>
+<p>Yes. Contact us with your requirements and we can discuss a solution suited to your project.</p>
+</article>
+
+<article class="service-card reveal">
+<div class="card-number">03</div>
+<h3>How can I contact you quickly?</h3>
+<p>You can call or WhatsApp either number, join our Telegram communities or email us directly.</p>
+</article>
+
+</div>
+</section>
+
+<section class="final-cta">
+<div class="final-cta-inner reveal">
+<div class="eyebrow">11 / Start the Conversation</div>
+<h2>Have a technology challenge?</h2>
+<p>Tell us what you're working on and let's find a practical way forward.</p>
+
+<div class="account-actions">
+<a class="btn btn-primary" href="#contact-form">Send a Message</a>
+<a class="btn" href="https://wa.me/256742956448" target="_blank" rel="noopener">WhatsApp Us</a>
+<a class="btn" href="https://t.me/zakmolanitech" target="_blank" rel="noopener">Telegram</a>
+</div>
+</div>
+</section>
+
+</main>
+
+<a class="floating-signup" href="signup.html">SIGN UP NOW</a>
+
+<footer class="site-footer">
+<div class="footer-brand">ZAKMOLANITECH SOLUTIONS</div>
+<p class="footer-text">Technology • Security • Innovation • Empowerment</p>
+
+<nav class="footer-links" aria-label="Footer navigation">
+<a href="../index.html">Home</a>
+<a href="about.html">About</a>
+<a href="services.html">Services</a>
+<a href="portfolio.html">Portfolio</a>
+<a href="pricing.html">Pricing</a>
+<a href="contact.html">Contact</a>
+<a href="donate.html">Donate</a>
+</nav>
+
+<div class="footer-copy">© 2026 Zakmolanitech Solutions. All Rights Reserved.</div>
+</footer>
+
+<script src="../static/js/main.js"></script>
+
+<script>
+const contactForm=document.getElementById("contactForm"),contactStatus=document.getElementById("contactFormStatus");
+
+if(contactForm&&contactStatus){
+contactForm.addEventListener("submit",e=>{
+e.preventDefault();
+contactStatus.textContent="Message received on this page. Secure backend submission will be connected in the next phase.";
+contactStatus.style.color="var(--cyan)";
+contactForm.reset();
+});
+}
+</script>
+
+</body>
+                                        </html>
