@@ -88,7 +88,8 @@ document.addEventListener("DOMContentLoaded",async()=>{
         return;
       }
 
-      msg("SUCCESS — AUTHENTICATED ADMIN SESSION IS WORKING. NO REDIRECT WAS PERFORMED.");
+      msg("SUCCESS — AUTHENTICATED ADMIN SESSION IS WORKING. Opening dashboard...");
+      setTimeout(()=>{location.href="admin-dashboard.html";},300);
     }catch(error){
       console.error("AUTH TEST ERROR:",error);
       msg("AUTH ERROR: "+(error?.message||error),true);
