@@ -95,3 +95,11 @@ body.client-portal.page-workspace{min-height:100vh;background:#f4f8fb;color:#304
  .page-workspace .page-content .profile-card,.page-workspace .page-content .settings-card{padding:19px!important}
 }
 @media(max-width:420px){.page-workspace .page-content .support-header,.page-workspace .page-content .profile-head,.page-workspace .page-content .settings-head{padding:17px}.page-workspace .page-content .notification{padding:17px}.page-workspace .page-content .composer{gap:7px!important}}
+
+@media(max-width:760px){
+ .page-workspace .page-content .message-panel{display:flex!important;flex-direction:column!important;height:calc(var(--portal-vh,100dvh) - 310px)!important;min-height:360px!important}
+ .page-workspace .page-content .message-list{flex:1!important;height:auto!important;min-height:0!important;overflow:auto!important}
+ .page-workspace .page-content .message-panel .composer{position:sticky!important;bottom:0!important;z-index:5!important;flex-direction:row!important;align-items:flex-end!important;background:#fff!important;padding:11px!important;padding-bottom:calc(11px + env(safe-area-inset-bottom))!important}
+ .page-workspace .page-content .message-panel .composer textarea{min-height:48px!important;max-height:120px!important}
+ .page-workspace .page-content .message-panel .send-btn{width:auto!important;min-width:70px!important}
+}
