@@ -281,7 +281,7 @@ function render(){
 }
 async function load(){
  statusBox.textContent="Loading notifications...";
- const {data,error}=await supabase.from("client_notifications").select("id,title,message,notification_type,related_project_id,related_message_id,is_read,created_at").eq("user_id",currentUserId).order("created_at",{ascending:false}).limit(100);
+ const {data,error}=await supabase.from("client_notifications").select("id,title,message,notification_type,related_project_id,related_message_id,related_support_conversation_id,is_read,created_at").eq("user_id",currentUserId).order("created_at",{ascending:false}).limit(100);
  if(error)throw error;notifications=data||[];render();
 }
 async function init(){
