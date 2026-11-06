@@ -352,5 +352,6 @@ init();</script>
 (()=>{const sidebar=document.getElementById("dashboardSidebar"),backdrop=document.getElementById("dashBackdrop"),toggle=document.getElementById("dashMenuToggle");if(!sidebar||!backdrop||!toggle)return;const close=()=>{sidebar.classList.remove("is-open");backdrop.classList.remove("is-visible");};toggle.addEventListener("click",()=>{sidebar.classList.toggle("is-open");backdrop.classList.toggle("is-visible");});backdrop.addEventListener("click",close);sidebar.querySelectorAll("a").forEach(link=>link.addEventListener("click",close));})();
 (()=>{const viewport=window.visualViewport;if(!viewport)return;const update=()=>{const keyboard=Math.max(0,window.innerHeight-(viewport.height+viewport.offsetTop));document.documentElement.style.setProperty("--portal-vh",viewport.height+"px");document.documentElement.style.setProperty("--keyboard-offset",keyboard+"px");};viewport.addEventListener("resize",update);viewport.addEventListener("scroll",update);window.addEventListener("resize",update);update();})();
 </script>
+<script src="../static/js/portal-app-lock.js"></script>
 </body>
 </html>
