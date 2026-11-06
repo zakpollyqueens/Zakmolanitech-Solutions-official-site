@@ -273,7 +273,7 @@
     <section class="community-selector">
 
       <label for="communitySelect">
-        Select community
+        Select a project
       </label>
 
       <select id="communitySelect">
@@ -360,7 +360,7 @@ async function init(){
  const {data:projects,error:pe}=await supabase.from("client_projects").select("id,project_name,status").order("created_at",{ascending:false});
  if(pe){console.error(pe);showNotice("Unable to load your projects. Please refresh.","error");return}
  projectSelect.innerHTML='<option value="">Choose a project...</option>'+(projects||[]).map(p=>'<option value="'+esc(p.id)+'">'+esc(p.project_name)+' · '+esc(p.status.replaceAll("_"," "))+'</option>').join("");
- if(!projects?.length){projectSelect.innerHTML='<option value="">No projects yet</option>';messageStatus.textContent="Submit a project request from Overview to start a conversation with our team.";messageInput.disabled=true;sendButton.disabled=true;return}
+ if(!projects?.length){projectSelect.innerHTML='<option value="">No projects yet</option>';messageStatus.textContent="Submit a request from My Projects to start a conversation with our team.";messageInput.disabled=true;sendButton.disabled=true;return}
  const requested=new URLSearchParams(location.search).get("project");
  const chosen=projects.find(p=>p.id===requested)||projects[0];
  projectSelect.value=chosen.id;await selectProject(chosen.id);
