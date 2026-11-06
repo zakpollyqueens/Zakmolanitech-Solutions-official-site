@@ -18,7 +18,7 @@
       taps += 1;
       window.clearTimeout(reset);
       reset = window.setTimeout(() => { taps = 0; }, 1500);
-      if (taps >= 5) window.location.href = 'admin-login.html';
+      if (taps >= 5) window.location.href = window.location.pathname.includes('/templates/') ? 'admin-login.html' : 'templates/admin-login.html';
     });
   }
   const header = document.querySelector('.header');
