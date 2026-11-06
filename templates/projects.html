@@ -287,7 +287,7 @@ document.getElementById("projectRequestForm").addEventListener("submit",async e=
   const failed=[];
   for(const file of ideaFiles){
    const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_").slice(-110),path=currentUser.id+"/"+project.id+"/"+Date.now()+"-"+safeName;
-   const uploadType=file.type.startsWith("audio/webm")?"audio/webm":(file.type||"application/octet-stream");const uploaded=await supabaseClient.storage.from("project-request-files").upload(path,file,{contentType:uploadType,upsert:false});
+   const extension=file.name.split(".").pop().toLowerCase(),mimeByExtension={pdf:"application/pdf",doc:"application/msword",docx:"application/vnd.openxmlformats-officedocument.wordprocessingml.document",ppt:"application/vnd.ms-powerpoint",pptx:"application/vnd.openxmlformats-officedocument.presentationml.presentation"};const uploadType=file.type.startsWith("audio/webm")?"audio/webm":(file.type||mimeByExtension[extension]);const uploaded=await supabaseClient.storage.from("project-request-files").upload(path,file,{contentType:uploadType,upsert:false});
    if(uploaded.error){console.error(uploaded.error);failed.push(file.name);continue}
    const saved=await supabaseClient.from("project_request_attachments").insert({project_id:project.id,owner_id:currentUser.id,storage_path:path,file_name:file.name,mime_type:uploadType,size_bytes:file.size});
    if(saved.error){console.error(saved.error);await supabaseClient.storage.from("project-request-files").remove([path]);failed.push(file.name)}
