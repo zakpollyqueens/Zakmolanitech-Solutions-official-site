@@ -9,6 +9,18 @@
   });
   nav.querySelectorAll('a').forEach(link => link.addEventListener('click', close));
   document.addEventListener('keydown', event => { if (event.key === 'Escape') close(); });
+  const logo = document.getElementById('adminTrigger');
+  if (logo) {
+    let taps = 0;
+    let reset;
+    logo.addEventListener('click', event => {
+      event.preventDefault();
+      taps += 1;
+      window.clearTimeout(reset);
+      reset = window.setTimeout(() => { taps = 0; }, 1500);
+      if (taps >= 5) window.location.href = 'admin-login.html';
+    });
+  }
   const header = document.querySelector('.header');
   const syncHeader = () => {
     if (!header) return;
