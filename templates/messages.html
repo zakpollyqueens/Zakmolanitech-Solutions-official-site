@@ -193,10 +193,11 @@ function renderProjects(){
  const filtered=projects.filter(p=>(p.project_name||"").toLowerCase().includes(q));
  projectCount.textContent=String(projects.length);
  if(!filtered.length){projectList.innerHTML='<div class="rail-empty">'+(projects.length?'No projects match that search.':'No projects have been created yet. Submit an idea from My Projects to begin.')+'</div>';return;}
- projectList.innerHTML=filtered.map(p=>'<button type="button" class="project-choice '+(p.id===currentProjectId?'active':'')+'" data-project="'+esc(p.id)+'"><span class="project-initial">'+esc((p.project_name||"P").trim().charAt(0).toUpperCase())+'</span><span class="project-choice-copy"><strong>'+esc(p.project_name||"Untitled project")+'</strong><small>'+esc((p.status||"in progress").replaceAll("_"," "))+'</small></span><span class="project-arrow">›</span></button>').join("");
+ projectList.innerHTML=filtered.map(p=>'<button type="button" class="project-choice '+(p.id===currentProjectId?'active':'')+'" data-project="'+esc(p.id)+'"><span class="project-initial">'+esc((p.project_name||"P").trim().charAt(0).toUpperCase())+'</span><span class="project-choice-copy"><strong>'+esc(p.project_name||"Untitled project")+'</strong><small>'+esc((p.status||"in progress").replace(/_/g," "))+'</small></span><span class="project-arrow">›</span></button>').join("");
  projectList.querySelectorAll("[data-project]").forEach(button=>button.addEventListener("click",()=>selectProject(button.dataset.project)));
 }
 async function init(){
+ try {
  const {data,error}=await supabase.auth.getSession();
  if(error||!data.session){location.replace("signin.html");return;}
  currentUserId=data.session.user.id;
@@ -207,6 +208,7 @@ async function init(){
  const requested=new URLSearchParams(location.search).get("project");
  const chosen=projects.find(p=>p.id===requested)||projects[0];
  await selectProject(chosen.id);
+ } catch(initError) { console.error("Messages page initialization failed:",initError); showNotice("The messaging tools could not start. Please refresh the page or update your browser.","error"); messageInput.disabled=true; sendButton.disabled=true; voiceButton.disabled=true; }
 }
 async function selectProject(id){
  if(channel){await supabase.removeChannel(channel);channel=null;}
@@ -240,14 +242,23 @@ async function loadMessages(){
 projectSearch.addEventListener("input",renderProjects);
 async function sendTextMessage(){
  const message=messageInput.value.trim();
- if(!message||!currentProjectId||sending)return;
+ if(!message){messageInput.focus();return;}
+ if(!currentProjectId||!currentUserId){showNotice("Select a project before sending a message.","error");return;}
+ if(sending)return;
  sending=true;sendButton.disabled=true;voiceButton.disabled=true;sendButton.innerHTML="<span>…</span>";
- const {error}=await supabase.from("project_messages").insert({project_id:currentProjectId,sender_id:currentUserId,message,message_type:"text"}).select("id").single();
- if(error){console.error("Message send failed:",error);showNotice("Message not sent: "+(error.message||"Please try again."),"error");}
- else{messageInput.value="";messageInput.style.height="";showNotice("Message sent.","success");await loadMessages();}
- sending=false;sendButton.disabled=!currentProjectId;voiceButton.disabled=!currentProjectId;sendButton.innerHTML="<span>➤</span> Send";
+ try {
+  const {error}=await supabase.from("project_messages").insert({project_id:currentProjectId,sender_id:currentUserId,message:message,message_type:"text"});
+  if(error) throw error;
+  messageInput.value="";messageInput.style.height="";showNotice("Message sent.","success");await loadMessages();
+ } catch(error) {
+  console.error("Message send failed:",error);
+  showNotice("Message not sent: "+(error.message||"Please check your connection and try again."),"error");
+ } finally {
+  sending=false;sendButton.disabled=!currentProjectId;voiceButton.disabled=!currentProjectId;sendButton.innerHTML="<span>➤</span> Send";
+ }
 }
 messageForm.addEventListener("submit",async event=>{event.preventDefault();await sendTextMessage();});
+sendButton.addEventListener("click",event=>{event.preventDefault();if(!messageForm.reportValidity || messageForm.reportValidity())sendTextMessage();});
 function supportedAudioType(){
  const types=["audio/webm;codecs=opus","audio/webm","audio/ogg;codecs=opus","audio/mp4"];
  return types.find(type=>window.MediaRecorder&&MediaRecorder.isTypeSupported(type))||"";
