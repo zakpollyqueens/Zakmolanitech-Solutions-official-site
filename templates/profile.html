@@ -7,6 +7,8 @@
 <meta name="description" content="Manage your Zakmolanitech Solutions profile.">
 <meta name="theme-color" content="#050b14">
 <link rel="stylesheet" href="../static/css/main.css">
+<link rel="stylesheet" href="../static/css/dashboard.css">
+<link rel="stylesheet" href="../static/css/portal-pages.css">
 
 <style>
 .profile-page{
@@ -118,9 +120,10 @@
 </style>
 </head>
 
-<body>
+<body class="client-portal page-workspace">
+<aside id="dashboardSidebar" class="portal-sidebar"><a class="portal-brand" href="../index.html"><span class="brand-symbol">Z</span><span class="brand-copy"><strong>ZAKMOLANITECH</strong><small>CLIENT WORKSPACE</small></span></a><div class="sidebar-section-label">WORKSPACE</div><nav class="portal-nav"><a class="nav-item " href="dashboard.html"><span class="nav-icon">⌂</span><span>Overview</span></a><a class="nav-item " href="projects.html"><span class="nav-icon">▤</span><span>My projects</span></a><a class="nav-item " href="messages.html"><span class="nav-icon">✉</span><span>Messages</span></a><a class="nav-item " href="notifications.html"><span class="nav-icon">◉</span><span>Notifications</span></a><a class="nav-item " href="support.html"><span class="nav-icon">?</span><span>Help &amp; support</span></a></nav><div class="sidebar-section-label account-label">PERSONAL</div><nav class="portal-nav"><a class="nav-item is-current" href="profile.html"><span class="nav-icon">◎</span><span>My profile</span></a><a class="nav-item " href="settings.html"><span class="nav-icon">⚙</span><span>Account settings</span></a><a class="nav-item" href="../index.html"><span class="nav-icon">↗</span><span>Visit website</span></a></nav><div class="sidebar-account"><div class="account-avatar">Z</div><div class="account-copy"><strong>My account</strong><span>Client workspace</span></div></div></aside><div id="dashBackdrop" class="portal-backdrop"></div>
 
-<main class="profile-page">
+<main class="profile-page portal-main page-content"><header class="portal-topbar"><div class="topbar-left"><button id="dashMenuToggle" class="menu-toggle" type="button" aria-label="Open menu"><span></span><span></span><span></span></button><div class="breadcrumb"><span>Workspace</span><i>/</i><strong>My profile</strong></div></div><div class="topbar-right"><a class="topbar-link" href="notifications.html" aria-label="Notifications" title="Notifications">🔔</a><span class="topbar-divider"></span><div class="topbar-user"><span class="topbar-avatar">Z</span><span>My workspace</span></div></div></header>
 
   <div class="profile-wrap">
 
@@ -300,5 +303,6 @@ form.addEventListener("submit", async function(event){
 loadProfile();
 </script>
 
+<script>(()=>{const s=document.getElementById("dashboardSidebar"),b=document.getElementById("dashBackdrop"),t=document.getElementById("dashMenuToggle");if(!s||!b||!t)return;const c=()=>{s.classList.remove("is-open");b.classList.remove("is-visible")};t.addEventListener("click",()=>{s.classList.toggle("is-open");b.classList.toggle("is-visible")});b.addEventListener("click",c);s.querySelectorAll("a").forEach(a=>a.addEventListener("click",c));})();</script>
 </body>
   </html>
