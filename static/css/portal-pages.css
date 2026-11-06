@@ -42,3 +42,56 @@ body.client-portal.page-workspace{min-height:100vh;background:#f4f8fb;color:#304
 .page-workspace .brand-symbol,.page-workspace .startup-logo{overflow:hidden;padding:4px;background:#fff!important;border:1px solid #e5edf2;box-shadow:0 6px 18px #1b4a6414!important}
 .page-workspace .brand-symbol img,.page-workspace .startup-logo img{display:block;width:100%;height:100%;object-fit:contain;border-radius:8px}
 @media(max-width:600px){.page-workspace .page-content .composer{align-items:stretch!important;flex-direction:column!important}.page-workspace .page-content .composer textarea{width:100%!important}.page-workspace .page-content .send-btn{width:100%!important}.page-workspace .page-content .message-list{min-height:320px!important;height:55vh!important}.page-workspace .page-content .messages-head,.page-workspace .page-content .notifications-head{padding:17px}}
+
+
+/* Workspace polish: consistent with the My Projects reference page */
+.page-workspace .page-content h1{font-size:clamp(27px,3.8vw,38px)!important;letter-spacing:-1.25px!important}
+.page-workspace .page-content h2{color:#1d3b50}
+.page-workspace .page-content p{line-height:1.65}
+.page-workspace .page-content .support-header,.page-workspace .page-content .profile-head,.page-workspace .page-content .settings-head{padding:22px 24px;margin:0 0 18px;border:1px solid #e4edf2;border-radius:17px;background:linear-gradient(115deg,#fff,#f2f9fb);box-shadow:0 12px 34px #163b5308}
+.page-workspace .page-content .support-header h1,.page-workspace .page-content .profile-head h1,.page-workspace .page-content .settings-head h1{margin:0 0 8px;font-size:clamp(28px,4vw,39px)!important;line-height:1.12;letter-spacing:-1.4px}
+.page-workspace .page-content .support-header p,.page-workspace .page-content .profile-head p,.page-workspace .page-content .settings-head p{margin:0;color:#7c91a0!important;font-size:13px}
+.page-workspace .page-content .support-layout{gap:16px}
+.page-workspace .page-content .support-card{border-radius:17px!important;overflow:hidden}
+.page-workspace .page-content .panel-head,.page-workspace .page-content .chat-header{padding:17px 19px;background:#fbfdfe;border-color:#e7eef2}
+.page-workspace .page-content .panel-head h2,.page-workspace .page-content .chat-title h2{font-size:15px;color:#23465d}
+.page-workspace .page-content .conversation-item{padding:15px 17px;border-color:#edf2f5}
+.page-workspace .page-content .conversation-item:hover{background:#f4fafc}
+.page-workspace .page-content .conversation-item.active{background:#eaf7fa;border-left-color:#2494b0}
+.page-workspace .page-content .messages{background:linear-gradient(180deg,#fbfdfe,#f5f9fb);padding:22px}
+.page-workspace .page-content .message-bubble{border:1px solid #e4edf2!important;border-radius:16px!important;background:#fff!important;color:#365267!important;box-shadow:0 7px 18px #173d5208}
+.page-workspace .page-content .message-row.mine .message-bubble{background:#e8f6fa!important;border-color:#cceaf0!important;color:#28586d!important}
+.page-workspace .page-content .new-btn,.page-workspace .page-content .send-btn,.page-workspace .page-content .close-btn,.page-workspace .page-content .refresh-btn,.page-workspace .page-content .cancel-btn{min-height:40px;border-radius:11px;font-weight:800}
+.page-workspace .page-content .new-btn,.page-workspace .page-content .send-btn{background:linear-gradient(135deg,#167f9c,#286abd)!important;color:#fff!important;box-shadow:0 8px 20px #187da522}
+.page-workspace .page-content .notification{padding:21px 22px;border-radius:16px!important;transition:transform .18s,box-shadow .18s}
+.page-workspace .page-content .notification:hover{transform:translateY(-2px);box-shadow:0 15px 32px #173b5212!important}
+.page-workspace .page-content .notification.unread{background:linear-gradient(110deg,#eff9fb,#fff)!important;border-color:#c7e8ee!important}
+.page-workspace .page-content .notification-title{color:#21445b;font-size:15px;font-weight:800}
+.page-workspace .page-content .notification-message{color:#6c8292;opacity:1;font-size:13px}
+.page-workspace .page-content .notification-type{background:#eaf4f7;color:#397b90;opacity:1;font-weight:800}
+.page-workspace .page-content .status,.page-workspace .page-content .read-btn,.page-workspace .page-content .action-btn,.page-workspace .page-content .back-link{border-radius:10px}
+.page-workspace .page-content .profile-card,.page-workspace .page-content .settings-card{padding:25px!important;border-radius:17px!important}
+.page-workspace .page-content .profile-card form,.page-workspace .page-content .settings-card form{max-width:760px}
+.page-workspace .page-content .form-field input,.page-workspace .page-content .form-input,.page-workspace .page-content .composer textarea{min-height:48px;border-radius:12px!important;padding:13px 14px!important}
+.page-workspace .page-content .form-field label{font-size:10px;letter-spacing:.7px}
+.page-workspace .page-content .settings-card h2{font-size:17px;margin:0 0 7px}
+.page-workspace .page-content .settings-card>p{color:#7d91a0;font-size:12px}
+.page-workspace .page-content .actions .btn,.page-workspace .page-content .btn{border-radius:11px}
+.page-workspace .page-content button:focus-visible,.page-workspace .page-content a:focus-visible,.page-workspace .page-content input:focus-visible,.page-workspace .page-content textarea:focus-visible,.page-workspace .page-content select:focus-visible{outline:3px solid #48aeca45;outline-offset:2px}
+.page-workspace .profile-summary{display:flex;align-items:center;gap:14px;padding:0 0 22px;margin-bottom:22px;border-bottom:1px solid #eaf0f3}
+.page-workspace .profile-mark{width:58px;height:58px;display:grid;place-items:center;border-radius:18px;background:linear-gradient(145deg,#dff5f8,#e8efff);color:#167f9c;font-size:22px;font-weight:900}
+.page-workspace .profile-summary strong,.page-workspace .profile-summary span{display:block}
+.page-workspace .profile-summary strong{color:#21445b;font-size:16px}
+.page-workspace .profile-summary span{margin-top:4px;color:#8295a3;font-size:11px}
+.page-workspace .preference-row{padding:12px 0;border-top:1px solid #edf2f5;color:#526b7c;font-size:12px}
+.page-workspace .preference-row input{margin-right:9px;accent-color:#1686a2}
+@media(max-width:760px){
+ .page-workspace .page-content .support-layout{grid-template-columns:1fr}
+ .page-workspace .page-content .chat-panel{height:calc(var(--portal-vh,100dvh) - 205px);min-height:420px;display:flex}
+ .page-workspace .page-content .messages{flex:1;min-height:0;max-height:none;overflow:auto}
+ .page-workspace .page-content .composer{position:sticky;bottom:0;z-index:5;display:flex!important;flex-direction:row!important;align-items:flex-end!important;padding:11px!important;padding-bottom:calc(11px + env(safe-area-inset-bottom))!important;background:#fff!important;box-shadow:0 -8px 22px #173b520b}
+ .page-workspace .page-content .composer textarea{min-height:48px!important;max-height:120px!important;resize:none!important}
+ .page-workspace .page-content .composer .send-btn{width:auto!important;min-width:70px!important;min-height:48px!important}
+ .page-workspace .page-content .profile-card,.page-workspace .page-content .settings-card{padding:19px!important}
+}
+@media(max-width:420px){.page-workspace .page-content .support-header,.page-workspace .page-content .profile-head,.page-workspace .page-content .settings-head{padding:17px}.page-workspace .page-content .notification{padding:17px}.page-workspace .page-content .composer{gap:7px!important}}
