@@ -260,13 +260,11 @@
     <div class="messages-head">
 
       <div class="messages-title">
-        <h1>Community Messages</h1>
-        <p>Connect and communicate with your community.</p>
+        <h1>Project Messages</h1>
+        <p>Keep every project conversation with our team in one place.</p>
       </div>
 
-      <a class="back-link" href="communities.html">
-        ← Communities
-      </a>
+      <a class="back-link" href="projects.html">← My Projects</a>
 
     </div>
 
@@ -279,7 +277,7 @@
       </label>
 
       <select id="communitySelect">
-        <option value="">Loading communities...</option>
+        <option value="">Loading your projects...</option>
       </select>
 
     </section>
@@ -287,7 +285,7 @@
     <section class="message-panel">
 
       <div id="messageStatus" class="message-status">
-        Select a community to begin.
+        Choose a project to view its conversation.
       </div>
 
       <div id="messageList" class="message-list">
@@ -295,7 +293,7 @@
         <div class="message-empty">
           <div>
             <div style="font-size:2rem;margin-bottom:10px;">💬</div>
-            Select a community to view messages.
+            Select a project to view messages.
           </div>
         </div>
 
@@ -340,732 +338,57 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-const SUPABASE_URL =
-  "https://jjcptobdzreckuhtcuzm.supabase.co";
 
-const SUPABASE_KEY =
-  "sb_publishable_5AyVE6y2FGY8S_NoLC5a-w_URf-Mfxc";
-
-const supabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-const communitySelect =
-  document.getElementById("communitySelect");
-
-const messageList =
-  document.getElementById("messageList");
-
-const messageStatus =
-  document.getElementById("messageStatus");
-
-const messageForm =
-  document.getElementById("messageForm");
-
-const messageInput =
-  document.getElementById("messageInput");
-
-const sendButton =
-  document.getElementById("sendButton");
-
-const notice =
-  document.getElementById("notice");
-
-document.getElementById("year").textContent =
-  new Date().getFullYear();
-
-let session = null;
-let currentUserId = null;
-let currentCommunityId = null;
-let currentMembership = null;
-let messagesChannel = null;
-
-const REACTIONS = [
-  ["like","👍"],
-  ["love","❤️"],
-  ["laugh","😂"],
-  ["wow","😮"],
-  ["sad","😢"],
-  ["celebrate","🎉"]
-];
-
-function escapeHtml(value){
-
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+const SUPABASE_URL="https://jjcptobdzreckuhtcuzm.supabase.co";
+const SUPABASE_KEY="sb_publishable_5AyVE6y2FGY8S_NoLC5a-w_URf-Mfxc";
+const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const projectSelect=document.getElementById("communitySelect");
+const messageList=document.getElementById("messageList");
+const messageStatus=document.getElementById("messageStatus");
+const messageForm=document.getElementById("messageForm");
+const messageInput=document.getElementById("messageInput");
+const sendButton=document.getElementById("sendButton");
+const notice=document.getElementById("notice");
+document.getElementById("year").textContent=new Date().getFullYear();
+let session=null,currentUserId=null,currentProjectId=null,channel=null;
+const esc=v=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+const date=v=>new Date(v).toLocaleString(undefined,{dateStyle:"medium",timeStyle:"short"});
+function showNotice(t,type=""){notice.textContent=t;notice.className="notice show"+(type?" "+type:"");}
+async function init(){
+ const {data,error}=await supabase.auth.getSession();if(error||!data.session){location.replace("signin.html");return}
+ session=data.session;currentUserId=session.user.id;
+ const {data:projects,error:pe}=await supabase.from("client_projects").select("id,project_name,status").order("created_at",{ascending:false});
+ if(pe){console.error(pe);showNotice("Unable to load your projects. Please refresh.","error");return}
+ projectSelect.innerHTML='<option value="">Choose a project...</option>'+(projects||[]).map(p=>'<option value="'+esc(p.id)+'">'+esc(p.project_name)+' · '+esc(p.status.replaceAll("_"," "))+'</option>').join("");
+ if(!projects?.length){projectSelect.innerHTML='<option value="">No projects yet</option>';messageStatus.textContent="Submit a project request from Overview to start a conversation with our team.";messageInput.disabled=true;sendButton.disabled=true;return}
+ const requested=new URLSearchParams(location.search).get("project");
+ const chosen=projects.find(p=>p.id===requested)||projects[0];
+ projectSelect.value=chosen.id;await selectProject(chosen.id);
 }
-
-function showNotice(text,type=""){
-
-  notice.textContent = text;
-
-  notice.className =
-    "notice show" +
-    (type ? " " + type : "");
-
-  clearTimeout(showNotice.timer);
-
-  showNotice.timer = setTimeout(()=>{
-    notice.className = "notice";
-  },4000);
+async function selectProject(id){
+ if(channel){await supabase.removeChannel(channel);channel=null}
+ currentProjectId=id||null;messageInput.value="";
+ if(!id){messageStatus.textContent="Choose a project to view its conversation.";messageList.innerHTML='<div class="message-empty">Select a project to begin.</div>';messageInput.disabled=true;sendButton.disabled=true;return}
+ messageInput.disabled=false;sendButton.disabled=false;await loadMessages();
+ channel=supabase.channel("client-project-messages-"+id).on("postgres_changes",{event:"*",schema:"public",table:"project_messages",filter:"project_id=eq."+id},loadMessages).subscribe();
 }
-
-function formatDate(date){
-
-  return new Date(date).toLocaleString(
-    undefined,
-    {
-      dateStyle:"medium",
-      timeStyle:"short"
-    }
-  );
-}
-
-async function initialise(){
-
-  try{
-
-    const {
-      data,
-      error
-    } = await supabase.auth.getSession();
-
-    if(error) throw error;
-
-    session = data.session;
-
-    if(!session){
-
-      location.replace("signin.html");
-      return;
-    }
-
-    currentUserId = session.user.id;
-
-    await loadCommunities();
-
-    const params =
-      new URLSearchParams(location.search);
-
-    const requestedCommunity =
-      params.get("community");
-
-    if(
-      requestedCommunity &&
-      [...communitySelect.options]
-        .some(option=>option.value === requestedCommunity)
-    ){
-
-      communitySelect.value =
-        requestedCommunity;
-
-      await selectCommunity(requestedCommunity);
-
-    }
-
-  }catch(error){
-
-    console.error(error);
-
-    showNotice(
-      "Unable to initialise the messaging centre.",
-      "error"
-    );
-
-  }
-
-}
-
-async function loadCommunities(){
-
-  const {
-    data: memberships,
-    error
-  } = await supabase
-    .from("community_members")
-    .select("community_id,is_muted")
-    .eq("user_id",currentUserId);
-
-  if(error) throw error;
-
-  const activeMemberships =
-    (memberships || [])
-      .filter(member => member.is_muted === false);
-
-  if(activeMemberships.length === 0){
-
-    communitySelect.innerHTML =
-      `<option value="">No active communities</option>`;
-
-    messageStatus.textContent =
-      "You are not currently an active member of a community.";
-
-    messageInput.disabled = true;
-    sendButton.disabled = true;
-
-    return;
-  }
-
-  const communityIds =
-    activeMemberships.map(
-      member => member.community_id
-    );
-
-  const {
-    data: communities,
-    error: communityError
-  } = await supabase
-    .from("communities")
-    .select("id,name")
-    .in("id",communityIds)
-    .order("name");
-
-  if(communityError) throw communityError;
-
-  communitySelect.innerHTML =
-    `<option value="">Choose a community...</option>` +
-    (communities || []).map(community => `
-      <option value="${escapeHtml(community.id)}">
-        ${escapeHtml(community.name)}
-      </option>
-    `).join("");
-
-}
-
-communitySelect.addEventListener(
-  "change",
-  async ()=>{
-
-    await selectCommunity(
-      communitySelect.value
-    );
-
-  }
-);
-
-async function selectCommunity(communityId){
-
-  if(messagesChannel){
-
-    await supabase
-      .removeChannel(messagesChannel);
-
-    messagesChannel = null;
-  }
-
-  currentCommunityId =
-    communityId || null;
-
-  currentMembership = null;
-
-  messageInput.value = "";
-
-  if(!communityId){
-
-    messageStatus.textContent =
-      "Select a community to begin.";
-
-    messageList.innerHTML = `
-      <div class="message-empty">
-        <div>
-          <div style="font-size:2rem;margin-bottom:10px;">💬</div>
-          Select a community to view messages.
-        </div>
-      </div>
-    `;
-
-    messageInput.disabled = true;
-    sendButton.disabled = true;
-
-    return;
-  }
-
-  const {
-    data: membership,
-    error: membershipError
-  } = await supabase
-    .from("community_members")
-    .select("community_id,is_muted")
-    .eq("community_id",communityId)
-    .eq("user_id",currentUserId)
-    .maybeSingle();
-
-  if(membershipError) throw membershipError;
-
-  if(!membership || membership.is_muted){
-
-    messageStatus.textContent =
-      "You do not have active access to this community.";
-
-    messageList.innerHTML = `
-      <div class="message-empty">
-        <div>
-          🔒 You are not an active member of this community.
-        </div>
-      </div>
-    `;
-
-    messageInput.disabled = true;
-    sendButton.disabled = true;
-
-    return;
-  }
-
-  currentMembership = membership;
-
-  messageInput.disabled = false;
-  sendButton.disabled = false;
-
-  await loadMessages();
-
-  subscribeToMessages();
-
-}
-
 async function loadMessages(){
-
-  messageStatus.textContent =
-    "Loading messages...";
-
-  const {
-    data: messages,
-    error
-  } = await supabase
-    .from("community_messages")
-    .select(`
-      id,
-      community_id,
-      sender_id,
-      message,
-      message_type,
-      is_deleted,
-      created_at,
-      updated_at
-    `)
-    .eq("community_id",currentCommunityId)
-    .eq("is_deleted",false)
-    .order("created_at",{ascending:true});
-
-  if(error) throw error;
-
-  const messageIds =
-    (messages || []).map(
-      message => message.id
-    );
-
-  let reactions = [];
-
-  if(messageIds.length){
-
-    const {
-      data,
-      error: reactionError
-    } = await supabase
-      .from("message_reactions")
-      .select(
-        "id,message_id,user_id,reaction"
-      )
-      .in("message_id",messageIds);
-
-    if(reactionError) throw reactionError;
-
-    reactions = data || [];
-  }
-
-  renderMessages(
-    messages || [],
-    reactions
-  );
-
-  messageStatus.textContent =
-    `${messages?.length || 0} message${messages?.length === 1 ? "" : "s"}`;
-
-  await markMessagesRead(messageIds);
-
+ if(!currentProjectId)return;
+ messageStatus.textContent="Loading project conversation...";
+ const {data,error}=await supabase.from("project_messages").select("id,project_id,sender_id,message,created_at").eq("project_id",currentProjectId).order("created_at",{ascending:true}).limit(200);
+ if(error){console.error(error);messageStatus.textContent="Messages are temporarily unavailable.";return}
+ messageStatus.textContent=(data?.length||0)+" message"+(data?.length===1?"":"s")+" in this project";
+ if(!data?.length){messageList.innerHTML='<div class="message-empty"><div><div style="font-size:2rem;margin-bottom:10px">💬</div>No messages yet.<br>Send a message to your project team.</div></div>';return}
+ messageList.innerHTML=data.map(m=>'<article class="message '+(m.sender_id===currentUserId?"mine":"")+'"><div class="message-bubble"><div class="message-author">'+(m.sender_id===currentUserId?"You":"Zakmolanitech team")+'</div><div class="message-text">'+esc(m.message).replace(/\n/g,"<br>")+'</div><div class="message-time">'+esc(date(m.created_at))+'</div></div></article>').join("");
+ messageList.scrollTop=messageList.scrollHeight;
 }
+projectSelect.addEventListener("change",()=>selectProject(projectSelect.value));
+messageForm.addEventListener("submit",async e=>{e.preventDefault();const message=messageInput.value.trim();if(!message||!currentProjectId)return;sendButton.disabled=true;sendButton.textContent="Sending...";const {error}=await supabase.from("project_messages").insert({project_id:currentProjectId,sender_id:currentUserId,message});if(error){console.error(error);showNotice("Message could not be sent. Please try again.","error")}else{messageInput.value="";await loadMessages()}sendButton.disabled=false;sendButton.textContent="Send"});
+messageInput.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();messageForm.requestSubmit()}});
+supabase.auth.onAuthStateChange((event,newSession)=>{if(event==="SIGNED_OUT"||!newSession)location.replace("signin.html")});
+window.addEventListener("beforeunload",()=>{if(channel)supabase.removeChannel(channel)});
+init();
 
-function renderMessages(messages,reactions){
-
-  if(!messages.length){
-
-    messageList.innerHTML = `
-      <div class="message-empty">
-        <div>
-          <div style="font-size:2rem;margin-bottom:10px;">👋</div>
-          No messages yet.<br>
-          Be the first to start the conversation.
-        </div>
-      </div>
-    `;
-
-    return;
-  }
-
-  messageList.innerHTML =
-    messages.map(message=>{
-
-      const mine =
-        message.sender_id === currentUserId;
-
-      const messageReactions =
-        reactions.filter(
-          reaction =>
-            reaction.message_id === message.id
-        );
-
-      const reactionCounts = {};
-
-      messageReactions.forEach(reaction=>{
-
-        reactionCounts[reaction.reaction] =
-          (reactionCounts[reaction.reaction] || 0) + 1;
-
-      });
-
-      return `
-        <article
-          class="message ${mine ? "mine" : ""}"
-          data-message-id="${escapeHtml(message.id)}"
-        >
-
-          <div class="message-bubble">
-
-            <div class="message-author">
-              ${mine ? "You" : "Community member"}
-            </div>
-
-            <div class="message-text">
-              ${escapeHtml(message.message)}
-            </div>
-
-            <div class="message-time">
-              ${formatDate(message.created_at)}
-            </div>
-
-            <div class="message-actions">
-
-              ${REACTIONS.map(([type,emoji])=>{
-
-                const count =
-                  reactionCounts[type] || 0;
-
-                const userReacted =
-                  messageReactions.some(
-                    reaction =>
-                      reaction.user_id === currentUserId &&
-                      reaction.reaction === type
-                  );
-
-                return `
-                  <button
-                    type="button"
-                    class="reaction-btn ${userReacted ? "active" : ""}"
-                    data-reaction="${type}"
-                    data-message="${message.id}"
-                    title="${type}"
-                  >
-                    ${emoji}${count ? " " + count : ""}
-                  </button>
-                `;
-
-              }).join("")}
-
-            </div>
-
-          </div>
-
-        </article>
-      `;
-
-    }).join("");
-
-  messageList.scrollTop =
-    messageList.scrollHeight;
-
-}
-
-messageList.addEventListener(
-  "click",
-  async event=>{
-
-    const button =
-      event.target.closest(".reaction-btn");
-
-    if(!button) return;
-
-    const messageId =
-      button.dataset.message;
-
-    const reaction =
-      button.dataset.reaction;
-
-    await toggleReaction(
-      messageId,
-      reaction
-    );
-
-  }
-);
-
-async function toggleReaction(
-  messageId,
-  reaction
-){
-
-  try{
-
-    const {
-      data: existing,
-      error: findError
-    } = await supabase
-      .from("message_reactions")
-      .select("id")
-      .eq("message_id",messageId)
-      .eq("user_id",currentUserId)
-      .eq("reaction",reaction)
-      .maybeSingle();
-
-    if(findError) throw findError;
-
-    if(existing){
-
-      const {
-        error
-      } = await supabase
-        .from("message_reactions")
-        .delete()
-        .eq("id",existing.id);
-
-      if(error) throw error;
-
-    }else{
-
-      const {
-        error
-      } = await supabase
-        .from("message_reactions")
-        .insert({
-          message_id:messageId,
-          user_id:currentUserId,
-          reaction:reaction
-        });
-
-      if(error) throw error;
-    }
-
-    await loadMessages();
-
-  }catch(error){
-
-    console.error(error);
-
-    showNotice(
-      "Unable to update the reaction.",
-      "error"
-    );
-
-  }
-
-}
-
-messageForm.addEventListener(
-  "submit",
-  async event=>{
-
-    event.preventDefault();
-
-    const text =
-      messageInput.value.trim();
-
-    if(!text || !currentCommunityId){
-
-      return;
-    }
-
-    sendButton.disabled = true;
-    sendButton.textContent = "Sending...";
-
-    try{
-
-      const {
-        error
-      } = await supabase
-        .from("community_messages")
-        .insert({
-          community_id:currentCommunityId,
-          sender_id:currentUserId,
-          message:text,
-          message_type:"message"
-        });
-
-      if(error) throw error;
-
-      messageInput.value = "";
-
-      await loadMessages();
-
-    }catch(error){
-
-      console.error(error);
-
-      showNotice(
-        "Message could not be sent. Please try again.",
-        "error"
-      );
-
-    }finally{
-
-      sendButton.disabled =
-        !currentCommunityId ||
-        !currentMembership ||
-        currentMembership.is_muted;
-
-      sendButton.textContent =
-        "Send";
-
-    }
-
-  }
-);
-
-messageInput.addEventListener(
-  "keydown",
-  event=>{
-
-    if(
-      event.key === "Enter" &&
-      !event.shiftKey
-    ){
-
-      event.preventDefault();
-
-      messageForm.requestSubmit();
-
-    }
-
-  }
-);
-
-async function markMessagesRead(messageIds){
-
-  if(!messageIds.length) return;
-
-  const records =
-    messageIds.map(messageId=>({
-      message_id:messageId,
-      user_id:currentUserId
-    }));
-
-  const {
-    error
-  } = await supabase
-    .from("message_reads")
-    .upsert(
-      records,
-      {
-        onConflict:"message_id,user_id"
-      }
-    );
-
-  if(error){
-
-    /*
-      Reading a message should never break
-      the messaging interface.
-    */
-    console.warn(
-      "Message read tracking failed:",
-      error
-    );
-  }
-
-}
-
-function subscribeToMessages(){
-
-  if(messagesChannel){
-
-    supabase.removeChannel(
-      messagesChannel
-    );
-
-  }
-
-  messagesChannel =
-    supabase
-      .channel(
-        "community-messages-" +
-        currentCommunityId
-      )
-      .on(
-        "postgres_changes",
-        {
-          event:"*",
-          schema:"public",
-          table:"community_messages",
-          filter:
-            "community_id=eq." +
-            currentCommunityId
-        },
-        async payload=>{
-
-          await loadMessages();
-
-        }
-      )
-      .on(
-        "postgres_changes",
-        {
-          event:"*",
-          schema:"public",
-          table:"message_reactions"
-        },
-        async payload=>{
-
-          await loadMessages();
-
-        }
-      )
-      .subscribe();
-
-}
-
-supabase.auth.onAuthStateChange(
-  (event,newSession)=>{
-
-    if(
-      event === "SIGNED_OUT" ||
-      !newSession
-    ){
-
-      location.replace("signin.html");
-
-    }
-
-  }
-);
-
-window.addEventListener(
-  "beforeunload",
-  ()=>{
-
-    if(messagesChannel){
-
-      supabase.removeChannel(
-        messagesChannel
-      );
-
-    }
-
-  }
-);
-
-initialise();
 </script>
 
 <script>(()=>{const s=document.getElementById("dashboardSidebar"),b=document.getElementById("dashBackdrop"),t=document.getElementById("dashMenuToggle");if(!s||!b||!t)return;const c=()=>{s.classList.remove("is-open");b.classList.remove("is-visible")};t.addEventListener("click",()=>{s.classList.toggle("is-open");b.classList.toggle("is-visible")});b.addEventListener("click",c);s.querySelectorAll("a").forEach(a=>a.addEventListener("click",c));})();</script>
