@@ -50,6 +50,10 @@ body{background:radial-gradient(ellipse at 10% 0,rgba(0,184,255,.12),transparent
 <div class="stat-card"><span>In progress</span><strong id="statProgress">0</strong></div>
 <div class="stat-card"><span>Completed</span><strong id="statDone">0</strong></div>
 </section>
+<section class="staff-panel staff-notifications-panel">
+ <div class="panel-head"><h2>Architect &amp; team alerts</h2><small>New project submissions</small></div>
+ <div id="staffNotificationList" class="project-list"><div class="empty-state">Loading project alerts…</div></div>
+</section>
 <div class="staff-layout">
 <section class="staff-panel">
 <div class="panel-head"><h2>Client projects</h2><small id="projectCount">0 records</small></div>
@@ -72,7 +76,7 @@ const statusNames={submitted:"Submitted",reviewing:"Under review",planning:"Plan
 let staffUser=null,projects=[],profiles={},selectedId=null;
 function node(tag,cls,txt){const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=String(txt);return n}
 function notify(message,type="success"){const n=byId("notice");n.textContent=message;n.className="notice show "+type;window.setTimeout(()=>n.classList.remove("show"),5500)}
-function isStaff(user){return ["admin","manager","staff"].includes(user?.app_metadata?.staff_role)}
+function isStaff(user){return ["admin","manager","staff","architect"].includes(user?.app_metadata?.staff_role)}
 function clientLabel(project){const p=profiles[project.owner_id]||{};return p.full_name||p.email||"Client"}
 function filteredProjects(){const q=byId("searchInput").value.trim().toLowerCase(),status=byId("statusFilter").value;return projects.filter(p=>{const profile=profiles[p.owner_id]||{};const hay=[p.project_name,p.project_type,p.description,p.id,profile.full_name,profile.email,profile.phone].join(" ").toLowerCase();return (!q||hay.includes(q))&&(!status||p.status===status)})}
 function updateStats(){byId("statAll").textContent=projects.length;byId("statNew").textContent=projects.filter(p=>p.status==="submitted").length;byId("statProgress").textContent=projects.filter(p=>p.status==="in_progress").length;byId("statDone").textContent=projects.filter(p=>p.status==="completed").length}
@@ -89,6 +93,7 @@ function renderDetail(){
  const top=node("div","detail-title"),title=node("div");title.append(node("h2","",p.project_name),node("p","",p.project_type+" · Submitted "+new Date(p.created_at).toLocaleString()));top.append(title,node("span","status-pill",statusNames[p.status]||p.status));box.append(top);
  const contact=node("div","client-contact");const addContact=(label,value)=>{const item=node("span","");item.append(node("b","",label),document.createTextNode(value||"Not provided"));contact.append(item)};addContact("Client",profile.full_name||"Name not provided");addContact("Email",profile.email||"Not provided");addContact("Phone",profile.phone||"Not provided");box.append(contact);
  box.append(node("p","project-description",p.description));
+ const attachmentsBox=node("section","section-block");attachmentsBox.append(node("h3","","Client idea files & recordings"),node("p","inline-note","Private files submitted with this project request."));const attachmentFeed=node("div","feed","Loading attachments…");attachmentsBox.append(attachmentFeed);box.append(attachmentsBox);loadProjectAttachments(p.id,attachmentFeed);
  const form=document.createElement("form");form.className="staff-form";form.id="projectEditForm";
  const grid=node("div","form-grid"),statusLabel=node("label","","Project status"),status=document.createElement("select");status.id="editStatus";Object.entries(statusNames).forEach(([value,label])=>{const o=document.createElement("option");o.value=value;o.textContent=label;status.append(o)});status.value=p.status;statusLabel.append(status);grid.append(statusLabel);
  const progressLabel=node("label","","Delivery progress"),progressWrap=node("div","progress-wrap"),range=document.createElement("input");range.type="range";range.min="0";range.max="100";range.step="5";range.value=p.progress;const output=node("output","",p.progress+"%");range.addEventListener("input",()=>output.textContent=range.value+"%");progressWrap.append(range,output);progressLabel.append(progressWrap);grid.append(progressLabel);form.append(grid);
@@ -103,6 +108,21 @@ function renderDetail(){
  const notesSection=node("section","section-block");notesSection.append(node("h3","","Private staff notes"),node("p","inline-note","These notes are visible only to authorized staff, not to the client."));const notesFeed=node("div","feed","Loading private notes…");notesSection.append(notesFeed);
  const noteForm=document.createElement("form");noteForm.className="message-form";const note=document.createElement("textarea");note.maxLength=5000;note.required=true;note.placeholder="Add an internal note for the team…";const addNote=node("button","staff-button","Add private note");addNote.type="submit";noteForm.append(note,addNote);noteForm.addEventListener("submit",async e=>{e.preventDefault();addNote.disabled=true;const result=await db.from("project_internal_notes").insert({project_id:p.id,author_id:staffUser.id,note:note.value.trim()});if(result.error){console.error(result.error);notify("Could not save the internal note.","error")}else{noteForm.reset();notify("Private staff note saved.");await loadActivity(p.id,updatesFeed,messagesFeed,notesFeed)}addNote.disabled=false});box.append(notesSection,noteForm);
  loadActivity(p.id,updatesFeed,messagesFeed,notesFeed);
+}
+async function loadProjectAttachments(projectId,target){
+ const {data,error}=await db.from("project_request_attachments").select("id,file_name,mime_type,size_bytes,storage_path,created_at").eq("project_id",projectId).order("created_at",{ascending:true});
+ target.replaceChildren();
+ if(error){console.error(error);target.append(node("p","inline-note","Attachments are not available right now."));return}
+ if(!data?.length){target.append(node("p","inline-note","No supporting files were attached."));return}
+ for(const file of data){const row=node("article","feed-item"),meta=node("small","",((file.size_bytes/1024/1024).toFixed(2))+" MB · "+new Date(file.created_at).toLocaleString());row.append(node("strong","",file.file_name),meta);const link=node("a","staff-button","Open private file");link.href="#";link.addEventListener("click",async e=>{e.preventDefault();link.textContent="Preparing secure link…";const signed=await db.storage.from("project-request-files").createSignedUrl(file.storage_path,300);if(signed.error){console.error(signed.error);notify("Could not open this attachment.","error");link.textContent="Try again";return}window.open(signed.data.signedUrl,"_blank","noopener");link.textContent="Open private file"});row.append(link);target.append(row)}
+}
+async function loadStaffNotifications(){
+ const target=byId("staffNotificationList");if(!target||!staffUser)return;
+ const {data,error}=await db.from("staff_project_notifications").select("id,project_id,title,message,is_read,created_at").order("created_at",{ascending:false}).limit(25);
+ target.replaceChildren();
+ if(error){console.error(error);target.append(node("div","empty-state","Project alerts could not be loaded. Confirm architect/staff access."));return}
+ if(!data?.length){target.append(node("div","empty-state","No new project requests yet. New client submissions will appear here."));return}
+ data.forEach(item=>{const card=node("article","project-row"+(item.is_read?"":" active"));const top=node("div","project-row-top");top.append(node("strong","",item.title),node("span","status-pill",item.is_read?"Viewed":"New"));card.append(top,node("p","",item.message),node("small","",new Date(item.created_at).toLocaleString()));const open=node("button","staff-button primary","Review project");open.type="button";open.addEventListener("click",async()=>{await db.from("staff_project_notifications").update({is_read:true}).eq("id",item.id);selectProject(item.project_id);window.scrollTo({top:0,behavior:"smooth"});await loadStaffNotifications()});card.append(open);target.append(card)})
 }
 async function loadActivity(projectId,updatesFeed,messagesFeed,notesFeed){
  const [u,m,n]=await Promise.all([
@@ -126,7 +146,7 @@ async function loadProjects(){
 async function init(){
  try{const {data,error}=await db.auth.getSession();if(error)throw error;if(!data.session){location.replace("signin.html");return}
  staffUser=data.session.user;if(!isStaff(staffUser)){byId("loading").hidden=true;byId("denied").style.display="block";return}
- byId("loading").hidden=true;byId("workspace").hidden=false;await loadProjects();
+ byId("loading").hidden=true;byId("workspace").hidden=false;await loadProjects();await loadStaffNotifications();db.channel("staff-project-alerts-"+staffUser.id).on("postgres_changes",{event:"INSERT",schema:"public",table:"staff_project_notifications",filter:"recipient_user_id=eq."+staffUser.id},loadStaffNotifications).subscribe();
  }catch(error){console.error(error);byId("loading").textContent="We couldn't verify your session. Please refresh or sign in again."}
 }
 byId("searchInput").addEventListener("input",renderList);byId("statusFilter").addEventListener("change",renderList);
