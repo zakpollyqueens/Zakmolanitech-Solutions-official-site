@@ -223,6 +223,23 @@
  .client-portal .support-page .composer .send-btn,.client-portal .messages-page .composer .send-btn{min-width:60px!important}
  .client-portal .notification{padding:17px!important}
 }
+
+.client-portal .settings-security-card{padding:28px!important}
+.client-portal .settings-security-head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.client-portal .settings-security-head h2{margin:0 0 5px!important;color:#183b53!important}
+.client-portal .settings-security-head p,.client-portal .settings-security-help{margin:0;color:#6f8495!important;font-size:13px;line-height:1.65}
+.client-portal .settings-security-icon{width:44px;height:44px;flex:0 0 44px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(135deg,#d8f7fb,#e0eaff);color:#087f9d;font-size:22px;font-weight:900}
+.client-portal .settings-security-status{display:inline-flex;padding:9px 13px;border-radius:999px;background:#e7f8ef;color:#16764b;font-size:12px;font-weight:800}
+.client-portal .settings-security-status.off{background:#fff4e5;color:#93621b}
+.client-portal .settings-security-actions{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.client-portal .settings-page .btn,.client-portal .settings-page button.btn,.client-portal .settings-page a.btn{min-height:46px;padding:12px 18px!important;border:1px solid #147fa7!important;border-radius:12px!important;background:linear-gradient(125deg,#078da9,#2868c5)!important;color:#fff!important;font-weight:850!important;box-shadow:0 8px 18px #147fa72b!important;text-decoration:none!important;opacity:1!important}
+.client-portal .settings-page .btn:hover,.client-portal .settings-page button.btn:hover,.client-portal .settings-page a.btn:hover{filter:brightness(1.07);transform:translateY(-1px);box-shadow:0 11px 22px #147fa738!important}
+.client-portal .settings-page .btn:disabled{opacity:.65!important;cursor:wait}
+.client-portal .settings-page .form-field input.settings-pin-input{max-width:420px;letter-spacing:3px}
+.client-portal .settings-inline-status:empty{display:none}
+.client-portal .settings-inline-status{margin:12px 0}
+.client-portal [hidden]{display:none!important}
+@media(max-width:600px){.client-portal .settings-security-actions{display:grid}.client-portal .settings-security-actions button{width:100%}.client-portal .settings-security-card{padding:20px!important}}
 </style>
 </head>
 
@@ -243,6 +260,26 @@
       <h1>Settings</h1>
       <p>Manage your account security and preferences.</p>
     </header>
+
+<section class="settings-card settings-security-card">
+<div class="settings-security-head"><span class="settings-security-icon">✧</span><div><h2>Two-step verification</h2><p>Add an authenticator app as a second layer of account protection.</p></div></div>
+<div id="mfaState" class="settings-security-status off">Checking security status…</div>
+<p class="settings-security-help" style="margin-top:12px">Use Google Authenticator, Microsoft Authenticator or 1Password. You will need its one-time code when signing in.</p>
+<div id="mfaSetup" hidden><p class="settings-security-help">Scan this QR code with your authenticator app. If you cannot scan it, enter the setup key manually.</p><img id="mfaQr" class="mfa-qr" alt="Authenticator setup QR code"><code id="mfaSecret" class="mfa-secret"></code>
+<div class="form-field" style="margin-top:14px"><label for="mfaCode">6-digit authenticator code</label><input id="mfaCode" class="settings-pin-input" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000"></div>
+<div class="settings-security-actions"><button id="verifyMfaButton" class="btn btn-primary settings-security-button" type="button">Verify and enable</button><button id="cancelMfaButton" class="btn settings-security-button" type="button">Cancel setup</button></div></div>
+<div id="mfaDisable" hidden><div class="form-field" style="margin-top:14px"><label for="mfaDisableCode">Enter authenticator code to turn it off</label><input id="mfaDisableCode" class="settings-pin-input" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000"></div><button id="disableMfaButton" class="btn btn-primary settings-security-button" type="button">Disable two-step verification</button></div>
+<div id="mfaStatus" class="status settings-inline-status" role="status"></div><button id="startMfaButton" class="btn btn-primary settings-security-button" type="button">Set up two-step verification</button></section>
+<section class="settings-card settings-security-card">
+<div class="settings-security-head"><span class="settings-security-icon">⌑</span><div><h2>Workspace lock</h2><p>Protect this browser workspace with a quick PIN when you step away.</p></div></div>
+<div id="appLockState" class="settings-security-status off">Quick lock is off</div>
+<p class="settings-security-help" style="margin:14px 0">This optional lock protects the workspace screen on this browser and automatically locks after five minutes of inactivity. It is an extra privacy layer, not a replacement for your account password or two-step verification. Clearing this browser’s site data can remove the local lock.</p>
+<div class="form-field"><label for="appLockPin">New 6–12 digit PIN</label><input id="appLockPin" class="settings-pin-input" type="password" inputmode="numeric" autocomplete="new-password" minlength="6" maxlength="12" placeholder="Create a PIN"></div>
+<div class="form-field"><label for="appLockPinConfirm">Confirm PIN</label><input id="appLockPinConfirm" class="settings-pin-input" type="password" inputmode="numeric" autocomplete="new-password" minlength="6" maxlength="12" placeholder="Repeat your PIN"></div>
+<div class="settings-security-actions"><button id="saveAppLockButton" class="btn btn-primary settings-security-button" type="button">Enable / Update workspace lock</button><button id="lockNowButton" class="btn settings-security-button" type="button">Lock workspace now</button></div>
+<div id="appLockDisable" hidden><div class="form-field" style="margin-top:14px"><label for="appLockCurrentPin">Current PIN to disable</label><input id="appLockCurrentPin" class="settings-pin-input" type="password" inputmode="numeric" maxlength="12" placeholder="Current PIN"></div><button id="disableAppLockButton" class="btn btn-primary settings-security-button" type="button">Turn off workspace lock</button></div>
+<div id="appLockStatus" class="status settings-inline-status" role="status"></div>
+<p class="settings-security-help" style="margin-top:14px">Full phone storage encryption is managed by Android or your phone manufacturer. Enable screen lock and device encryption in your phone’s Security settings.</p></section>
 
     <section class="settings-card">
 
@@ -342,6 +379,7 @@ const logoutButton = document.getElementById("logoutButton");
 const logoutStatus = document.getElementById("logoutStatus");
 
 function showStatus(element, message, type){
+  if(!element)return;
   element.textContent = message;
   element.className = "status show " + type;
 }
@@ -358,6 +396,8 @@ async function loadSettings(){
 
   document.getElementById("passwordEmail").value =
     data.session.user.email || "";
+  await loadMfaStatus();
+  loadAppLockStatus();
   const user=data.session.user;document.getElementById("sessionDetails").textContent="Signed in as "+(user.email||"your account")+" · Last sign-in "+(user.last_sign_in_at?new Date(user.last_sign_in_at).toLocaleString():"current session")+".";
 }
 
@@ -432,6 +472,18 @@ logoutButton.addEventListener("click", async function(){
   }
 
 });
+
+
+let mfaFactorId=null;
+async function loadMfaStatus(){const state=document.getElementById("mfaState");if(!state)return;try{const{data,error}=await supabaseClient.auth.mfa.listFactors();if(error)throw error;const verified=(data.totp||[]).find(f=>f.status==="verified");if(verified){mfaFactorId=verified.id;state.textContent="✓ Two-step verification is enabled";state.className="settings-security-status";document.getElementById("startMfaButton").hidden=true;document.getElementById("mfaDisable").hidden=false;document.getElementById("mfaSetup").hidden=true;}else{mfaFactorId=null;state.textContent="Two-step verification is not enabled";state.className="settings-security-status off";document.getElementById("startMfaButton").hidden=false;document.getElementById("mfaDisable").hidden=true;}}catch(error){state.textContent="Security status could not be loaded";state.className="settings-security-status off";showStatus(document.getElementById("mfaStatus"),error.message||"Unable to check two-step verification.","error");}}
+document.getElementById("startMfaButton").addEventListener("click",async()=>{const b=document.getElementById("startMfaButton");b.disabled=true;b.textContent="Preparing setup…";try{const{data,error}=await supabaseClient.auth.mfa.enroll({factorType:"totp",friendlyName:"ZakiTech Workspace"});if(error)throw error;mfaFactorId=data.id;document.getElementById("mfaQr").src=data.totp.qr_code;document.getElementById("mfaSecret").textContent=data.totp.secret;document.getElementById("mfaSetup").hidden=false;b.hidden=true;showStatus(document.getElementById("mfaStatus"),"Scan the QR code, then enter the 6-digit code from your authenticator app.","success");}catch(error){showStatus(document.getElementById("mfaStatus"),error.message||"Could not start two-step verification.","error");b.disabled=false;b.textContent="Set up two-step verification";}});
+document.getElementById("cancelMfaButton").addEventListener("click",async()=>{if(mfaFactorId)await supabaseClient.auth.mfa.unenroll({factorId:mfaFactorId});mfaFactorId=null;document.getElementById("mfaSetup").hidden=true;const b=document.getElementById("startMfaButton");b.hidden=false;b.disabled=false;b.textContent="Set up two-step verification";document.getElementById("mfaQr").removeAttribute("src");document.getElementById("mfaSecret").textContent="";showStatus(document.getElementById("mfaStatus"),"Setup cancelled.","success");});
+document.getElementById("verifyMfaButton").addEventListener("click",async()=>{const code=document.getElementById("mfaCode").value.trim();if(!/^\\d{6}$/.test(code)){showStatus(document.getElementById("mfaStatus"),"Enter the 6-digit code from your authenticator app.","error");return;}const b=document.getElementById("verifyMfaButton");b.disabled=true;b.textContent="Verifying…";try{const c=await supabaseClient.auth.mfa.challenge({factorId:mfaFactorId});if(c.error)throw c.error;const v=await supabaseClient.auth.mfa.verify({factorId:mfaFactorId,challengeId:c.data.id,code});if(v.error)throw v.error;document.getElementById("mfaCode").value="";document.getElementById("mfaSetup").hidden=true;await loadMfaStatus();showStatus(document.getElementById("mfaStatus"),"Two-step verification is now enabled for your account.","success");}catch(error){showStatus(document.getElementById("mfaStatus"),error.message||"The code could not be verified.","error");}finally{b.disabled=false;b.textContent="Verify and enable";}});
+document.getElementById("disableMfaButton").addEventListener("click",async()=>{const code=document.getElementById("mfaDisableCode").value.trim();if(!/^\\d{6}$/.test(code)){showStatus(document.getElementById("mfaStatus"),"Enter your current 6-digit authenticator code to disable this feature.","error");return;}const b=document.getElementById("disableMfaButton");b.disabled=true;b.textContent="Verifying…";try{const c=await supabaseClient.auth.mfa.challenge({factorId:mfaFactorId});if(c.error)throw c.error;const v=await supabaseClient.auth.mfa.verify({factorId:mfaFactorId,challengeId:c.data.id,code});if(v.error)throw v.error;const r=await supabaseClient.auth.mfa.unenroll({factorId:mfaFactorId});if(r.error)throw r.error;document.getElementById("mfaDisableCode").value="";await supabaseClient.auth.refreshSession();await loadMfaStatus();showStatus(document.getElementById("mfaStatus"),"Two-step verification has been disabled.","success");}catch(error){showStatus(document.getElementById("mfaStatus"),error.message||"Could not disable two-step verification.","error");}finally{b.disabled=false;b.textContent="Disable two-step verification";}});
+function loadAppLockStatus(){const enabled=!!(window.ZakiPortalLock&&window.ZakiPortalLock.isEnabled());const state=document.getElementById("appLockState");state.textContent=enabled?"✓ Workspace lock is enabled on this browser":"Workspace lock is off";state.className="settings-security-status"+(enabled?"":" off");document.getElementById("appLockDisable").hidden=!enabled;}
+document.getElementById("saveAppLockButton").addEventListener("click",async()=>{const pin=document.getElementById("appLockPin").value.trim(),confirm=document.getElementById("appLockPinConfirm").value.trim();if(!/^\\d{6,12}$/.test(pin)){showStatus(document.getElementById("appLockStatus"),"Choose a PIN containing 6 to 12 digits.","error");return;}if(pin!==confirm){showStatus(document.getElementById("appLockStatus"),"The PIN entries do not match.","error");return;}try{if(!window.ZakiPortalLock)throw new Error("Workspace lock is not available. Reload this page and try again.");await window.ZakiPortalLock.setPin(pin);document.getElementById("appLockPin").value="";document.getElementById("appLockPinConfirm").value="";loadAppLockStatus();showStatus(document.getElementById("appLockStatus"),"Workspace lock is enabled on this browser. It will lock after five minutes of inactivity.","success");}catch(error){showStatus(document.getElementById("appLockStatus"),error.message||"Could not enable workspace lock.","error");}});
+document.getElementById("lockNowButton").addEventListener("click",()=>{if(window.ZakiPortalLock)window.ZakiPortalLock.lockNow();});
+document.getElementById("disableAppLockButton").addEventListener("click",async()=>{const pin=document.getElementById("appLockCurrentPin").value.trim();try{await window.ZakiPortalLock.disable(pin);document.getElementById("appLockCurrentPin").value="";loadAppLockStatus();showStatus(document.getElementById("appLockStatus"),"Workspace lock has been turned off on this browser.","success");}catch(error){showStatus(document.getElementById("appLockStatus"),error.message||"The PIN was not accepted.","error");}});
 
 loadSettings();
 </script>
