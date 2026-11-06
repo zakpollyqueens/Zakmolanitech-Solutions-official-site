@@ -31,7 +31,7 @@
 
 <div class="dashboard-top">
 <div><span class="eyebrow">PERSONAL DASHBOARD</span><h1>Welcome.</h1><p id="welcomeText">Your account is ready.</p></div>
-<button id="logoutButton" class="btn logout-btn" type="button">Sign Out</button>
+<a id="staffWorkspaceLink" class="btn" href="admin.html" hidden>Staff workspace</a>\n<button id="logoutButton" class="btn logout-btn" type="button">Sign Out</button>
 </div>
 
 <div class="dashboard-grid">\n<section class="client-projects-card">
@@ -184,7 +184,7 @@ async function loadProjects(){
 async function loadDashboard(){
  try{
   const {data,error}=await supabaseClient.auth.getSession();if(error)throw error;if(!data.session){location.replace("signin.html");return}
-  currentUser=data.session.user;const meta=currentUser.user_metadata||{},name=meta.full_name||meta.name||"Zakmolanitech User";
+  currentUser=data.session.user;const staffRole=currentUser.app_metadata?.staff_role;if(["admin","manager","staff"].includes(staffRole))document.getElementById("staffWorkspaceLink").hidden=false;const meta=currentUser.user_metadata||{},name=meta.full_name||meta.name||"Zakmolanitech User";
   document.getElementById("userName").textContent=name;document.getElementById("welcomeText").textContent="Welcome back, "+name+".";
   document.getElementById("userEmail").textContent=currentUser.email||"Not available";document.getElementById("userPhone").textContent=meta.phone||currentUser.phone||"Not provided";
   loading.hidden=true;dashboard.hidden=false;await loadProjects();
