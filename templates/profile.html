@@ -221,6 +221,52 @@
  .client-portal .support-page .composer .send-btn,.client-portal .messages-page .composer .send-btn{min-width:60px!important}
  .client-portal .notification{padding:17px!important}
 }
+
+/* Profile centre: high-contrast controls and clear field hierarchy */
+.client-portal .profile-page{padding-bottom:64px!important}
+.client-portal .profile-wrap{width:min(1160px,100%)!important}
+.client-portal .profile-head{margin-bottom:20px!important}
+.client-portal .profile-card{padding:26px!important}
+.client-portal .profile-section-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px}
+.client-portal .profile-section-icon{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border-radius:13px;background:#e8f5f9;color:#167f9c;font-size:20px}
+.client-portal .profile-section-head h2{margin:0 0 5px;color:#1e3c52;font-size:17px}
+.client-portal .profile-section-head p{margin:0;color:#8193a3;font-size:12px;line-height:1.6}
+.client-portal .profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+.client-portal .profile-field{min-width:0;margin-bottom:16px}
+.client-portal .profile-field.full{grid-column:1/-1}
+.client-portal .profile-field label{display:block;margin:0 0 7px;color:#496176;font-size:10px;font-weight:800;letter-spacing:.7px;text-transform:uppercase}
+.client-portal .profile-field input,.client-portal .profile-field select,.client-portal .profile-field textarea{width:100%;min-height:48px;padding:12px 14px;background:#f8fbfd;color:#243d52;border:1px solid #dfe8ef;border-radius:12px;font:500 13px "DM Sans",sans-serif;outline:0}
+.client-portal .profile-field textarea{min-height:78px;resize:vertical}
+.client-portal .profile-field input:focus,.client-portal .profile-field select:focus,.client-portal .profile-field textarea:focus{border-color:#2296b3;box-shadow:0 0 0 3px #2296b31c}
+.client-portal .profile-field input::placeholder,.client-portal .profile-field textarea::placeholder{color:#9aabba}
+.client-portal .profile-help{margin:-5px 0 16px;color:#8193a3;font-size:11px;line-height:1.55}
+.client-portal .profile-photo-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.client-portal .profile-photo{width:94px;height:94px;display:grid;place-items:center;overflow:hidden;border:3px solid #e5f2f6;border-radius:28px;background:linear-gradient(145deg,#d8f4f6,#e4ebff);color:#167f9c;font-size:30px;font-weight:900}
+.client-portal .profile-photo img{width:100%;height:100%;object-fit:cover}
+.client-portal .photo-actions{display:flex;gap:9px;flex-wrap:wrap}
+.client-portal .profile-secondary-btn{min-height:42px;padding:0 15px;border:1px solid #dce8ef;border-radius:10px;background:#f4f8fa;color:#36566d;font-size:12px;font-weight:800;cursor:pointer}
+.client-portal .profile-secondary-btn:hover{background:#eaf4f8}
+.client-portal .business-card{padding:20px;border:1px solid #e6edf2;border-radius:15px;background:linear-gradient(145deg,#fff,#f9fcfd);margin:0 0 16px}
+.client-portal .business-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.client-portal .business-card-head strong{color:#24465d;font-size:13px}
+.client-portal .optional-tag{padding:5px 9px;border-radius:30px;background:#eef5f8;color:#6b8293;font-size:9px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+.client-portal .profile-savebar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding-top:20px;border-top:1px solid #eaf0f4}
+.client-portal #saveButton,.client-portal .profile-save-primary{min-height:52px!important;min-width:190px;padding:0 25px!important;border:0!important;border-radius:12px!important;background:linear-gradient(115deg,#087f9d,#1764bd)!important;color:#fff!important;font-size:14px!important;font-weight:900!important;letter-spacing:.2px!important;box-shadow:0 10px 22px #126b9d35!important;opacity:1!important;text-shadow:0 1px 1px #073b5870!important;cursor:pointer}
+.client-portal #saveButton:hover,.client-portal .profile-save-primary:hover{transform:translateY(-1px);box-shadow:0 14px 27px #126b9d45!important}
+.client-portal #saveButton:disabled{opacity:.72!important;cursor:wait}
+.client-portal .profile-security-status{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:30px;background:#edf8f4;color:#257a59;font-size:11px;font-weight:800}
+.client-portal .profile-security-status.off{background:#fff5e9;color:#9a6521}
+.client-portal .mfa-qr{display:block;max-width:190px;max-height:190px;padding:10px;margin:12px 0;border:1px solid #e4ebf1;border-radius:12px;background:#fff}
+.client-portal .mfa-secret{display:block;max-width:100%;overflow-wrap:anywhere;padding:10px;border-radius:9px;background:#f4f7fa;color:#38566d;font:700 12px monospace}
+.client-portal .profile-inline-status{display:none;margin:12px 0;padding:12px 14px;border-radius:10px;font-size:12px;line-height:1.5}
+.client-portal .profile-inline-status.show{display:block}
+.client-portal .profile-inline-status.success{background:#edf8f3;color:#216d4d;border:1px solid #ccebdc}
+.client-portal .profile-inline-status.error{background:#fff2f2;color:#9d3333;border:1px solid #f3d1d1}
+.client-portal .profile-security-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.client-portal .profile-pin-input{max-width:230px!important;letter-spacing:4px!important}
+.client-portal .device-note{padding:13px 15px;border-radius:12px;background:#f3f7fa;color:#6d8393;font-size:11px;line-height:1.6}
+@media(max-width:650px){.client-portal .profile-grid{grid-template-columns:1fr}.client-portal .profile-field.full{grid-column:auto}.client-portal .profile-savebar{align-items:stretch}.client-portal #saveButton{width:100%}.client-portal .profile-card{padding:19px!important}.client-portal .business-card{padding:15px}.client-portal .profile-photo{width:78px;height:78px;border-radius:22px}}
+
 </style>
 </head>
 
@@ -242,63 +288,93 @@
       <p>Keep your account information up to date.</p>
     </header>
 
-    <section class="profile-card"><div class="profile-summary"><div class="profile-mark" id="profileMark">Z</div><div><strong id="profileDisplayName">Your workspace profile</strong><span id="profileDisplayEmail">Account details</span></div></div>
 
-      <div id="status" class="status" role="alert"></div>
-
-      <form id="profileForm" novalidate>
-
-        <div class="form-field">
-          <label for="fullName">Full name</label>
-          <input
-            id="fullName"
-            type="text"
-            autocomplete="name"
-            placeholder="Your full name"
-            required
-          >
-        </div>
-
-        <div class="form-field">
-          <label for="email">Email address</label>
-          <input
-            id="email"
-            type="email"
-            disabled
-          >
-        </div>
-
-        <p class="form-note">
-          Your email address is managed by your authentication account.
-        </p>
-
-        <div class="form-field">
-          <label for="phone">Phone number</label>
-          <input
-            id="phone"
-            type="tel"
-            autocomplete="tel"
-            placeholder="+256 ..."
-          >
-        </div>
-
-        <div class="actions">
-          <button
-            id="saveButton"
-            class="btn btn-primary"
-            type="submit"
-          >
-            Save Changes
-          </button>
-
-          <a class="btn" href="dashboard.html">
-            Cancel
-          </a>
-        </div>
-
-      </form>
-
+    <section class="profile-card">
+      <div class="profile-section-head"><span class="profile-section-icon">◎</span><div><h2>Profile photo</h2><p>Use a clear image so our team can recognise your account.</p></div></div>
+      <div class="profile-photo-row">
+        <div class="profile-photo" id="profilePhotoPreview">Z</div>
+        <div><div class="photo-actions"><label class="profile-secondary-btn" for="profilePhotoInput">Upload photo</label><button class="profile-secondary-btn" id="removePhotoButton" type="button">Remove photo</button></div><p class="profile-help" style="margin:9px 0 0">JPG, PNG, WebP or GIF · Maximum 2 MB</p><input id="profilePhotoInput" type="file" accept="image/jpeg,image/png,image/webp,image/gif" hidden></div>
+      </div>
+      <div id="photoStatus" class="profile-inline-status" role="status"></div>
     </section>
+
+    <section class="profile-card">
+      <div class="profile-section-head"><span class="profile-section-icon">✎</span><div><h2>Personal information</h2><p>Keep your main account details and contact methods up to date.</p></div></div>
+      <div id="status" class="status" role="alert"></div>
+      <form id="profileForm" novalidate>
+        <div class="profile-grid">
+          <div class="profile-field"><label for="fullName">Full name</label><input id="fullName" type="text" autocomplete="name" placeholder="Your full name" required></div>
+          <div class="profile-field"><label for="email">Account email</label><input id="email" type="email" disabled></div>
+          <div class="profile-field"><label for="phone">Primary phone number</label><input id="phone" type="tel" autocomplete="tel" placeholder="+256 ..."></div>
+          <div class="profile-field"><label for="whatsapp">WhatsApp number (optional)</label><input id="whatsapp" type="tel" placeholder="+256 ..."></div>
+          <div class="profile-field"><label for="alternatePhone">Alternative phone (optional)</label><input id="alternatePhone" type="tel" placeholder="Another contact number"></div>
+          <div class="profile-field"><label for="alternateEmail">Alternative email (optional)</label><input id="alternateEmail" type="email" placeholder="Another email address"></div>
+        </div>
+        <p class="profile-help">Your account email is managed by your sign-in account. You can add alternative contact details here without changing your login email.</p>
+        <div class="profile-savebar"><span class="profile-help" style="margin:0">Your changes are saved to your account profile.</span><button id="saveButton" class="btn btn-primary profile-save-primary" type="submit">Save Changes</button></div>
+      </form>
+    </section>
+
+    <section class="profile-card">
+      <div class="profile-section-head"><span class="profile-section-icon">▣</span><div><h2>Business information</h2><p>Add up to two businesses. The second business is optional, and you can leave either section blank.</p></div></div>
+      <div class="business-card">
+        <div class="business-card-head"><strong>Business 1 · Primary business</strong><span class="optional-tag">Optional</span></div>
+        <div class="profile-grid">
+          <div class="profile-field"><label for="business1Name">Business name</label><input id="business1Name" placeholder="Your business or organisation"></div>
+          <div class="profile-field"><label for="business1Type">Business category</label><input id="business1Type" placeholder="e.g. Retail, ICT, Education"></div>
+          <div class="profile-field"><label for="business1Phone">Business phone</label><input id="business1Phone" type="tel" placeholder="+256 ..."></div>
+          <div class="profile-field"><label for="business1Email">Business email</label><input id="business1Email" type="email" placeholder="business@example.com"></div>
+          <div class="profile-field"><label for="business1Website">Business website (optional)</label><input id="business1Website" type="url" placeholder="https://example.com"></div>
+          <div class="profile-field"><label for="business1Location">Business location (optional)</label><input id="business1Location" placeholder="Town, district, country"></div>
+        </div>
+      </div>
+      <div class="business-card">
+        <div class="business-card-head"><strong>Business 2 · Additional business</strong><span class="optional-tag">Optional</span></div>
+        <div class="profile-grid">
+          <div class="profile-field"><label for="business2Name">Business name</label><input id="business2Name" placeholder="Second business or organisation"></div>
+          <div class="profile-field"><label for="business2Type">Business category</label><input id="business2Type" placeholder="e.g. Retail, ICT, Education"></div>
+          <div class="profile-field"><label for="business2Phone">Business phone</label><input id="business2Phone" type="tel" placeholder="+256 ..."></div>
+          <div class="profile-field"><label for="business2Email">Business email</label><input id="business2Email" type="email" placeholder="business@example.com"></div>
+          <div class="profile-field"><label for="business2Website">Business website (optional)</label><input id="business2Website" type="url" placeholder="https://example.com"></div>
+          <div class="profile-field"><label for="business2Location">Business location (optional)</label><input id="business2Location" placeholder="Town, district, country"></div>
+        </div>
+      </div>
+      <p class="profile-help">You can save your profile without adding any business details. Only two business profiles are available.</p>
+      <div class="profile-savebar"><span class="profile-help" style="margin:0">Business details remain optional.</span><button id="saveBusinessButton" class="btn btn-primary profile-save-primary" type="button">Save Business Details</button></div>
+      <div id="businessStatus" class="profile-inline-status" role="status"></div>
+    </section>
+
+    <section class="profile-card">
+      <div class="profile-section-head"><span class="profile-section-icon">✧</span><div><h2>Two-step verification</h2><p>Add an authenticator app as a second layer of account protection.</p></div></div>
+      <div id="mfaState" class="profile-security-status off">Checking security status…</div>
+      <p class="profile-help" style="margin-top:12px">Use an authenticator such as Google Authenticator, Microsoft Authenticator or 1Password. You will need its one-time code when signing in.</p>
+      <div id="mfaSetup" hidden>
+        <p class="profile-help">Scan this QR code with your authenticator app. If you cannot scan it, enter the setup key manually.</p>
+        <img id="mfaQr" class="mfa-qr" alt="Authenticator setup QR code">
+        <code id="mfaSecret" class="mfa-secret"></code>
+        <div class="profile-field" style="margin-top:14px"><label for="mfaCode">6-digit authenticator code</label><input id="mfaCode" class="profile-pin-input" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000"></div>
+        <div class="profile-security-actions"><button id="verifyMfaButton" class="profile-secondary-btn" type="button">Verify and enable</button><button id="cancelMfaButton" class="profile-secondary-btn" type="button">Cancel setup</button></div>
+      </div>
+      <div id="mfaDisable" hidden>
+        <div class="profile-field" style="margin-top:14px"><label for="mfaDisableCode">Enter authenticator code to turn it off</label><input id="mfaDisableCode" class="profile-pin-input" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000"></div>
+        <button id="disableMfaButton" class="profile-secondary-btn" type="button">Disable two-step verification</button>
+      </div>
+      <div id="mfaStatus" class="profile-inline-status" role="status"></div>
+      <button id="startMfaButton" class="profile-secondary-btn" type="button">Set up two-step verification</button>
+    </section>
+
+    <section class="profile-card">
+      <div class="profile-section-head"><span class="profile-section-icon">⌑</span><div><h2>Workspace app lock</h2><p>Protect this browser workspace with a quick PIN when you step away.</p></div></div>
+      <div id="appLockState" class="profile-security-status off">Quick lock is off</div>
+      <p class="device-note" style="margin:14px 0">This optional lock protects the workspace screen on this browser and automatically locks after five minutes of inactivity. It is an extra privacy layer, not a replacement for your account password or two-step verification. Clearing this browser's site data can remove the local lock.</p>
+      <div class="profile-field"><label for="appLockPin">New 6–12 digit PIN</label><input id="appLockPin" class="profile-pin-input" type="password" inputmode="numeric" autocomplete="new-password" minlength="6" maxlength="12" placeholder="Create a PIN"></div>
+      <div class="profile-field"><label for="appLockPinConfirm">Confirm PIN</label><input id="appLockPinConfirm" class="profile-pin-input" type="password" inputmode="numeric" autocomplete="new-password" minlength="6" maxlength="12" placeholder="Repeat your PIN"></div>
+      <div class="profile-security-actions"><button id="saveAppLockButton" class="profile-secondary-btn" type="button">Enable / Update app lock</button><button id="lockNowButton" class="profile-secondary-btn" type="button">Lock workspace now</button></div>
+      <div id="appLockDisable" hidden><div class="profile-field" style="margin-top:14px"><label for="appLockCurrentPin">Current PIN to disable</label><input id="appLockCurrentPin" class="profile-pin-input" type="password" inputmode="numeric" maxlength="12" placeholder="Current PIN"></div><button id="disableAppLockButton" class="profile-secondary-btn" type="button">Turn off app lock</button></div>
+      <div id="appLockStatus" class="profile-inline-status" role="status"></div>
+      <p class="device-note" style="margin-top:14px">Phone storage encryption is controlled by Android or your phone manufacturer, not by a website. For full-device protection, enable screen lock and device encryption in your phone's Security settings.</p>
+    </section>
+
 
   </div>
 
@@ -306,105 +382,209 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <script>
 const SUPABASE_URL = "https://jjcptobdzreckuhtcuzm.supabase.co";
 const SUPABASE_KEY = "sb_publishable_5AyVE6y2FGY8S_NoLC5a-w_URf-Mfxc";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const $ = id => document.getElementById(id);
+let currentUser = null;
+let mfaFactorId = null;
+let profilePhotoPath = null;
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-const form = document.getElementById("profileForm");
-const saveButton = document.getElementById("saveButton");
-const statusBox = document.getElementById("status");
-
-function showStatus(message, type){
-  statusBox.textContent = message;
-  statusBox.className = "status show " + type;
+function showStatus(element, message, type) {
+  element.textContent = message;
+  element.className = "profile-inline-status show " + type;
 }
-
-async function loadProfile(){
-
-  const { data, error } =
-    await supabaseClient.auth.getSession();
-
-  if(error || !data.session){
-    window.location.replace("signin.html");
-    return;
-  }
-
-  const user = data.session.user;
-  const metadata = user.user_metadata || {};
-
-  const displayName=metadata.full_name||metadata.name||"Your workspace profile";document.getElementById("profileDisplayName").textContent=displayName;document.getElementById("profileDisplayEmail").textContent=user.email||"Account details";document.getElementById("profileMark").textContent=(displayName.trim()[0]||"Z").toUpperCase();
-  document.getElementById("fullName").value =
-    metadata.full_name ||
-    metadata.name ||
-    "";
-
-  document.getElementById("email").value =
-    user.email || "";
-
-  document.getElementById("phone").value =
-    metadata.phone ||
-    user.phone ||
-    "";
+function showMainStatus(message,type) {
+  $("status").textContent=message;
+  $("status").className="status show "+type;
 }
-
-form.addEventListener("submit", async function(event){
-
-  event.preventDefault();
-
-  const fullName =
-    document.getElementById("fullName").value.trim();
-
-  const phone =
-    document.getElementById("phone").value.trim();
-
-  if(!fullName){
-    showStatus("Please enter your full name.", "error");
-    return;
-  }
-
-  saveButton.disabled = true;
-  saveButton.textContent = "Saving...";
-
+function businessFields(n) {
+  return {
+    name:$("business"+n+"Name").value.trim(),
+    category:$("business"+n+"Type").value.trim(),
+    phone:$("business"+n+"Phone").value.trim(),
+    email:$("business"+n+"Email").value.trim(),
+    website:$("business"+n+"Website").value.trim(),
+    location:$("business"+n+"Location").value.trim()
+  };
+}
+function fillBusiness(n,b={}) {
+  $("business"+n+"Name").value=b.name||"";
+  $("business"+n+"Type").value=b.category||"";
+  $("business"+n+"Phone").value=b.phone||"";
+  $("business"+n+"Email").value=b.email||"";
+  $("business"+n+"Website").value=b.website||"";
+  $("business"+n+"Location").value=b.location||"";
+}
+function setAvatar(url,name) {
+  const preview=$("profilePhotoPreview"),mark=$("profileMark");
+  const initial=(name||"Z").trim().charAt(0).toUpperCase()||"Z";
+  if(url){preview.innerHTML="";const img=document.createElement("img");img.src=url;img.alt="Profile photo";preview.append(img);mark.innerHTML="";const small=document.createElement("img");small.src=url;small.alt="";small.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:18px";mark.append(small)}
+  else {preview.textContent=initial;mark.textContent=initial}
+}
+async function loadProfile() {
+  const {data,error}=await supabaseClient.auth.getSession();
+  if(error||!data.session){window.location.replace("signin.html");return}
+  currentUser=data.session.user;
+  const m=currentUser.user_metadata||{};
+  $("profileDisplayName").textContent=m.full_name||m.name||"Your workspace profile";
+  $("profileDisplayEmail").textContent=currentUser.email||"Account details";
+  $("fullName").value=m.full_name||m.name||"";
+  $("email").value=currentUser.email||"";
+  $("phone").value=m.phone||currentUser.phone||"";
+  $("whatsapp").value=m.whatsapp||"";
+  $("alternatePhone").value=m.alternate_phone||"";
+  $("alternateEmail").value=m.alternate_email||"";
+  setAvatar(m.profile_photo_url||"",m.full_name||m.name||"Z");
+  profilePhotoPath=m.profile_photo_path||null;
+  const businesses=Array.isArray(m.business_profiles)?m.business_profiles.slice(0,2):[];
+  fillBusiness(1,businesses[0]||{});
+  fillBusiness(2,businesses[1]||{});
+  await loadMfaStatus();
+  loadAppLockStatus();
+}
+async function savePersonalAndBusiness() {
+  const fullName=$("fullName").value.trim();
+  if(!fullName){showMainStatus("Please enter your full name.","error");return}
+  const button=$("saveButton");
+  button.disabled=true;button.textContent="Saving your profile…";
   try{
-
-    const { error } =
-      await supabaseClient.auth.updateUser({
-        data:{
-          full_name:fullName,
-          phone:phone
-        }
-      });
-
-    if(error){
-      throw error;
+    const payload={
+      full_name:fullName,
+      phone:$("phone").value.trim(),
+      whatsapp:$("whatsapp").value.trim(),
+      alternate_phone:$("alternatePhone").value.trim(),
+      alternate_email:$("alternateEmail").value.trim()
+    };
+    const {data,error}=await supabaseClient.auth.updateUser({data:payload});
+    if(error)throw error;
+    currentUser=data.user||currentUser;
+    $("profileDisplayName").textContent=fullName;
+    showMainStatus("Your personal profile has been saved.","success");
+  }catch(error){showMainStatus(error.message||"Unable to save your profile.","error")}
+  finally{button.disabled=false;button.textContent="Save Changes"}
+}
+async function saveBusinesses() {
+  const button=$("saveBusinessButton");button.disabled=true;button.textContent="Saving business details…";
+  try{
+    const businesses=[businessFields(1),businessFields(2)].filter(b=>Object.values(b).some(v=>v));
+    if(businesses.length>2)throw new Error("You can save a maximum of two businesses.");
+    for(const b of businesses) {
+      if(b.website && !/^https?:\/\//i.test(b.website))throw new Error("Business website links must begin with https:// or http://.");
+      if(b.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(b.email))throw new Error("Please check the business email address.");
     }
+    const {error}=await supabaseClient.auth.updateUser({data:{business_profiles:businesses}});
+    if(error)throw error;
+    showStatus($("businessStatus"),"Your business details have been saved. You can add one more business at any time.","success");
+  }catch(error){showStatus($("businessStatus"),error.message||"Unable to save business details.","error")}
+  finally{button.disabled=false;button.textContent="Save Business Details"}
+}
+$("profileForm").addEventListener("submit",e=>{e.preventDefault();savePersonalAndBusiness()});
+$("saveBusinessButton").addEventListener("click",saveBusinesses);
 
-    showStatus(
-      "Your profile has been updated successfully.",
-      "success"
-    );
-
-  }catch(error){
-
-    showStatus(
-      error.message || "Unable to update your profile.",
-      "error"
-    );
-
-  }finally{
-
-    saveButton.disabled = false;
-    saveButton.textContent = "Save Changes";
-
-  }
-
+$("profilePhotoInput").addEventListener("change",async e=>{
+  const file=e.target.files&&e.target.files[0];if(!file)return;
+  if(!/^image\/(jpeg|png|webp|gif)$/.test(file.type)){showStatus($("photoStatus"),"Choose a JPG, PNG, WebP or GIF image.","error");e.target.value="";return}
+  if(file.size>2*1024*1024){showStatus($("photoStatus"),"Your image must be 2 MB or smaller.","error");e.target.value="";return}
+  const ext=({ "image/jpeg":"jpg","image/png":"png","image/webp":"webp","image/gif":"gif"})[file.type];
+  const path=currentUser.id+"/avatar-"+Date.now()+"."+ext;
+  const button=e.target;
+  try{
+    showStatus($("photoStatus"),"Uploading your profile photo…","success");
+    const {error}=await supabaseClient.storage.from("client-profile-photos").upload(path,file,{contentType:file.type,upsert:false});
+    if(error)throw error;
+    const {data}=supabaseClient.storage.from("client-profile-photos").getPublicUrl(path);
+    const oldPath=profilePhotoPath;
+    const {error:updateError}=await supabaseClient.auth.updateUser({data:{profile_photo_url:data.publicUrl,profile_photo_path:path}});
+    if(updateError){await supabaseClient.storage.from("client-profile-photos").remove([path]);throw updateError}
+    profilePhotoPath=path;setAvatar(data.publicUrl,$("fullName").value);
+    if(oldPath)await supabaseClient.storage.from("client-profile-photos").remove([oldPath]);
+    showStatus($("photoStatus"),"Profile photo updated successfully.","success");
+  }catch(error){showStatus($("photoStatus"),error.message||"Could not upload your photo. Please try again.","error")}
+  finally{button.value=""}
+});
+$("removePhotoButton").addEventListener("click",async()=>{
+  if(!profilePhotoPath){showStatus($("photoStatus"),"There is no profile photo to remove.","error");return}
+  const old=profilePhotoPath;
+  const {error}=await supabaseClient.auth.updateUser({data:{profile_photo_url:null,profile_photo_path:null}});
+  if(error){showStatus($("photoStatus"),error.message,"error");return}
+  await supabaseClient.storage.from("client-profile-photos").remove([old]);
+  profilePhotoPath=null;setAvatar("",$("fullName").value);
+  showStatus($("photoStatus"),"Your profile photo has been removed.","success");
 });
 
+async function loadMfaStatus() {
+  try{
+    const {data,error}=await supabaseClient.auth.mfa.listFactors();if(error)throw error;
+    const verified=(data.totp||[]).find(f=>f.status==="verified");
+    if(verified){
+      mfaFactorId=verified.id;$("mfaState").textContent="✓ Two-step verification is enabled";$("mfaState").className="profile-security-status";
+      $("startMfaButton").hidden=true;$("mfaDisable").hidden=false;$("mfaSetup").hidden=true;
+    }else{
+      mfaFactorId=null;$("mfaState").textContent="Two-step verification is not enabled";$("mfaState").className="profile-security-status off";
+      $("startMfaButton").hidden=false;$("mfaDisable").hidden=true;
+    }
+  }catch(error){$("mfaState").textContent="Security status could not be loaded";$("mfaState").className="profile-security-status off";showStatus($("mfaStatus"),error.message||"Unable to check two-step verification.","error")}
+}
+$("startMfaButton").addEventListener("click",async()=>{
+  $("startMfaButton").disabled=true;$("startMfaButton").textContent="Preparing setup…";
+  try{
+    const {data,error}=await supabaseClient.auth.mfa.enroll({factorType:"totp",friendlyName:"ZakiTech Workspace"});
+    if(error)throw error;
+    mfaFactorId=data.id;$("mfaQr").src=data.totp.qr_code;$("mfaSecret").textContent=data.totp.secret;
+    $("mfaSetup").hidden=false;$("startMfaButton").hidden=true;
+    showStatus($("mfaStatus"),"Scan the QR code, then enter the 6-digit code from your authenticator app.","success");
+  }catch(error){showStatus($("mfaStatus"),error.message||"Could not start two-step verification.","error");$("startMfaButton").disabled=false;$("startMfaButton").textContent="Set up two-step verification"}
+});
+$("cancelMfaButton").addEventListener("click",async()=>{
+  if(mfaFactorId)await supabaseClient.auth.mfa.unenroll({factorId:mfaFactorId});
+  mfaFactorId=null;$("mfaSetup").hidden=true;$("startMfaButton").hidden=false;$("startMfaButton").disabled=false;$("startMfaButton").textContent="Set up two-step verification";$("mfaQr").removeAttribute("src");$("mfaSecret").textContent="";showStatus($("mfaStatus"),"Setup cancelled.","success");
+});
+$("verifyMfaButton").addEventListener("click",async()=>{
+  const code=$("mfaCode").value.trim();if(!/^\d{6}$/.test(code)){showStatus($("mfaStatus"),"Enter the 6-digit code from your authenticator app.","error");return}
+  const button=$("verifyMfaButton");button.disabled=true;button.textContent="Verifying…";
+  try{
+    const challenge=await supabaseClient.auth.mfa.challenge({factorId:mfaFactorId});if(challenge.error)throw challenge.error;
+    const verified=await supabaseClient.auth.mfa.verify({factorId:mfaFactorId,challengeId:challenge.data.id,code});if(verified.error)throw verified.error;
+    $("mfaCode").value="";$("mfaSetup").hidden=true;await loadMfaStatus();showStatus($("mfaStatus"),"Two-step verification is now enabled for your account.","success");
+  }catch(error){showStatus($("mfaStatus"),error.message||"The code could not be verified.","error")}
+  finally{button.disabled=false;button.textContent="Verify and enable"}
+});
+$("disableMfaButton").addEventListener("click",async()=>{
+  const code=$("mfaDisableCode").value.trim();if(!/^\d{6}$/.test(code)){showStatus($("mfaStatus"),"Enter your current 6-digit authenticator code to disable this feature.","error");return}
+  const button=$("disableMfaButton");button.disabled=true;button.textContent="Verifying…";
+  try{
+    const challenge=await supabaseClient.auth.mfa.challenge({factorId:mfaFactorId});if(challenge.error)throw challenge.error;
+    const verified=await supabaseClient.auth.mfa.verify({factorId:mfaFactorId,challengeId:challenge.data.id,code});if(verified.error)throw verified.error;
+    const removed=await supabaseClient.auth.mfa.unenroll({factorId:mfaFactorId});if(removed.error)throw removed.error;
+    $("mfaDisableCode").value="";await supabaseClient.auth.refreshSession();await loadMfaStatus();showStatus($("mfaStatus"),"Two-step verification has been disabled.","success");
+  }catch(error){showStatus($("mfaStatus"),error.message||"Could not disable two-step verification.","error")}
+  finally{button.disabled=false;button.textContent="Disable two-step verification"}
+});
+
+function loadAppLockStatus(){
+  const enabled=!!(window.ZakiPortalLock&&window.ZakiPortalLock.isEnabled());
+  $("appLockState").textContent=enabled?"✓ Quick app lock is enabled on this browser":"Quick lock is off";
+  $("appLockState").className="profile-security-status"+(enabled?"":" off");
+  $("appLockDisable").hidden=!enabled;
+}
+$("saveAppLockButton").addEventListener("click",async()=>{
+  const pin=$("appLockPin").value.trim(),confirm=$("appLockPinConfirm").value.trim();
+  if(!/^\d{6,12}$/.test(pin)){showStatus($("appLockStatus"),"Choose a PIN containing 6 to 12 digits.","error");return}
+  if(pin!==confirm){showStatus($("appLockStatus"),"The PIN entries do not match.","error");return}
+  try{
+    await window.ZakiPortalLock.setPin(pin);$("appLockPin").value="";$("appLockPinConfirm").value="";loadAppLockStatus();
+    showStatus($("appLockStatus"),"Quick app lock is enabled on this browser. It will lock after five minutes of inactivity.","success");
+  }catch(error){showStatus($("appLockStatus"),error.message||"Could not enable app lock.","error")}
+});
+$("lockNowButton").addEventListener("click",()=>window.ZakiPortalLock.lockNow());
+$("disableAppLockButton").addEventListener("click",async()=>{
+  const pin=$("appLockCurrentPin").value.trim();
+  try{await window.ZakiPortalLock.disable(pin);$("appLockCurrentPin").value="";loadAppLockStatus();showStatus($("appLockStatus"),"Quick app lock has been turned off on this browser.","success")}
+  catch(error){showStatus($("appLockStatus"),error.message||"The PIN was not accepted.","error")}
+});
 loadProfile();
 </script>
 
