@@ -107,7 +107,7 @@
 
   <section class="workspace-heading" id="my-projects">
     <div><span class="section-kicker">YOUR WORK, IN ONE PLACE</span><h2>Project workspace</h2><p>Track delivery, follow team updates and keep the conversation moving.</p></div>
-    <div class="workspace-actions"><a class="outline-action" href="projects.html">View all projects <span>→</span></a><a class="outline-action" href="#new-project">＋ New project request</a></div>
+    <div class="workspace-actions"><a class="outline-action" href="projects.html">View all projects <span>→</span></a><a class="outline-action" href="projects.html#new-project">＋ New project request</a></div>
   </section>
   <section class="project-area">
     <div class="project-list-panel">
@@ -129,20 +129,11 @@
     </aside>
   </section>
 
-  <section class="new-project-section" id="new-project">
-    <div class="new-project-intro"><span class="section-kicker">START SOMETHING NEW</span><h2>Have another idea<br>in mind?</h2><p>Tell us what you’re planning. We’ll review your request and get back to you.</p><div class="new-project-decoration" aria-hidden="true"><span>✳</span><i></i></div></div>
+  <section class="new-project-section">
+    <div class="new-project-intro"><span class="section-kicker">START SOMETHING NEW</span><h2>Have an idea?<br>Let's shape it.</h2><p>Share your next project using a written brief, voice recording or supporting documents.</p><div class="new-project-decoration" aria-hidden="true"><span>✳</span><i></i></div></div>
     <div class="new-project-form-panel">
-      <div class="panel-heading"><div><h3>Submit a project request</h3><span>Share a few details to get started.</span></div><span class="form-step">01 <i>/</i> 01</span></div>
-      <form id="projectRequestForm" class="project-form">
-        <div class="project-form-grid">
-          <label>Project name<input id="projectName" maxlength="120" required placeholder="e.g. Business website"></label>
-          <label>Project type<select id="projectType"><option>Website</option><option>Web application</option><option>Mobile application</option><option>Branding and design</option><option>IT support</option><option>Other</option></select></label>
-          <label>Budget range <span>Optional</span><input id="projectBudget" maxlength="100" placeholder="Your estimated budget"></label>
-          <label>Desired timeline <span>Optional</span><input id="projectTimeline" maxlength="100" placeholder="e.g. 4–6 weeks"></label>
-        </div>
-        <label class="description-label">Tell us about your idea<textarea id="projectDescription" rows="4" maxlength="5000" required placeholder="What would you like us to create or help you with?"></textarea></label>
-        <div class="form-submit-row"><div id="projectFormStatus" class="project-feedback" role="status" aria-live="polite"></div><button id="submitProjectButton" class="submit-project-btn" type="submit">Send project request <span>→</span></button></div>
-      </form>
+      <div class="panel-heading"><div><h3>Tell us about your idea</h3><span>Choose the way you want to explain your project.</span></div><span class="form-step">IDEA <i>→</i></span></div>
+      <a class="submit-project-btn" href="projects.html#new-project">Tell us about your idea <span>→</span></a>
     </div>
   </section>
 
