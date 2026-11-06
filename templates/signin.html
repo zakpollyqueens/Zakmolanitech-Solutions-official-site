@@ -232,7 +232,7 @@ document.querySelectorAll(".oauth-button").forEach(function(oauthButton){
     try{
       const {error}=await supabaseClient.auth.signInWithOAuth({
         provider,
-        options:{redirectTo:window.location.origin+"/templates/dashboard.html"}
+        options:{redirectTo:window.location.origin+"/templates/signin.html"}
       });
       if(error) throw error;
       showStatus("Redirecting to "+label+"…","success");
@@ -249,7 +249,28 @@ async function checkExistingSession(){
   try{
     const {data,error} = await supabaseClient.auth.getSession();
     if(error){console.error(error);return;}
-    if(data && data.session) window.location.replace("dashboard.html");
+    if(data && data.session){
+      const [factorResult,assurance]=await Promise.all([
+        supabaseClient.auth.mfa.listFactors(),
+        supabaseClient.auth.mfa.getAuthenticatorAssuranceLevel()
+      ]);
+      if(factorResult.error) throw factorResult.error;
+      if(assurance.error) throw assurance.error;
+      const verifiedFactor=[...(factorResult.data.totp||[]),...(factorResult.data.phone||[])].find(f=>f.status==="verified");
+      if(verifiedFactor && assurance.data.nextLevel==="aal2" && assurance.data.currentLevel!=="aal2"){
+        const challenge=await supabaseClient.auth.mfa.challenge({factorId:verifiedFactor.id});
+        if(challenge.error) throw challenge.error;
+        loginMfaFactorId=verifiedFactor.id;loginMfaChallengeId=challenge.data.id;
+        document.getElementById("signinForm").hidden=true;
+        document.querySelector(".oauth-options").hidden=true;
+        document.querySelector(".card-bottom").hidden=true;
+        document.getElementById("loginMfaPanel").hidden=false;
+        document.getElementById("loginMfaCode").focus();
+        showStatus("Complete the additional verification step to open your account.","success");
+      }else{
+        window.location.replace("dashboard.html");
+      }
+    }
   }catch(error){console.error("Session check error:",error);}
 }
 checkExistingSession();
