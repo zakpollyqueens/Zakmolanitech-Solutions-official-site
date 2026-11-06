@@ -253,7 +253,8 @@ async function loadSettings(){
   }
 
   document.getElementById("passwordEmail").value =
-    data.session.user.email || "";\n  const user=data.session.user;document.getElementById("sessionDetails").textContent="Signed in as "+(user.email||"your account")+" · Last sign-in "+(user.last_sign_in_at?new Date(user.last_sign_in_at).toLocaleString():"current session")+".";
+    data.session.user.email || "";
+  const user=data.session.user;document.getElementById("sessionDetails").textContent="Signed in as "+(user.email||"your account")+" · Last sign-in "+(user.last_sign_in_at?new Date(user.last_sign_in_at).toLocaleString():"current session")+".";
 }
 
 document.getElementById("savePreferences").addEventListener("click",async()=>{const button=document.getElementById("savePreferences"),box=document.getElementById("preferencesStatus");button.disabled=true;button.textContent="Saving...";const{error}=await supabaseClient.auth.updateUser({data:{workspace_preferences:{project_updates:document.getElementById("prefProject").checked,messages:document.getElementById("prefMessages").checked,support:document.getElementById("prefSupport").checked}}});box.textContent=error?error.message:"Your communication preferences have been saved to your account.";box.className="status show "+(error?"error":"success");button.disabled=false;button.textContent="Save preferences"});passwordForm.addEventListener("submit", async function(event){
