@@ -29,7 +29,10 @@ body{background:radial-gradient(ellipse at 10% 0,rgba(0,184,255,.12),transparent
 @media(max-width:900px){.staff-layout{grid-template-columns:1fr}.project-list{max-height:400px}.staff-stats{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.staff-shell{width:calc(100% - 24px);padding-top:25px}.staff-header{align-items:flex-start}.staff-brand strong{font-size:13px}.staff-actions{justify-content:flex-end}.staff-stats{gap:8px}.stat-card{padding:13px}.stat-card strong{font-size:22px}.filters{grid-template-columns:1fr}.detail{padding:15px}.form-grid{grid-template-columns:1fr}.detail-title{display:block}}
 </style>
-</head>
+<style id="support-inbox-admin-style">
+.support-top-alert{display:inline-flex;align-items:center;gap:9px}.support-top-alert span{display:inline-grid;place-items:center;min-width:21px;height:21px;padding:0 5px;border-radius:30px;background:#ff5470;color:#fff;font-size:10px}.support-inbox-panel{margin-bottom:18px}.support-inbox-tools{display:flex;align-items:center;gap:10px}.support-unread-label{color:#8fe9ff;font-size:11px;font-weight:800}.support-inbox-grid{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(0,1.5fr);min-height:350px}.support-request-list{max-height:620px;overflow:auto;padding:9px;border-right:1px solid var(--staff-line)}.support-request-row{display:block;width:100%;padding:13px;text-align:left;border:1px solid transparent;border-radius:12px;background:transparent;color:inherit;cursor:pointer}.support-request-row:hover,.support-request-row.active{background:#0d2a40;border-color:#1b6d89}.support-request-row strong{display:block;font-size:12px}.support-request-row p{margin:6px 0;color:var(--staff-muted);font-size:10px;line-height:1.5}.support-request-row small{color:#7693a8;font-size:9px}.support-request-detail{padding:19px;min-width:0}.support-client-card{display:flex;flex-wrap:wrap;gap:12px 22px;padding:13px;margin:13px 0;border:1px solid var(--staff-line);border-radius:12px;background:#081a2a}.support-client-card span{font-size:10px;color:var(--staff-muted);overflow-wrap:anywhere}.support-client-card b{display:block;color:#edf7ff;margin-bottom:4px}.support-thread{display:grid;gap:9px;margin:13px 0;max-height:430px;overflow:auto}.support-thread-item{padding:12px;border:1px solid var(--staff-line);border-radius:12px;background:#091a2a}.support-thread-item.customer{border-left:3px solid #8294ac}.support-thread-item.staff{border-left:3px solid #25c4ee}.support-thread-item strong{font-size:10px}.support-thread-item p{font-size:12px;line-height:1.65;color:#c7d6e4;white-space:pre-wrap;overflow-wrap:anywhere;margin:6px 0}.support-thread-item small{font-size:9px;color:var(--staff-muted)}.support-thread-item audio{display:block;width:min(100%,340px);margin-top:8px}.support-reply-form{display:grid;gap:9px;margin-top:13px}.support-reply-form textarea{width:100%;min-height:90px;box-sizing:border-box;padding:12px;border:1px solid var(--staff-line);border-radius:11px;background:#071523;color:#fff;font:inherit;font-size:12px}.support-detail-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.support-detail-actions select{padding:10px;border:1px solid var(--staff-line);border-radius:10px;background:#071523;color:#fff}
+@media(max-width:760px){.support-inbox-grid{grid-template-columns:1fr}.support-request-list{max-height:260px;border-right:0;border-bottom:1px solid var(--staff-line)}.support-inbox-tools{flex-wrap:wrap;justify-content:flex-end}.support-inbox-panel>.panel-head{align-items:flex-start;flex-wrap:wrap}}
+</style></head>
 <body>
 <div id="loading">Verifying staff permissions…</div>
 <section id="denied">
@@ -40,7 +43,7 @@ body{background:radial-gradient(ellipse at 10% 0,rgba(0,184,255,.12),transparent
 <main id="workspace" class="staff-shell" hidden>
 <header class="staff-header">
 <div class="staff-brand"><div class="staff-mark"><img src="../static/assets/logo.png" alt="Zakmolanitech Solutions"></div><div><small>COMPANY OPERATIONS</small><strong>Zakmolanitech Solutions</strong></div></div>
-<div class="staff-actions"><a class="staff-button" href="dashboard.html">Client portal</a><button id="logoutButton" class="staff-button" type="button">Sign out</button></div>
+<div class="staff-actions"><a class="staff-button support-top-alert" href="#supportInbox">♧ Support <span id="supportUnreadBadge">0</span></a><a class="staff-button" href="dashboard.html">Client portal</a><button id="logoutButton" class="staff-button" type="button">Sign out</button></div>
 </header>
 <div class="staff-intro"><span class="eyebrow">STAFF PROJECT CONTROL</span><h1>Project management</h1><p>Review incoming client requests, coordinate delivery, publish progress and communicate securely.</p></div>
 <div id="notice" class="notice" role="status" aria-live="polite"></div>
@@ -49,6 +52,10 @@ body{background:radial-gradient(ellipse at 10% 0,rgba(0,184,255,.12),transparent
 <div class="stat-card"><span>New submissions</span><strong id="statNew">0</strong></div>
 <div class="stat-card"><span>In progress</span><strong id="statProgress">0</strong></div>
 <div class="stat-card"><span>Completed</span><strong id="statDone">0</strong></div>
+</section>
+<section id="supportInbox" class="staff-panel support-inbox-panel">
+<div class="panel-head"><div><h2>Customer Support Inbox</h2><small>Requests, conversations and complaints from client workspaces</small></div><div class="support-inbox-tools"><span id="supportUnreadLabel" class="support-unread-label">0 unread</span><button id="refreshSupportInbox" class="staff-button" type="button">↻ Refresh</button></div></div>
+<div class="support-inbox-grid"><div id="supportRequestList" class="support-request-list"><div class="empty-state">Loading customer requests…</div></div><div id="supportRequestDetail" class="support-request-detail"><div class="empty-state">Select a customer request to review their account details and respond.</div></div></div>
 </section>
 <section class="staff-panel staff-notifications-panel">
  <div class="panel-head"><h2>Architect &amp; team alerts</h2><small>New project submissions</small></div>
@@ -73,10 +80,10 @@ const SUPABASE_KEY="sb_publishable_5AyVE6y2FGY8S_NoLC5a-w_URf-Mfxc";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const byId=id=>document.getElementById(id);
 const statusNames={submitted:"Submitted",reviewing:"Under review",planning:"Planning",in_progress:"In progress",review:"Client review",completed:"Completed",on_hold:"On hold",cancelled:"Cancelled"};
-let staffUser=null,projects=[],profiles={},selectedId=null;
+let staffUser=null,projects=[],profiles={},selectedId=null,supportRows=[],selectedSupportId=null,supportProfiles={};
 function node(tag,cls,txt){const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=String(txt);return n}
 function notify(message,type="success"){const n=byId("notice");n.textContent=message;n.className="notice show "+type;window.setTimeout(()=>n.classList.remove("show"),5500)}
-function isStaff(user){return ["admin","manager","staff","architect"].includes(user?.app_metadata?.staff_role)}
+function isStaff(user){return ["admin","manager","staff","architect","chairperson","vice_chairperson","support"].includes(user?.app_metadata?.staff_role)}
 function clientLabel(project){const p=profiles[project.owner_id]||{};return p.full_name||p.email||"Client"}
 function filteredProjects(){const q=byId("searchInput").value.trim().toLowerCase(),status=byId("statusFilter").value;return projects.filter(p=>{const profile=profiles[p.owner_id]||{};const hay=[p.project_name,p.project_type,p.description,p.id,profile.full_name,profile.email,profile.phone].join(" ").toLowerCase();return (!q||hay.includes(q))&&(!status||p.status===status)})}
 function updateStats(){byId("statAll").textContent=projects.length;byId("statNew").textContent=projects.filter(p=>p.status==="submitted").length;byId("statProgress").textContent=projects.filter(p=>p.status==="in_progress").length;byId("statDone").textContent=projects.filter(p=>p.status==="completed").length}
@@ -116,6 +123,43 @@ async function loadProjectAttachments(projectId,target){
  if(!data?.length){target.append(node("p","inline-note","No supporting files were attached."));return}
  for(const file of data){const row=node("article","feed-item"),meta=node("small","",((file.size_bytes/1024/1024).toFixed(2))+" MB · "+new Date(file.created_at).toLocaleString());row.append(node("strong","",file.file_name),meta);const link=node("a","staff-button","Preparing secure link…");const signed=await db.storage.from("project-request-files").createSignedUrl(file.storage_path,3600);if(signed.error){console.error(signed.error);link.textContent="Secure link unavailable";link.setAttribute("aria-disabled","true")}else{link.href=signed.data.signedUrl;link.target="_blank";link.rel="noopener noreferrer";link.textContent="Open private file"}row.append(link);target.append(row)}
 }
+async function loadSupportInbox(){
+ const list=byId("supportRequestList");if(!list||!staffUser)return;
+ const [tickets,alerts]=await Promise.all([
+  db.from("support_conversations").select("id,user_id,assigned_admin_id,subject,status,created_at,updated_at").order("updated_at",{ascending:false}).limit(100),
+  db.from("staff_support_notifications").select("id,conversation_id,is_read").eq("recipient_user_id",staffUser.id).eq("is_read",false)
+ ]);
+ if(tickets.error){console.error(tickets.error);list.textContent="Customer support requests could not be loaded.";return}
+ supportRows=tickets.data||[];
+ const unread=(alerts.data||[]).length;byId("supportUnreadBadge").textContent=unread;byId("supportUnreadLabel").textContent=unread+" unread";
+ const ids=[...new Set(supportRows.map(x=>x.user_id))];
+ if(ids.length){const p=await db.from("profiles").select("id,full_name,email,phone").in("id",ids);if(!p.error){supportProfiles={};(p.data||[]).forEach(x=>supportProfiles[x.id]=x)}}
+ list.replaceChildren();
+ if(!supportRows.length){list.append(node("div","empty-state","No customer support requests yet."));byId("supportRequestDetail").innerHTML='<div class="empty-state">New customer conversations will appear here.</div>';return}
+ supportRows.forEach(ticket=>{const profile=supportProfiles[ticket.user_id]||{},b=node("button","support-request-row"+(ticket.id===selectedSupportId?" active":""));b.type="button";b.append(node("strong","",ticket.subject||"Customer request"),node("p","",((profile.full_name||"Customer")+" · "+(profile.email||"No email on profile"))),node("small","",new Date(ticket.updated_at).toLocaleString()+" · "+ticket.status));b.addEventListener("click",()=>openSupportRequest(ticket.id));list.append(b)});
+ if(selectedSupportId&&supportRows.some(x=>x.id===selectedSupportId))await openSupportRequest(selectedSupportId,false);
+ else if(supportRows.length)await openSupportRequest(supportRows[0].id,false);
+}
+async function openSupportRequest(id,markRead=true){
+ selectedSupportId=id;const ticket=supportRows.find(x=>x.id===id);if(!ticket)return;
+ const profile=supportProfiles[ticket.user_id]||{},box=byId("supportRequestDetail");
+ if(markRead){await db.from("staff_support_notifications").update({is_read:true}).eq("conversation_id",id).eq("recipient_user_id",staffUser.id).eq("is_read",false)}
+ byId("supportRequestList").querySelectorAll(".support-request-row").forEach(b=>b.classList.toggle("active",b.querySelector("strong")&&b.querySelector("strong").textContent===(ticket.subject||"Customer request")));
+ const contact=node("div","support-client-card");
+ [["Customer",profile.full_name||"Name not provided"],["Email",profile.email||"Not provided"],["Phone / WhatsApp",profile.phone||"Not provided"],["Account ID",ticket.user_id]].forEach(pair=>{const s=node("span","");s.append(node("b","",pair[0]),document.createTextNode(pair[1]));contact.append(s)});
+ box.replaceChildren();const title=node("div","detail-title"),heading=node("div");heading.append(node("h2","",ticket.subject||"Customer request"),node("p","",new Date(ticket.created_at).toLocaleString()+" · "+ticket.status));title.append(heading);box.append(title,contact);
+ const actions=node("div","support-detail-actions"),status=document.createElement("select");["open","in_progress","closed"].forEach(v=>{const o=node("option","",v.replace("_"," "));o.value=v;status.append(o)});status.value=ticket.status;const saveStatus=node("button","staff-button","Update status");saveStatus.type="button";saveStatus.addEventListener("click",async()=>{saveStatus.disabled=true;const r=await db.from("support_conversations").update({status:status.value,assigned_admin_id:ticket.assigned_admin_id||staffUser.id,updated_at:new Date().toISOString()}).eq("id",ticket.id);if(r.error){notify("Could not update support status.","error")}else{ticket.status=status.value;ticket.assigned_admin_id=ticket.assigned_admin_id||staffUser.id;notify("Support request status updated.");await loadSupportInbox()}saveStatus.disabled=false});actions.append(status,saveStatus);box.append(actions);
+ const thread=node("div","support-thread");thread.textContent="Loading conversation…";box.append(thread);
+ const result=await db.from("support_messages").select("id,sender_id,message,message_type,audio_path,created_at").eq("conversation_id",id).eq("is_deleted",false).order("created_at",{ascending:true});
+ thread.replaceChildren();if(result.error){thread.textContent="Messages could not be loaded.";console.error(result.error)}else if(!result.data||!result.data.length){thread.append(node("p","inline-note","No messages yet."))}else{
+  for(const m of result.data){const staff=m.sender_id!==ticket.user_id,item=node("article","support-thread-item "+(staff?"staff":"customer"));item.append(node("strong","",staff?"ZakiTech staff":"Customer"));
+   if(m.message_type==="voice"&&m.audio_path){const audio=document.createElement("audio");audio.controls=true;audio.preload="none";const signed=await db.storage.from("support-voice-messages").createSignedUrl(m.audio_path,3600);if(!signed.error)audio.src=signed.data.signedUrl;else item.append(node("p","","Voice note unavailable"));item.append(audio)}
+   if(m.message)item.append(node("p","",m.message));item.append(node("small","",new Date(m.created_at).toLocaleString()));thread.append(item)}
+ }
+ if(ticket.status!=="closed"){
+  const form=document.createElement("form");form.className="support-reply-form";const input=document.createElement("textarea");input.maxLength=5000;input.required=true;input.placeholder="Write a reply to this customer…";const send=node("button","staff-button primary","Send reply to customer");send.type="submit";form.append(input,send);form.addEventListener("submit",async e=>{e.preventDefault();send.disabled=true;const reply=input.value.trim();const r=await db.from("support_messages").insert({conversation_id:ticket.id,sender_id:staffUser.id,message:reply,message_type:"text",is_read:false,is_deleted:false});if(r.error){console.error(r.error);notify("Reply could not be sent.","error")}else{form.reset();notify("Reply delivered to the customer's workspace. Email delivery is queued.");await openSupportRequest(ticket.id,false)}send.disabled=false});box.append(form)
+ }else{box.append(node("p","inline-note","This conversation is closed. Reopen it by changing its status to open or in progress."))}
+}
 async function loadStaffNotifications(){
  const target=byId("staffNotificationList");if(!target||!staffUser)return;
  const {data,error}=await db.from("staff_project_notifications").select("id,project_id,title,message,is_read,created_at").order("created_at",{ascending:false}).limit(25);
@@ -146,10 +190,10 @@ async function loadProjects(){
 async function init(){
  try{const {data,error}=await db.auth.getSession();if(error)throw error;if(!data.session){location.replace("signin.html");return}
  staffUser=data.session.user;if(!isStaff(staffUser)){byId("loading").hidden=true;byId("denied").style.display="block";return}
- byId("loading").hidden=true;byId("workspace").hidden=false;await loadProjects();await loadStaffNotifications();db.channel("staff-project-alerts-"+staffUser.id).on("postgres_changes",{event:"INSERT",schema:"public",table:"staff_project_notifications",filter:"recipient_user_id=eq."+staffUser.id},loadStaffNotifications).subscribe();
+ byId("loading").hidden=true;byId("workspace").hidden=false;await loadProjects();await loadStaffNotifications();await loadSupportInbox();db.channel("staff-project-alerts-"+staffUser.id).on("postgres_changes",{event:"INSERT",schema:"public",table:"staff_project_notifications",filter:"recipient_user_id=eq."+staffUser.id},loadStaffNotifications).subscribe();db.channel("staff-support-alerts-"+staffUser.id).on("postgres_changes",{event:"INSERT",schema:"public",table:"staff_support_notifications",filter:"recipient_user_id=eq."+staffUser.id},loadSupportInbox).subscribe();db.channel("staff-support-messages-"+staffUser.id).on("postgres_changes",{event:"INSERT",schema:"public",table:"support_messages"},function(){if(selectedSupportId)openSupportRequest(selectedSupportId,false)}).subscribe();
  }catch(error){console.error(error);byId("loading").textContent="We couldn't verify your session. Please refresh or sign in again."}
 }
-byId("searchInput").addEventListener("input",renderList);byId("statusFilter").addEventListener("change",renderList);
+byId("refreshSupportInbox").addEventListener("click",loadSupportInbox);byId("searchInput").addEventListener("input",renderList);byId("statusFilter").addEventListener("change",renderList);
 byId("logoutButton").addEventListener("click",async()=>{const {error}=await db.auth.signOut();if(error){notify("Sign out failed. Please try again.","error");return}location.replace("signin.html")});
 init();
 </script>
