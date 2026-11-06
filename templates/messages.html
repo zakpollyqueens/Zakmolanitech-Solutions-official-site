@@ -90,7 +90,7 @@
 .send-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-width:105px;height:46px;padding:0 17px;border:0;border-radius:11px;background:linear-gradient(130deg,#147f9c,#286abd);color:#fff;font-size:11px;font-weight:900;cursor:pointer;box-shadow:0 8px 18px #167f9c20;transition:.2s}
 .send-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 23px #167f9c30}
 .send-btn:disabled{opacity:.48;cursor:not-allowed}
-.voice-btn{display:inline-flex;align-items:center;justify-content:center;flex:0 0 46px;width:46px;height:46px;border:1px solid #c9e9ee;border-radius:11px;background:#eaf8fa;color:#168aa6;font-size:18px;cursor:pointer;transition:.2s}.voice-btn:hover:not(:disabled){transform:translateY(-2px);background:#dff4f7;border-color:#79cbd8}.voice-btn.is-recording{border-color:#f1b6b6;background:#fff0f0;color:#c44747;animation:recordPulse 1.1s ease-in-out infinite}.voice-btn:disabled{opacity:.48;cursor:not--allowed}@keyframes recordPulse{50%{box-shadow:0 0 0 5px #e85d5d20}}
+.voice-btn{display:inline-flex;align-items:center;justify-content:center;flex:0 0 46px;width:46px;height:46px;border:1px solid #c9e9ee;border-radius:11px;background:#eaf8fa;color:#168aa6;font-size:18px;cursor:pointer;transition:.2s}.voice-btn:hover:not(:disabled){transform:translateY(-2px);background:#dff4f7;border-color:#79cbd8}.voice-btn.is-recording{border-color:#f1b6b6;background:#fff0f0;color:#c44747;animation:recordPulse 1.1s ease-in-out infinite}.voice-btn:disabled{opacity:.48;cursor:not-allowed}@keyframes recordPulse{50%{box-shadow:0 0 0 5px #e85d5d20}}
 .notice{display:none;margin:0 0 14px;padding:12px 15px;border:1px solid #e3ebef;border-radius:11px;background:#fff;color:#567184;font-size:11px}
 .notice.show{display:block}.notice.error{border-color:#f2d5d5;background:#fff8f8;color:#b54f56}.notice.success{border-color:#d4eee2;background:#f5fcf8;color:#27835f}
 @keyframes messageEnter{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
@@ -284,7 +284,8 @@ async function sendVoiceMessage(blob){
  sending=true;sendButton.disabled=true;voiceButton.disabled=true;composerHint.textContent="Uploading your voice message…";
  const mime=(blob.type||"audio/webm").split(";")[0];
  const ext={"audio/webm":"webm","audio/ogg":"ogg","audio/mp4":"m4a","audio/mpeg":"mp3","audio/wav":"wav","audio/x-wav":"wav"}[mime]||"webm";
- const path=currentUserId+"/"+currentProjectId+"/"+crypto.randomUUID()+"."+ext;
+ const voiceId=window.crypto?.randomUUID?crypto.randomUUID():Date.now().toString(36)+"-"+Math.random().toString(36).slice(2);
+ const path=currentUserId+"/"+currentProjectId+"/"+voiceId+"."+ext;
  const {error:uploadError}=await supabase.storage.from("project-voice-messages").upload(path,blob,{contentType:mime,cacheControl:"3600",upsert:false});
  if(uploadError){console.error("Voice upload failed:",uploadError);showNotice("Voice message upload failed: "+uploadError.message,"error");}
  else{
