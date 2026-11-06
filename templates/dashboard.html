@@ -238,13 +238,6 @@ async function loadDashboard(){
   console.error(e);location.replace("signin.html");
  }
 }
-document.getElementById("projectRequestForm").addEventListener("submit",async e=>{
- e.preventDefault();const b=document.getElementById("submitProjectButton");b.disabled=true;b.textContent="Submitting…";
- const payload={owner_id:currentUser.id,project_name:document.getElementById("projectName").value.trim(),project_type:document.getElementById("projectType").value,description:document.getElementById("projectDescription").value.trim(),budget_range:document.getElementById("projectBudget").value.trim()||null,desired_timeline:document.getElementById("projectTimeline").value.trim()||null};
- const {error}=await supabaseClient.from("client_projects").insert(payload);
- if(error){console.error(error);feedback("Project request could not be submitted. Please try again.",true)}else{e.target.reset();feedback("Your project request has been submitted.");await loadProjects()}
- b.disabled=false;b.textContent="＋ Submit project request";
-});
 document.getElementById("logoutButton").addEventListener("click",async function(){const b=this;b.disabled=true;b.textContent="Signing out…";const {error}=await supabaseClient.auth.signOut();if(error){console.error(error);b.disabled=false;b.textContent="Sign Out";return}location.replace("signin.html")});
 const menu=document.getElementById("dashMenuToggle"),side=document.getElementById("dashboardSidebar"),back=document.getElementById("dashBackdrop");function toggleMenu(open){side.classList.toggle("is-open",open);back.classList.toggle("is-visible",open);document.body.classList.toggle("dash-menu-open",open)}menu.addEventListener("click",()=>toggleMenu(!side.classList.contains("is-open")));back.addEventListener("click",()=>toggleMenu(false));side.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>toggleMenu(false)));loadDashboard();
 
