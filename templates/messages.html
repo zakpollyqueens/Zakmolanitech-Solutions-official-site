@@ -384,7 +384,7 @@ async function loadMessages(){
 }
 projectSelect.addEventListener("change",()=>selectProject(projectSelect.value));
 messageForm.addEventListener("submit",async e=>{e.preventDefault();const message=messageInput.value.trim();if(!message||!currentProjectId)return;sendButton.disabled=true;sendButton.textContent="Sending...";const {error}=await supabase.from("project_messages").insert({project_id:currentProjectId,sender_id:currentUserId,message});if(error){console.error(error);showNotice("Message could not be sent. Please try again.","error")}else{messageInput.value="";await loadMessages()}sendButton.disabled=false;sendButton.textContent="Send"});
-messageInput.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();messageForm.requestSubmit()}});
+messageInput.addEventListener("input",()=>{messageInput.style.height="auto";messageInput.style.height=Math.min(messageInput.scrollHeight,170)+"px"});\nmessageInput.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();messageForm.requestSubmit()}});
 supabase.auth.onAuthStateChange((event,newSession)=>{if(event==="SIGNED_OUT"||!newSession)location.replace("signin.html")});
 window.addEventListener("beforeunload",()=>{if(channel)supabase.removeChannel(channel)});
 init();
