@@ -12,7 +12,17 @@
 .communication-card{grid-column:1/-1;padding:26px;border:1px solid rgba(0,180,255,.16);border-radius:var(--radius);background:linear-gradient(145deg,rgba(7,28,48,.92),rgba(5,14,25,.82));box-shadow:var(--shadow)}.communication-head{display:flex;justify-content:space-between;align-items:flex-end;gap:15px;margin-bottom:20px}.communication-head h2{font-size:24px;margin-top:6px}.communication-head p{margin-top:7px;color:var(--muted);font-size:13px;line-height:1.6}.comm-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:11px}.comm-link{position:relative;display:flex;flex-direction:column;min-height:125px;padding:17px;border:1px solid var(--line);border-radius:15px;color:var(--text);background:rgba(255,255,255,.025);transition:.25s;text-decoration:none}.comm-link:hover{transform:translateY(-3px);border-color:var(--line-bright);background:rgba(255,255,255,.045)}.comm-icon{font-size:27px;margin-bottom:13px}.comm-title{font-size:13px;font-weight:800}.comm-desc{margin-top:5px;color:var(--muted);font-size:11px;line-height:1.45}.badge{position:absolute;top:11px;right:11px;min-width:18px;height:18px;padding:0 5px;display:grid;place-items:center;border-radius:20px;background:#e5484d;color:#fff;font-size:10px;font-weight:800}.centre-actions{display:flex;gap:9px;margin-top:18px;flex-wrap:wrap}.centre-actions a{font-size:11px!important;padding:10px 13px!important}.logout-btn:disabled{opacity:.6;cursor:wait}
 @media(max-width:950px){.comm-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:850px){.dashboard-grid{grid-template-columns:1fr 1fr}.dashboard-card.wide{grid-column:span 2}}@media(max-width:650px){.dashboard-page{padding:95px 15px 50px}.dashboard-top{display:block}.logout-btn{width:100%;margin-top:18px}.dashboard-grid{grid-template-columns:1fr}.dashboard-card.wide{grid-column:span 1}.comm-grid{grid-template-columns:1fr 1fr}.communication-head{display:block}}@media(max-width:430px){.comm-grid{grid-template-columns:1fr}.comm-link{min-height:auto}}
 </style>
-</head>
+<style>
+.client-projects-card{grid-column:1/-1;padding:28px;border:1px solid rgba(0,190,255,.2);border-radius:var(--radius);background:linear-gradient(145deg,rgba(8,27,47,.96),rgba(5,14,25,.9));box-shadow:var(--shadow)}
+.project-form{display:grid;gap:15px;padding:20px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025)}.project-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.project-form label{display:grid;gap:7px;color:var(--text);font-size:12px;font-weight:700}.project-form input,.project-form select,.project-form textarea,.project-message-form textarea{width:100%;box-sizing:border-box;padding:12px 13px;border:1px solid var(--line);border-radius:10px;background:#091321;color:#fff;font:inherit;font-size:13px;outline:none}
+.project-form textarea,.project-message-form textarea{resize:vertical}.project-form input:focus,.project-form select:focus,.project-form textarea:focus,.project-message-form textarea:focus{border-color:var(--cyan)}
+.project-feedback{font-size:12px;color:#9ff2c4;min-height:16px}.project-feedback.error{color:#ffaaaa}.project-list-heading{display:flex;justify-content:space-between;gap:12px;margin:27px 0 13px}.project-list-heading h3{font-size:18px}.project-list-heading span,.project-type,.project-meta,.project-empty{font-size:12px;color:var(--muted)}
+.client-project-list{display:grid;gap:14px}.client-project-card{padding:20px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.025)}.client-project-top{display:flex;justify-content:space-between;gap:12px}.client-project-top h4{font-size:17px}.project-type{margin-top:5px}.project-state{padding:7px 10px;border-radius:30px;background:rgba(0,190,255,.1);color:#7eeaff;font-size:11px;font-weight:800;white-space:nowrap}
+.project-description{margin-top:14px;color:#c1ccda;font-size:13px;line-height:1.7;white-space:pre-wrap}.project-meta{display:flex;gap:15px;flex-wrap:wrap;margin-top:12px}.project-progress{margin-top:17px}.project-progress-head{display:flex;justify-content:space-between;margin-bottom:8px;color:var(--muted);font-size:11px}.project-progress-head strong{color:var(--cyan)}.project-progress-track{height:7px;overflow:hidden;border-radius:10px;background:rgba(255,255,255,.09)}.project-progress-fill{display:block;height:100%;border-radius:10px;background:linear-gradient(90deg,#00bfff,#6c7cff)}
+.project-activity{display:grid;gap:10px;margin-top:20px;padding-top:17px;border-top:1px solid var(--line)}.project-activity h5{font-size:12px;color:#dce8f5}.project-update,.project-message{padding:11px 13px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.025)}.project-update strong{font-size:12px}.project-update p,.project-message p{margin-top:5px;color:#c1ccda;font-size:12px;line-height:1.6;white-space:pre-wrap}.project-update small,.project-message small{display:block;margin-top:7px;color:var(--muted);font-size:10px}.project-messages{display:grid;gap:8px}.project-message.own{border-color:rgba(0,190,255,.2);background:rgba(0,190,255,.055)}.project-message-form{display:grid;gap:8px}.project-message-form button{justify-self:start}
+@media(max-width:650px){.project-form-grid{grid-template-columns:1fr}.client-projects-card{padding:18px}.client-project-top{display:grid}.project-list-heading{flex-direction:column}}
+</style>\n</head>
 <body>
 <main class="dashboard-page">
 <div id="loading" class="loading">Checking your account...</div>
@@ -24,7 +34,20 @@
 <button id="logoutButton" class="btn logout-btn" type="button">Sign Out</button>
 </div>
 
-<div class="dashboard-grid">
+<div class="dashboard-grid">\n<section class="client-projects-card">
+<div class="communication-head"><div><span class="eyebrow">CLIENT PROJECT SPACE</span><h2>My projects</h2><p>Submit a project request, follow its progress and communicate with our team.</p></div></div>
+<form id="projectRequestForm" class="project-form">
+<div class="project-form-grid">
+<label>Project name<input id="projectName" maxlength="120" required placeholder="e.g. Business website"></label>
+<label>Project type<select id="projectType"><option>Website</option><option>Web application</option><option>Mobile application</option><option>Branding and design</option><option>IT support</option><option>Other</option></select></label>
+<label>Budget range<input id="projectBudget" maxlength="100" placeholder="Optional"></label>
+<label>Desired timeline<input id="projectTimeline" maxlength="100" placeholder="e.g. 4–6 weeks"></label>
+</div><label>Tell us about your project<textarea id="projectDescription" rows="4" maxlength="5000" required placeholder="What would you like us to build or help you with?"></textarea></label>
+<button id="submitProjectButton" class="btn btn-primary" type="submit">＋ Submit project request</button><div id="projectFormStatus" class="project-feedback" role="status" aria-live="polite"></div>
+</form>
+<div class="project-list-heading"><h3>Your submitted projects</h3><span id="projectCount">0 projects</span></div>
+<div id="clientProjectList" class="client-project-list"><p class="project-empty">Loading your projects…</p></div>
+</section>
 
 <section class="dashboard-card wide">
 <span class="eyebrow">ACCOUNT</span><h2>Your profile</h2><div id="userName" class="user-name">—</div>
@@ -118,60 +141,64 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const SUPABASE_URL="https://julhswsijtcoyjrjrobk.supabase.co";
-const SUPABASE_KEY="sb_publishable_a0qKsqBB0hR9BOWpP3dkwg_7nUOmXYC";
+<script>\n
+const SUPABASE_URL="https://jjcptobdzreckuhtcuzm.supabase.co",SUPABASE_KEY="sb_publishable_5AyVE6y2FGY8S_NoLC5a-w_URf-Mfxc";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const loading=document.getElementById("loading"),dashboard=document.getElementById("dashboard");
-
-async function loadNotificationCount(userId){
-try{
-const{count,error}=await supabaseClient.from("notifications").select("id",{count:"exact",head:true}).eq("user_id",userId).eq("is_read",false);
-if(error){console.warn("Notification count:",error);return}
-const badge=document.getElementById("notificationBadge");
-if(count>0){badge.textContent=count>99?"99+":count;badge.hidden=false}else badge.hidden=true;
-}catch(error){console.warn(error)}
+let currentUser=null;
+const el=(tag,cls,txt)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=String(txt);return n};
+const labels={submitted:"Submitted",reviewing:"Under review",planning:"Planning",in_progress:"In progress",review:"Client review",completed:"Completed",on_hold:"On hold",cancelled:"Cancelled"};
+function feedback(msg,bad=false){const n=document.getElementById("projectFormStatus");n.textContent=msg;n.className="project-feedback "+(bad?"error":"success")}
+async function activity(id,updates,messages){
+ const [u,m]=await Promise.all([
+  supabaseClient.from("project_updates").select("title,body,created_at").eq("project_id",id).eq("client_visible",true).order("created_at",{ascending:false}).limit(5),
+  supabaseClient.from("project_messages").select("sender_id,message,created_at").eq("project_id",id).order("created_at",{ascending:true}).limit(30)
+ ]);
+ updates.replaceChildren();
+ if(u.error||!u.data.length)updates.append(el("p","project-empty",u.error?"Updates temporarily unavailable.":"No team updates yet."));
+ else u.data.forEach(x=>{const n=el("div","project-update");n.append(el("strong","",x.title),el("p","",x.body),el("small","",new Date(x.created_at).toLocaleString()));updates.append(n)});
+ messages.replaceChildren();
+ if(m.error||!m.data.length)messages.append(el("p","project-empty",m.error?"Messages temporarily unavailable.":"No messages yet. Send the first message."));
+ else m.data.forEach(x=>{const n=el("div",x.sender_id===currentUser.id?"project-message own":"project-message");n.append(el("p","",x.message),el("small","",new Date(x.created_at).toLocaleString()));messages.append(n)});
 }
-
+async function loadProjects(){
+ const list=document.getElementById("clientProjectList");list.replaceChildren(el("p","project-empty","Loading your projects…"));
+ const {data,error}=await supabaseClient.from("client_projects").select("id,project_name,project_type,description,budget_range,desired_timeline,status,progress,created_at").order("created_at",{ascending:false});
+ if(error){console.error(error);list.replaceChildren(el("p","project-empty","Couldn't load projects. Please refresh and try again."));return}
+ document.getElementById("projectCount").textContent=data.length+" project"+(data.length===1?"":"s");
+ if(!data.length){list.replaceChildren(el("p","project-empty","No projects yet. Submit your first project request above."));return}
+ list.replaceChildren();
+ data.forEach(p=>{
+  const card=el("article","client-project-card"),top=el("div","client-project-top"),head=el("div");
+  head.append(el("h4","",p.project_name),el("p","project-type",p.project_type+" · "+new Date(p.created_at).toLocaleDateString()));
+  top.append(head,el("span","project-state",labels[p.status]||"Submitted"));card.append(top,el("p","project-description",p.description));
+  if(p.budget_range||p.desired_timeline){const meta=el("div","project-meta");if(p.budget_range)meta.append(el("span","","Budget: "+p.budget_range));if(p.desired_timeline)meta.append(el("span","","Timeline: "+p.desired_timeline));card.append(meta)}
+  const prog=el("div","project-progress"),ph=el("div","project-progress-head");ph.append(el("span","","Project progress"),el("strong","",(p.progress||0)+"%"));
+  const track=el("div","project-progress-track"),fill=el("span","project-progress-fill");fill.style.width=Math.max(0,Math.min(100,p.progress||0))+"%";track.append(fill);prog.append(ph,track);card.append(prog);
+  const act=el("div","project-activity"),uTitle=el("h5","","Latest team updates"),u=el("div","project-updates","Loading…"),mTitle=el("h5","","Project conversation"),m=el("div","project-messages","Loading…");
+  const form=document.createElement("form");form.className="project-message-form";const input=document.createElement("textarea");input.rows=2;input.maxLength=3000;input.required=true;input.placeholder="Write a message to our team…";
+  const send=el("button","btn","Send message");send.type="submit";form.append(input,send);act.append(uTitle,u,mTitle,m,form);card.append(act);list.append(card);activity(p.id,u,m);
+  form.addEventListener("submit",async e=>{e.preventDefault();const message=input.value.trim();if(!message)return;send.disabled=true;send.textContent="Sending…";const r=await supabaseClient.from("project_messages").insert({project_id:p.id,sender_id:currentUser.id,message});if(r.error){console.error(r.error);feedback("Message could not be sent. Please try again.",true)}else{input.value="";await activity(p.id,u,m)}send.disabled=false;send.textContent="Send message"});
+ });
+}
 async function loadDashboard(){
-try{
-const{data,error}=await supabaseClient.auth.getSession();
-if(error)throw error;
-if(!data.session){window.location.replace("signin.html");return}
-
-const user=data.session.user,metadata=user.user_metadata||{};
-const fullName=metadata.full_name||metadata.name||"Zakmolanitech User";
-const phone=metadata.phone||user.phone||"Not provided";
-
-document.getElementById("userName").textContent=fullName;
-document.getElementById("welcomeText").textContent="Welcome back, "+fullName+".";
-document.getElementById("userEmail").textContent=user.email||"Not available";
-document.getElementById("userPhone").textContent=phone;
-
-loading.hidden=true;
-dashboard.hidden=false;
-
-loadNotificationCount(user.id);
-
-supabaseClient.channel("dashboard-notifications-"+user.id)
-.on("postgres_changes",{event:"*",schema:"public",table:"notifications",filter:"user_id=eq."+user.id},()=>loadNotificationCount(user.id))
-.subscribe();
-
-}catch(error){
-console.error(error);
-window.location.replace("signin.html");
+ try{
+  const {data,error}=await supabaseClient.auth.getSession();if(error)throw error;if(!data.session){location.replace("signin.html");return}
+  currentUser=data.session.user;const meta=currentUser.user_metadata||{},name=meta.full_name||meta.name||"Zakmolanitech User";
+  document.getElementById("userName").textContent=name;document.getElementById("welcomeText").textContent="Welcome back, "+name+".";
+  document.getElementById("userEmail").textContent=currentUser.email||"Not available";document.getElementById("userPhone").textContent=meta.phone||currentUser.phone||"Not provided";
+  loading.hidden=true;dashboard.hidden=false;await loadProjects();
+ }catch(e){console.error(e);location.replace("signin.html")}
 }
-}
-  
-
-document.getElementById("logoutButton").addEventListener("click",async function(){
-const button=this;
-button.disabled=true;
-button.textContent="Signing out...";
-try{await supabaseClient.auth.signOut()}finally{window.location.replace("signin.html")}
+document.getElementById("projectRequestForm").addEventListener("submit",async e=>{
+ e.preventDefault();const b=document.getElementById("submitProjectButton");b.disabled=true;b.textContent="Submitting…";
+ const payload={owner_id:currentUser.id,project_name:document.getElementById("projectName").value.trim(),project_type:document.getElementById("projectType").value,description:document.getElementById("projectDescription").value.trim(),budget_range:document.getElementById("projectBudget").value.trim()||null,desired_timeline:document.getElementById("projectTimeline").value.trim()||null};
+ const {error}=await supabaseClient.from("client_projects").insert(payload);
+ if(error){console.error(error);feedback("Project request could not be submitted. Please try again.",true)}else{e.target.reset();feedback("Your project request has been submitted.");await loadProjects()}
+ b.disabled=false;b.textContent="＋ Submit project request";
 });
-
+document.getElementById("logoutButton").addEventListener("click",async function(){const b=this;b.disabled=true;b.textContent="Signing out…";const {error}=await supabaseClient.auth.signOut();if(error){console.error(error);b.disabled=false;b.textContent="Sign Out";return}location.replace("signin.html")});
 loadDashboard();
-</script>
+\n
 </body>
                                                       </html>
