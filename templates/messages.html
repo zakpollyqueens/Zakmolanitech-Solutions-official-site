@@ -158,7 +158,7 @@
     <div id="messageList" class="message-list" aria-live="polite"><div class="message-empty"><div><div class="empty-illustration">✉</div><strong>Your conversations, together</strong><p>Choose a project on the left to read messages or send a note to our team.</p></div></div></div>
     <div class="composer-wrap">
      <div class="composer-hint"><span id="composerHint">Messages are shared with your assigned project team.</span><span>Enter to send · Shift + Enter for a new line</span></div>
-     <form id="messageForm" class="composer"><textarea id="messageInput" maxlength="2000" placeholder="Write a message to your project team…" aria-label="Write a message" disabled></textarea><button id="voiceButton" class="voice-btn" type="button" disabled aria-label="Record a voice message" title="Record a voice message"><span class="icon-mic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="9" y="2.5" width="6" height="12" rx="3"></rect><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3.5M8.5 21.5h7"></path></svg></span></button><button id="sendButton" class="send-btn" type="submit" disabled><span class="icon-send" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m21 3-7.2 18-3.7-7.1L3 10.2 21 3Z"></path><path d="m10.1 13.9 4.4-4.4"></path></svg></span><span class="send-label">Send</span></button></form>
+     <form id="messageForm" class="composer"><textarea id="messageInput" maxlength="2000" placeholder="Select a project to start messaging…" aria-label="Write a message"></textarea><button id="voiceButton" class="voice-btn" type="button" aria-label="Record a voice message" title="Record a voice message"><span class="icon-mic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="9" y="2.5" width="6" height="12" rx="3"></rect><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3.5M8.5 21.5h7"></path></svg></span></button><button id="sendButton" class="send-btn" type="submit" disabled><span class="icon-send" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m21 3-7.2 18-3.7-7.1L3 10.2 21 3Z"></path><path d="m10.1 13.9 4.4-4.4"></path></svg></span><span class="send-label">Send</span></button></form>
     </div>
    </section>
   </section>
@@ -206,17 +206,17 @@ async function init(){
  const {data:rows,error:projectError}=await supabase.from("client_projects").select("id,project_name,status").order("created_at",{ascending:false});
  if(projectError){console.error("Project list load failed:",projectError);showNotice("Your projects could not be loaded: "+projectError.message,"error");projectList.innerHTML='<div class="rail-empty">Projects are temporarily unavailable. Refresh to try again.</div>';messageStatus.textContent="Project access could not be verified.";return;}
  projects=rows||[];renderProjects();
- if(!projects.length){conversationSubtitle.textContent="No project selected";messageStatus.textContent="A project is required before messaging can begin.";emptyState("Create a project to start messaging","Open My Projects and submit your idea. Once a project appears here, the message and voice-note tools will be enabled.");composerHint.textContent="Create a project first to open a conversation with the team.";messageInput.placeholder="Your project conversation will appear here…";messageInput.disabled=true;sendButton.disabled=true;voiceButton.disabled=true;return;}
+ if(!projects.length){conversationSubtitle.textContent="No project selected";messageStatus.textContent="A project is required before messaging can begin.";emptyState("Create a project to start messaging","Open My Projects and submit your idea. Once a project appears here, the message and voice-note tools will be enabled.");composerHint.textContent="Create a project first to open a conversation with the team.";messageInput.placeholder="Your project conversation will appear here…";messageInput.placeholder="Select a project to start messaging…";return;}
  const requested=new URLSearchParams(location.search).get("project");
  const chosen=projects.find(p=>p.id===requested)||projects[0];
  await selectProject(chosen.id);
- } catch(initError) { console.error("Messages page initialization failed:",initError); showNotice("The messaging tools could not start. Please refresh the page or update your browser.","error"); messageInput.disabled=true; sendButton.disabled=true; voiceButton.disabled=true; }
+ } catch(initError) { console.error("Messages page initialization failed:",initError); showNotice("The messaging tools could not start: "+(initError.message||"Please refresh the page or update your browser."),"error"); }
 }
 async function selectProject(id){
  if(channel){await supabase.removeChannel(channel);channel=null;}
  currentProject=projects.find(p=>p.id===id)||null;currentProjectId=currentProject?.id||null;
  renderProjects();messageInput.value="";
- if(!currentProject){messageInput.disabled=true;sendButton.disabled=true;return;}
+ if(!currentProject){messageInput.placeholder="Select a project to start messaging…";return;}
  conversationTitle.textContent=currentProject.project_name||"Project conversation";
  conversationSubtitle.textContent="Conversation with the Zakmolanitech team";
  messageInput.disabled=false;sendButton.disabled=false;voiceButton.disabled=false;
@@ -274,7 +274,8 @@ function setVoiceState(recording){
  composerHint.textContent=recording?"Recording… tap the red button to stop and send.":"Messages are shared with your assigned project team.";
 }
 async function startVoiceRecording(){
- if(!currentProjectId||sending)return;
+ if(!currentProjectId){showNotice("Choose a project from the project list before recording a voice message.","error");return;}
+ if(sending)return;
  if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){showNotice("Voice recording is not supported by this browser. Try an updated Chrome browser.","error");return;}
  try{
   const type=supportedAudioType();
