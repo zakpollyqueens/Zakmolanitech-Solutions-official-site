@@ -4,405 +4,148 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Notifications | Zakmolanitech Solutions</title>
-<meta name="description" content="View your Zakmolanitech Solutions notifications.">
-<meta name="theme-color" content="#050b14">
+<meta name="description" content="Your project activity and important account updates.">
+<meta name="theme-color" content="#f4f8fb">
 <link rel="stylesheet" href="../static/css/main.css">
 <link rel="stylesheet" href="../static/css/dashboard.css">
 <link rel="stylesheet" href="../static/css/portal-pages.css">
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-.notifications-page{
-  min-height:100vh;
-  padding:100px 16px 70px;
-  background:
-    radial-gradient(circle at top left,rgba(0,180,255,.12),transparent 35%),
-    radial-gradient(circle at bottom right,rgba(120,70,255,.10),transparent 35%),
-    #050b14;
-}
-
-.notifications-wrap{
-  width:min(900px,100%);
-  margin:auto;
-}
-
-.notifications-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-  flex-wrap:wrap;
-  margin-bottom:25px;
-}
-
-.notifications-title h1{
-  margin:0 0 7px;
-  font-size:clamp(1.8rem,5vw,2.7rem);
-}
-
-.notifications-title p{
-  margin:0;
-  opacity:.65;
-}
-
-.back-link,
-.action-btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:7px;
-  padding:10px 15px;
-  border-radius:12px;
-  text-decoration:none;
-  color:inherit;
-  background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.1);
-  cursor:pointer;
-  font:inherit;
-}
-
-.actions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:20px;
-}
-
-.status{
-  padding:13px 16px;
-  border-radius:13px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.08);
-  margin-bottom:20px;
-  opacity:.75;
-}
-
-.notification-list{
-  display:grid;
-  gap:14px;
-}
-
-.notification{
-  position:relative;
-  padding:20px;
-  border-radius:18px;
-  background:rgba(255,255,255,.045);
-  border:1px solid rgba(255,255,255,.08);
-  transition:.2s ease;
-}
-
-.notification.unread{
-  background:rgba(0,180,255,.08);
-  border-color:rgba(0,180,255,.25);
-}
-
-.notification.unread::before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:18px;
-  bottom:18px;
-  width:3px;
-  border-radius:3px;
-  background:rgba(0,180,255,.8);
-}
-
-.notification-top{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:15px;
-}
-
-.notification-title{
-  margin:0;
-  font-size:1.1rem;
-}
-
-.notification-type{
-  padding:5px 9px;
-  border-radius:999px;
-  background:rgba(255,255,255,.07);
-  font-size:.7rem;
-  white-space:nowrap;
-  opacity:.75;
-}
-
-.notification-message{
-  margin:10px 0 0;
-  line-height:1.65;
-  opacity:.78;
-  white-space:pre-wrap;
-  word-break:break-word;
-}
-
-.notification-bottom{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:15px;
-}
-
-.notification-date{
-  font-size:.75rem;
-  opacity:.45;
-}
-
-.read-btn{
-  padding:7px 11px;
-  border-radius:9px;
-  border:1px solid rgba(255,255,255,.1);
-  background:rgba(255,255,255,.06);
-  color:inherit;
-  cursor:pointer;
-}
-
-.empty{
-  text-align:center;
-  padding:65px 20px;
-  border-radius:20px;
-  background:rgba(255,255,255,.04);
-  opacity:.6;
-}
-
-.error{
-  color:#ff9b9b;
-}
-
-@media(max-width:600px){
-
-  .notification-top{
-    flex-direction:column;
-  }
-
-  .notification-type{
-    align-self:flex-start;
-  }
-
-  .actions .action-btn{
-    width:100%;
-  }
-}
-</style>
-<style id="workspace-quality-overrides">
-/* Unified light workspace language — aligned to My Projects */
-.client-portal .support-page,.client-portal .messages-page,.client-portal .notifications-page,.client-portal .profile-page,.client-portal .settings-page{
- background:var(--portal-bg,#f4f7fb)!important;color:var(--portal-ink,#14283b)!important;
- min-height:100vh;padding:0 34px 56px!important;
-}
-.client-portal .support-wrap,.client-portal .messages-wrap,.client-portal .notifications-wrap,.client-portal .profile-wrap,.client-portal .settings-wrap{width:min(1160px,100%)!important;margin:0 auto!important}
-.client-portal .support-header,.client-portal .messages-head,.client-portal .notifications-head,.client-portal .profile-head,.client-portal .settings-head{
- padding:26px 30px!important;margin:0 0 22px!important;border:1px solid #e5ebf2!important;border-radius:20px!important;
- background:linear-gradient(112deg,#fff 0%,#f0f8fc 100%)!important;box-shadow:0 14px 34px #193d560a!important;
-}
-.client-portal .support-header h1,.client-portal .messages-title h1,.client-portal .notifications-title h1,.client-portal .profile-head h1,.client-portal .settings-head h1{
- color:#142c40!important;font:800 clamp(27px,3.5vw,39px)/1.12 Manrope,"DM Sans",sans-serif!important;letter-spacing:-1.35px!important;margin:0 0 8px!important
-}
-.client-portal .support-header p,.client-portal .messages-title p,.client-portal .notifications-title p,.client-portal .profile-head p,.client-portal .settings-head p{color:#718297!important;opacity:1!important;font-size:13px!important;line-height:1.65}
-.client-portal .support-card,.client-portal .message-panel,.client-portal .community-selector,.client-portal .notification,.client-portal .profile-card,.client-portal .settings-card{
- background:#fff!important;color:#243b50!important;border:1px solid #e5ebf2!important;border-radius:18px!important;box-shadow:0 12px 32px #173b520a!important;backdrop-filter:none!important
-}
-.client-portal .support-layout{gap:18px!important}
-.client-portal .panel-head,.client-portal .chat-header,.client-portal .message-status{background:#f8fbfd!important;color:#29465d!important;border-color:#eaf0f4!important}
-.client-portal .panel-head h2,.client-portal .chat-title h2{color:#1d3b50!important}
-.client-portal .chat-title p,.client-portal .conversation-meta,.client-portal .composer-note{color:#8192a3!important}
-.client-portal .conversation-item{border-color:#edf2f6!important;color:#355168!important}
-.client-portal .conversation-item:hover{background:#f4fafc!important}
-.client-portal .conversation-item.active{background:#eaf7fb!important;border-left-color:#1b9bb9!important}
-.client-portal .messages,.client-portal .message-list{background:linear-gradient(180deg,#fbfdfe,#f4f8fb)!important}
-.client-portal .message-bubble{background:#fff!important;color:#345166!important;border:1px solid #e5edf2!important;box-shadow:0 6px 18px #173b5208!important}
-.client-portal .message-row.mine .message-bubble,.client-portal .message.mine .message-bubble{background:#e8f6fa!important;border-color:#cceaf0!important;color:#28566b!important}
-.client-portal .message-sender,.client-portal .message-author,.client-portal .message-time{color:#8193a3!important}
-.client-portal .composer{background:#fff!important;border-color:#e6edf2!important}
-.client-portal .composer textarea,.client-portal .form-input,.client-portal .community-selector select,.client-portal .form-field input{
- background:#f8fbfd!important;color:#243d52!important;border:1px solid #dfe8ef!important;border-radius:12px!important
-}
-.client-portal .composer textarea::placeholder,.client-portal .form-input::placeholder{color:#9aabba!important}
-.client-portal .new-btn,.client-portal .send-btn,.client-portal .action-btn,.client-portal .read-btn,.client-portal .btn,.client-portal .refresh-btn,.client-portal .close-btn,.client-portal .cancel-btn{
- border-radius:11px!important;font-weight:800!important;transition:transform .18s,box-shadow .18s,background .18s!important
-}
-.client-portal .new-btn,.client-portal .send-btn,.client-portal .btn-primary{
- background:linear-gradient(130deg,#167f9c,#286abd)!important;color:#fff!important;border:0!important;box-shadow:0 8px 18px #167f9c20!important
-}
-.client-portal .refresh-btn,.client-portal .action-btn,.client-portal .read-btn,.client-portal .back-link,.client-portal .cancel-btn{
- background:#f1f6f9!important;color:#416176!important;border:1px solid #e1eaf0!important
-}
-.client-portal .notification{padding:22px!important;transition:transform .18s,box-shadow .18s!important}
-.client-portal .notification:hover{transform:translateY(-2px);box-shadow:0 16px 34px #173b5212!important}
-.client-portal .notification.unread{background:linear-gradient(110deg,#eef9fc,#fff)!important;border-color:#c9e8ef!important}
-.client-portal .notification-title{color:#21445b!important;font-size:15px!important;font-weight:800!important}
-.client-portal .notification-message{color:#6c8292!important;opacity:1!important;font-size:13px!important}
-.client-portal .notification-type{background:#eaf4f7!important;color:#397b90!important;opacity:1!important}
-.client-portal .status,.client-portal .notice{background:#f2f7fa!important;color:#557084!important;border-color:#e4edf2!important;opacity:1!important}
-.client-portal .empty,.client-portal .empty-list,.client-portal .empty-chat,.client-portal .message-empty{color:#8293a3!important}
-.client-portal .modal{background:#102b4266!important;backdrop-filter:blur(5px)}
-.client-portal .modal-card{background:#fff!important;color:#243b50!important;border:1px solid #e3ebf1!important;box-shadow:0 24px 70px #102d4530!important}
-.client-portal .modal-card p{color:#718297!important}
-.client-portal .profile-card,.client-portal .settings-card{padding:26px!important;margin-bottom:18px!important}
-.client-portal .profile-card h2,.client-portal .settings-card h2{color:#1e3c52!important;font-size:18px!important}
-.client-portal .profile-summary{display:flex;align-items:center;gap:15px;padding:0 0 22px;margin-bottom:22px;border-bottom:1px solid #eaf0f4}
-.client-portal .profile-mark{width:60px;height:60px;display:grid;place-items:center;border-radius:18px;background:linear-gradient(145deg,#d8f4f6,#e4ebff);color:#167f9c;font-size:24px;font-weight:900}
-.client-portal .profile-summary strong,.client-portal .profile-summary span{display:block}
-.client-portal .profile-summary strong{color:#21445b;font-size:17px}
-.client-portal .profile-summary span{margin-top:4px;color:#8295a3;font-size:12px}
-.client-portal .form-field label{color:#496176!important;font-size:10px!important;letter-spacing:.7px!important}
-.client-portal .form-field input{min-height:49px;padding:13px 15px!important}
-.client-portal .settings-card>p,.client-portal .form-note,.client-portal .session-details{color:#7b8fa0!important}
-.client-portal .preference-row{padding:13px 0;border-top:1px solid #edf2f5;color:#526b7c;font-size:13px}
-.client-portal .preference-row input{margin-right:9px;accent-color:#1686a2}
-.client-portal .site-footer{background:transparent!important;color:#8797a6!important}
-.client-portal .site-footer p{color:#8797a6!important}
-.client-portal button:focus-visible,.client-portal a:focus-visible,.client-portal input:focus-visible,.client-portal textarea:focus-visible,.client-portal select:focus-visible{outline:3px solid #48aeca45!important;outline-offset:2px}
-@media(max-width:900px){
- .client-portal .support-page,.client-portal .messages-page,.client-portal .notifications-page,.client-portal .profile-page,.client-portal .settings-page{padding:0 18px 42px!important}
-}
-@media(max-width:760px){
- .client-portal .support-page,.client-portal .messages-page,.client-portal .notifications-page,.client-portal .profile-page,.client-portal .settings-page{padding:0 13px 36px!important}
- .client-portal .support-header,.client-portal .messages-head,.client-portal .notifications-head,.client-portal .profile-head,.client-portal .settings-head{padding:20px!important;border-radius:16px!important}
- .client-portal .support-layout{grid-template-columns:1fr!important}
- .client-portal .chat-panel{min-height:calc(var(--portal-vh,100dvh) - 170px)!important;height:calc(var(--portal-vh,100dvh) - 170px)!important;display:flex!important;overflow:hidden!important}
- .client-portal .chat-panel .messages{flex:1!important;min-height:0!important;max-height:none!important;overflow:auto!important;padding-bottom:150px!important}
- .client-portal .support-page .composer,.client-portal .messages-page .composer{
-   position:fixed!important;left:12px!important;right:12px!important;bottom:var(--keyboard-offset,0px)!important;z-index:10050!important;
-   display:flex!important;flex-direction:row!important;align-items:flex-end!important;gap:8px!important;
-   padding:10px!important;padding-bottom:calc(10px + env(safe-area-inset-bottom))!important;
-   border:1px solid #dce8ef!important;border-radius:15px!important;background:#fff!important;
-   box-shadow:0 -8px 30px #173b521c,0 8px 25px #173b520d!important
- }
- .client-portal .support-page .composer textarea,.client-portal .messages-page .composer textarea{min-height:48px!important;max-height:112px!important;resize:none!important;flex:1!important;width:1%!important;font-size:16px!important;padding:12px!important}
- .client-portal .support-page .composer .send-btn,.client-portal .messages-page .composer .send-btn{min-width:68px!important;width:auto!important;min-height:48px!important;align-self:stretch!important;padding:0 13px!important}
- .client-portal .support-page .composer .voice-btn{width:48px!important;min-width:48px!important;height:48px!important;padding:0!important;font-size:18px!important}
- .client-portal .support-page .composer-note{display:none!important}
- .client-portal .messages-page .message-panel{overflow:visible!important}
- .client-portal .messages-page .message-list{height:calc(var(--portal-vh,100dvh) - 360px)!important;min-height:240px!important;padding-bottom:145px!important}
- .client-portal .support-page .support-layout{padding-bottom:10px}
- .client-portal .support-page .conversation-list{max-height:220px!important}
- .client-portal .notifications-head{align-items:flex-start!important}
- .client-portal .actions{gap:8px!important}
- .client-portal .actions .action-btn{width:auto!important;flex:1}
- .client-portal .profile-card,.client-portal .settings-card{padding:19px!important}
-}
-@media(max-width:430px){
- .client-portal .support-page .composer,.client-portal .messages-page .composer{left:8px!important;right:8px!important;gap:6px!important}
- .client-portal .support-page .composer .send-btn,.client-portal .messages-page .composer .send-btn{min-width:60px!important}
- .client-portal .notification{padding:17px!important}
-}
+.notifications-page{min-height:100vh;padding:0 34px 56px!important;background:#f4f7fb!important;color:#172f43}
+.notifications-wrap{width:min(1160px,100%);margin:0 auto}
+.notifications-hero{position:relative;display:flex;align-items:center;justify-content:space-between;gap:24px;overflow:hidden;margin:0 0 22px;padding:30px 34px;border:1px solid #e2edf2;border-radius:22px;background:linear-gradient(112deg,#fff 0%,#f0f8fc 60%,#e8f5f8 100%);box-shadow:0 14px 34px #193d560a}
+.notifications-hero:after{content:"";position:absolute;width:240px;height:240px;right:8%;top:-130px;border:1px solid #8bcbd755;border-radius:50%;box-shadow:0 0 0 28px #8bcbd711,0 0 0 58px #8bcbd70b}
+.hero-copy{position:relative;z-index:1}.hero-kicker{display:flex;align-items:center;gap:8px;color:#278ca4;font-size:9px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase}.hero-kicker i{width:7px;height:7px;border-radius:50%;background:#39bca8;box-shadow:0 0 0 5px #39bca81b}
+.notifications-title h1{margin:12px 0 8px;color:#142c40;font:800 clamp(29px,4vw,42px)/1.1 Manrope,sans-serif;letter-spacing:-1.8px}.notifications-title p{max-width:520px;margin:0;color:#718597;font-size:13px;line-height:1.7}
+.hero-art{position:relative;z-index:1;display:grid;place-items:center;width:112px;height:112px;flex:0 0 auto;border:1px solid #cce7ec;border-radius:30px;background:linear-gradient(145deg,#e7f9f8,#e8efff);color:#258aa4;box-shadow:0 15px 30px #337e9718;transform:rotate(4deg)}.hero-art svg{width:53px;height:53px}
+.notification-overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:20px}
+.overview-card{display:flex;align-items:center;gap:13px;padding:17px 19px;border:1px solid #e4ebf1;border-radius:16px;background:#fff;box-shadow:0 8px 24px #173b5208}
+.overview-icon{display:grid;place-items:center;width:42px;height:42px;flex:0 0 auto;border-radius:13px;background:#eaf6f8;color:#218ba4;font-size:19px}.overview-card:nth-child(2) .overview-icon{background:#fff5e8;color:#c68a38}.overview-card:nth-child(3) .overview-icon{background:#edf1ff;color:#667bd1}
+.overview-card span,.overview-card strong{display:block}.overview-card span{color:#8799a8;font-size:10px;font-weight:700}.overview-card strong{margin-top:3px;color:#1e4056;font:800 24px Manrope,sans-serif;font-variant-numeric:tabular-nums}
+.notification-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:23px 0 14px}
+.toolbar-title h2{margin:0;color:#1c3a50;font:800 17px Manrope,sans-serif}.toolbar-title p{margin:4px 0 0;color:#8a9aa8;font-size:10px}
+.notification-actions{display:flex;gap:8px;flex-wrap:wrap}.action-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:39px;padding:0 13px;border:1px solid #dfe8ee;border-radius:10px;background:#fff;color:#466176;font:700 10px "DM Sans",sans-serif;cursor:pointer;transition:.2s}.action-btn:hover{border-color:#a8d3dc;transform:translateY(-1px)}.action-btn.primary{border-color:transparent;background:linear-gradient(125deg,#167f9c,#286abd);color:#fff;box-shadow:0 7px 17px #167f9c22}.action-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.notification-filters{display:flex;align-items:center;gap:7px;margin:0 0 15px;padding:5px;width:max-content;max-width:100%;border:1px solid #e5edf2;border-radius:12px;background:#edf3f6}.filter-btn{padding:8px 13px;border:0;border-radius:8px;background:transparent;color:#7a8d9c;font:700 10px "DM Sans",sans-serif;cursor:pointer}.filter-btn.active{background:#fff;color:#247d96;box-shadow:0 2px 8px #183d510d}
+.notification-status{display:flex;align-items:center;gap:9px;min-height:44px;margin-bottom:13px;padding:10px 14px;border:1px solid #e3edf1;border-radius:12px;background:#f9fcfd;color:#718798;font-size:11px}.status-dot{width:7px;height:7px;flex:0 0 auto;border-radius:50%;background:#38b99b}.notification-status.error{color:#b74f5b;background:#fff8f8;border-color:#f1d9dc}.notification-status.error .status-dot{background:#d65c69}
+.notification-list{display:grid;gap:11px}
+.notification{position:relative;display:grid;grid-template-columns:46px minmax(0,1fr);gap:15px;padding:19px 20px;border:1px solid #e4ebf1;border-radius:16px;background:#fff;box-shadow:0 8px 24px #173b5207;transition:transform .2s,box-shadow .2s,border-color .2s}
+.notification:hover{transform:translateY(-2px);border-color:#cbdfe7;box-shadow:0 14px 30px #173b5210}
+.notification.unread{border-color:#c9e7ed;background:linear-gradient(105deg,#f0fafb,#fff 68%)}
+.notification-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:#eaf5f8;color:#238ba4;font-size:18px}.notification-icon.support{background:#f0edff;color:#7868c8}.notification-icon.project{background:#eaf4ff;color:#4c83bd}.notification-icon.message{background:#e9f7f0;color:#37966c}
+.notification-content{min-width:0}.notification-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.notification-title{margin:1px 0 0;color:#24445a;font:800 13px/1.45 Manrope,sans-serif}.notification-type{padding:5px 8px;border-radius:7px;background:#eef4f7;color:#71899a;font-size:8px;font-weight:800;white-space:nowrap;text-transform:uppercase;letter-spacing:.5px}.notification-message{margin:7px 0 0;color:#6e8292;font-size:11px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}.notification-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px}.notification-date{color:#9aa9b5;font-size:9px}.notification-links{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.read-btn{padding:7px 10px;border:1px solid #e0eaf0;border-radius:8px;background:#f6fafb;color:#477084;font:700 9px "DM Sans",sans-serif;text-decoration:none;cursor:pointer}.read-btn:hover{background:#eaf6f8}.unread-mark{width:7px;height:7px;border-radius:50%;background:#2a9bb4;display:inline-block;margin-right:5px}
+.notification-empty{display:grid;justify-items:center;padding:52px 20px;border:1px dashed #d7e5eb;border-radius:18px;background:#fbfdfe;text-align:center}.empty-art{display:grid;place-items:center;width:74px;height:74px;margin-bottom:15px;border-radius:24px;background:linear-gradient(145deg,#e5f7f8,#edf1ff);color:#298da5;font-size:30px}.notification-empty h3{margin:0;color:#34546a;font:800 15px Manrope,sans-serif}.notification-empty p{max-width:330px;margin:7px 0 0;color:#8a9aa8;font-size:10px;line-height:1.7}
+@media(max-width:760px){.notifications-page{padding:0 13px 36px!important}.notifications-hero{padding:22px 20px;border-radius:17px}.hero-art{width:75px;height:75px;border-radius:22px}.hero-art svg{width:38px;height:38px}.notification-overview{gap:8px}.overview-card{padding:12px 10px;gap:8px}.overview-icon{width:34px;height:34px;border-radius:10px;font-size:15px}.overview-card span{font-size:8px}.overview-card strong{font-size:20px}.notification-toolbar{align-items:flex-start}.notification-actions{width:100%}.notification-actions .action-btn{flex:1}.notification{padding:15px;grid-template-columns:38px minmax(0,1fr);gap:11px}.notification-icon{width:38px;height:38px;border-radius:12px}.notification-title{font-size:12px}}
+@media(max-width:430px){.notifications-hero{gap:8px;padding:19px 16px}.hero-art{width:58px;height:58px;border-radius:17px}.hero-art svg{width:30px;height:30px}.notifications-title h1{font-size:28px}.notifications-title p{font-size:11px}.notification-overview{grid-template-columns:repeat(3,minmax(0,1fr))}.overview-card{display:block;padding:10px}.overview-icon{margin-bottom:7px}.overview-card strong{font-size:18px}.notification-top{display:block}.notification-type{display:inline-block;margin-top:7px}.notification-bottom{align-items:flex-start}.notification-links{width:100%}}
+@media(prefers-reduced-motion:reduce){.notification,.action-btn{transition:none!important}}
 </style>
 </head>
-
 <body class="client-portal page-workspace">
-<aside id="dashboardSidebar" class="portal-sidebar"><a class="portal-brand" href="../index.html"><span class="brand-symbol"><img src="../static/assets/logo.png" alt="Zakmolanitech Solutions"></span><span class="brand-copy"><strong>ZAKMOLANITECH</strong><small>CLIENT WORKSPACE</small></span></a><div class="sidebar-section-label">WORKSPACE</div><nav class="portal-nav"><a class="nav-item " href="dashboard.html"><span class="nav-icon">⌂</span><span>Overview</span></a><a class="nav-item " href="projects.html"><span class="nav-icon">▤</span><span>My projects</span></a><a class="nav-item " href="messages.html"><span class="nav-icon">✉</span><span>Messages</span></a><a class="nav-item is-current" href="notifications.html"><span class="nav-icon">◉</span><span>Notifications</span></a><a class="nav-item " href="support.html"><span class="nav-icon">?</span><span>Help &amp; support</span></a></nav><div class="sidebar-section-label account-label">PERSONAL</div><nav class="portal-nav"><a class="nav-item " href="profile.html"><span class="nav-icon">◎</span><span>My profile</span></a><a class="nav-item " href="settings.html"><span class="nav-icon">⚙</span><span>Account settings</span></a><a class="nav-item" href="../index.html"><span class="nav-icon">↗</span><span>Visit website</span></a></nav><div class="sidebar-account"><div class="account-avatar">Z</div><div class="account-copy"><strong>My account</strong><span>Client workspace</span></div></div></aside><div id="dashBackdrop" class="portal-backdrop"></div>
-
-
-
-<main class="notifications-page portal-main page-content"><header class="portal-topbar"><div class="topbar-left"><button id="dashMenuToggle" class="menu-toggle" type="button" aria-label="Open menu"><span></span><span></span><span></span></button><div class="breadcrumb"><span>Workspace</span><i>/</i><strong>Notifications</strong></div></div><div class="topbar-right"><a class="topbar-link" href="notifications.html" aria-label="Notifications" title="Notifications">🔔</a><span class="topbar-divider"></span><div class="topbar-user"><span class="topbar-avatar">Z</span><span>My workspace</span></div></div></header>
-
-  <div class="notifications-wrap">
-
-    <div class="notifications-head">
-
-      <div class="notifications-title">
-        <h1>Notifications</h1>
-        <p>
-          Keep track of important updates and activity.
-        </p>
-      </div>
-
-      <a
-        href="dashboard.html"
-        class="back-link"
-      >
-        ← Dashboard
-      </a>
-
-    </div>
-
-    <div class="actions">
-
-      <button
-        type="button"
-        id="markAllButton"
-        class="action-btn"
-      >
-        ✓ Mark all as read
-      </button>
-
-      <button
-        type="button"
-        id="refreshButton"
-        class="action-btn"
-      >
-        ↻ Refresh
-      </button>
-
-    </div>
-
-    <div id="status" class="status">
-      Loading notifications...
-    </div>
-
-    <section
-      id="notificationList"
-      class="notification-list"
-    >
-      <div class="empty">
-        Loading...
-      </div>
-    </section>
-
-  </div>
-
-</main>
-
-<footer class="site-footer">
-  <div class="container">
-    <p>
-      © <span id="year"></span>
-      Zakmolanitech Solutions. All rights reserved.
-    </p>
-  </div>
-</footer>
-
+<aside id="dashboardSidebar" class="portal-sidebar">
+<a class="portal-brand" href="../index.html"><span class="brand-symbol"><img src="../static/assets/logo.png" alt="Zakmolanitech Solutions"></span><span class="brand-copy"><strong>ZAKMOLANITECH</strong><small>CLIENT WORKSPACE</small></span></a>
+<div class="sidebar-section-label">WORKSPACE</div><nav class="portal-nav">
+<a class="nav-item" href="dashboard.html"><span class="nav-icon">⌂</span><span>Overview</span></a><a class="nav-item" href="projects.html"><span class="nav-icon">▤</span><span>My projects</span></a><a class="nav-item" href="messages.html"><span class="nav-icon">✉</span><span>Messages</span></a><a class="nav-item is-current" href="notifications.html"><span class="nav-icon">◉</span><span>Notifications</span></a><a class="nav-item" href="support.html"><span class="nav-icon">?</span><span>Help &amp; support</span></a>
+</nav><div class="sidebar-section-label account-label">PERSONAL</div><nav class="portal-nav"><a class="nav-item" href="profile.html"><span class="nav-icon">◎</span><span>My profile</span></a><a class="nav-item" href="settings.html"><span class="nav-icon">⚙</span><span>Account settings</span></a><a class="nav-item" href="../index.html"><span class="nav-icon">↗</span><span>Visit website</span></a></nav>
+<div class="sidebar-account"><div class="account-avatar">Z</div><div class="account-copy"><strong>My account</strong><span>Client workspace</span></div></div>
+</aside><div id="dashBackdrop" class="portal-backdrop"></div>
+<main class="notifications-page portal-main page-content">
+<header class="portal-topbar"><div class="topbar-left"><button id="dashMenuToggle" class="menu-toggle" type="button" aria-label="Open menu"><span></span><span></span><span></span></button><div class="breadcrumb"><span>Workspace</span><i>/</i><strong>Notifications</strong></div></div><div class="topbar-right"><a class="topbar-link" href="notifications.html" aria-label="Notifications" title="Notifications">🔔</a><span class="topbar-divider"></span><div class="topbar-user"><span class="topbar-avatar">Z</span><span>My workspace</span></div></div></header>
+<div class="notifications-wrap">
+<section class="notifications-hero"><div class="hero-copy"><div class="hero-kicker"><i></i> YOUR ACTIVITY CENTRE</div><div class="notifications-title"><h1>Stay in the loop.</h1><p>Project milestones, team replies and important updates — all gathered in one place.</p></div></div><div class="hero-art" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M48 25a16 16 0 0 0-32 0c0 19-7 19-7 23h46c0-4-7-4-7-23Z"/><path d="M26 55a6 6 0 0 0 12 0"/><path d="M32 4v4"/></svg></div></section>
+<section class="notification-overview" aria-label="Notification summary">
+<div class="overview-card"><div class="overview-icon">◉</div><div><span>Total updates</span><strong id="totalCount">—</strong></div></div>
+<div class="overview-card"><div class="overview-icon">✦</div><div><span>Unread</span><strong id="unreadCount">—</strong></div></div>
+<div class="overview-card"><div class="overview-icon">✓</div><div><span>Read</span><strong id="readCount">—</strong></div></div>
+</section>
+<div class="notification-toolbar"><div class="toolbar-title"><h2>Your notifications</h2><p>Latest activity appears first.</p></div><div class="notification-actions"><button type="button" id="refreshButton" class="action-btn">↻ Refresh</button><button type="button" id="markAllButton" class="action-btn primary">✓ Mark all as read</button></div></div>
+<div class="notification-filters" role="group" aria-label="Filter notifications"><button type="button" class="filter-btn active" data-filter="all">All updates</button><button type="button" class="filter-btn" data-filter="unread">Unread</button><button type="button" class="filter-btn" data-filter="read">Read</button></div>
+<div id="status" class="notification-status"><i class="status-dot"></i><span>Connecting to your workspace…</span></div>
+<section id="notificationList" class="notification-list"><div class="notification-empty"><div class="empty-art">◌</div><h3>Loading your activity</h3><p>Your latest project and account updates will appear here.</p></div></section>
+</div></main>
+<footer class="site-footer"><div class="container"><p>© <span id="year"></span> Zakmolanitech Solutions. All rights reserved.</p></div></footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-
-const SUPABASE_URL="https://jjcptobdzreckuhtcuzm.supabase.co";
-const SUPABASE_KEY="sb_publishable_5AyVE6y2FGY8S_NoLC5a-w_URf-Mfxc";
-const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const statusBox=document.getElementById("status"),list=document.getElementById("notificationList"),markAllButton=document.getElementById("markAllButton"),refreshButton=document.getElementById("refreshButton");
+(function(){
+"use strict";
+var SUPABASE_URL="https://jjcptobdzreckuhtcuzm.supabase.co";
+var SUPABASE_KEY="sb_publishable_5AyVE6y2FGY8S_NoLC5a-w_URf-Mfxc";
+var client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+var statusBox=document.getElementById("status"),list=document.getElementById("notificationList");
+var markAllButton=document.getElementById("markAllButton"),refreshButton=document.getElementById("refreshButton");
+var totalCount=document.getElementById("totalCount"),unreadCount=document.getElementById("unreadCount"),readCount=document.getElementById("readCount");
+var userId=null,notifications=[],channel=null,activeFilter="all",loading=false;
 document.getElementById("year").textContent=new Date().getFullYear();
-let currentUserId=null,notifications=[],notificationChannel=null;
-const esc=v=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-const date=v=>new Date(v).toLocaleString(undefined,{dateStyle:"medium",timeStyle:"short"});
+function esc(value){return String(value===null||value===undefined?"":value).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
+function typeLabel(value){return String(value||"update").replace(/_/g," ").replace(/\b\w/g,function(c){return c.toUpperCase();});}
+function formatDate(value){var d=new Date(value);if(isNaN(d.getTime()))return "Recently";try{return d.toLocaleString(undefined,{dateStyle:"medium",timeStyle:"short"});}catch(e){return d.toLocaleString();}}
+function iconFor(type){if(type==="support_reply")return "✦";if(type==="project_message")return "✉";if(type==="project_update")return "▤";return "◉";}
+function kindFor(type){if(type==="support_reply")return "support";if(type==="project_message")return "message";if(type==="project_update")return "project";return "";}
+function setStatus(message,isError){statusBox.className="notification-status"+(isError?" error":"");statusBox.innerHTML='<i class="status-dot"></i><span>'+esc(message)+'</span>';}
+function filtered(){return notifications.filter(function(n){if(activeFilter==="unread")return !n.is_read;if(activeFilter==="read")return !!n.is_read;return true;});}
 function render(){
- const unread=notifications.filter(n=>!n.is_read).length;
- statusBox.textContent=notifications.length+" notification"+(notifications.length===1?"":"s")+" · "+unread+" unread";
- markAllButton.disabled=!unread;
- if(!notifications.length){list.innerHTML='<div class="empty"><div style="font-size:2rem;margin-bottom:10px">🔔</div>You are all caught up.<br>No project notifications yet.</div>';return}
- list.innerHTML=notifications.map(n=>'<article class="notification '+(!n.is_read?"unread":"")+'" data-id="'+esc(n.id)+'"><div class="notification-top"><h2 class="notification-title">'+esc(n.title)+'</h2><span class="notification-type">'+esc(n.notification_type.replaceAll("_"," "))+'</span></div><div class="notification-message">'+esc(n.message)+'</div><div class="notification-bottom"><span class="notification-date">'+esc(date(n.created_at))+'</span>'+(n.notification_type==="support_reply"?'<a class="read-btn" href="support.html?conversation='+esc(n.related_support_conversation_id||"")+'">Open support</a>':(n.related_project_id?'<a class="read-btn" href="messages.html?project='+esc(n.related_project_id)+'">Open project</a>':""))+(!n.is_read?'<button class="read-btn" type="button" data-read-id="'+esc(n.id)+'">Mark as read</button>':'<span class="notification-date">Read</span>')+'</div></article>').join("");
+var unread=notifications.filter(function(n){return !n.is_read;}).length;
+totalCount.textContent=notifications.length;unreadCount.textContent=unread;readCount.textContent=notifications.length-unread;
+markAllButton.disabled=unread===0;
+var rows=filtered();
+if(!rows.length){
+var title=notifications.length?(activeFilter==="unread"?"You’re all caught up":"No read notifications yet"):"Nothing to notify you about — yet.";
+var message=notifications.length?"Try another filter to see the rest of your activity.":"When your team shares a project update or replies to you, it will show up here.";
+list.innerHTML='<div class="notification-empty"><div class="empty-art">✦</div><h3>'+esc(title)+'</h3><p>'+esc(message)+'</p></div>';return;
+}
+list.innerHTML=rows.map(function(n){
+var destination="";
+if(n.notification_type==="support_reply"&&n.related_support_conversation_id){destination='<a class="read-btn" href="support.html?conversation='+esc(n.related_support_conversation_id)+'">Open support ↗</a>';}
+else if(n.related_project_id){destination='<a class="read-btn" href="messages.html?project='+esc(n.related_project_id)+'">Open project ↗</a>';}
+var readAction=!n.is_read?'<button class="read-btn" type="button" data-read-id="'+esc(n.id)+'">Mark as read</button>':'<span class="notification-date">✓ Read</span>';
+return '<article class="notification '+(!n.is_read?"unread":"")+'"><div class="notification-icon '+kindFor(n.notification_type)+'">'+iconFor(n.notification_type)+'</div><div class="notification-content"><div class="notification-top"><h3 class="notification-title">'+esc(n.title)+'</h3><span class="notification-type">'+esc(typeLabel(n.notification_type))+'</span></div><p class="notification-message">'+esc(n.message)+'</p><div class="notification-bottom"><span class="notification-date">'+(!n.is_read?'<i class="unread-mark"></i>':'')+esc(formatDate(n.created_at))+'</span><div class="notification-links">'+destination+readAction+'</div></div></div></article>';
+}).join("");
 }
 async function load(){
- statusBox.textContent="Loading notifications...";
- const {data,error}=await supabase.from("client_notifications").select("id,title,message,notification_type,related_project_id,related_message_id,related_support_conversation_id,is_read,created_at").eq("user_id",currentUserId).order("created_at",{ascending:false}).limit(100);
- if(error)throw error;notifications=data||[];render();
+if(loading)return;loading=true;
+try{
+var result=await client.from("client_notifications").select("id,title,message,notification_type,related_project_id,related_message_id,related_support_conversation_id,is_read,created_at").eq("user_id",userId).order("created_at",{ascending:false}).limit(100);
+if(result.error)throw result.error;
+notifications=result.data||[];render();setStatus("Your activity is up to date. Live notifications are enabled.",false);
+}catch(error){console.error("Notifications load:",error);setStatus(error&&error.message?error.message:"Unable to load notifications. Please refresh.",true);}
+finally{loading=false;}
 }
 async function init(){
- const {data,error}=await supabase.auth.getSession();if(error||!data.session){location.replace("signin.html");return}
- currentUserId=data.session.user.id;
- try{await load();subscribe()}catch(e){console.error(e);statusBox.textContent="Unable to load notifications.";statusBox.classList.add("error");list.innerHTML='<div class="empty error">Notifications could not be loaded. Please refresh and try again.</div>'}
+try{
+var sessionResult=await client.auth.getSession();
+if(sessionResult.error||!sessionResult.data||!sessionResult.data.session){location.replace("signin.html");return;}
+userId=sessionResult.data.session.user.id;
+await load();
+channel=client.channel("client-notifications-"+userId).on("postgres_changes",{event:"*",schema:"public",table:"client_notifications",filter:"user_id=eq."+userId},function(){load();}).subscribe();
+}catch(error){console.error(error);setStatus("We could not connect to your notifications. Please refresh.",true);}
 }
-list.addEventListener("click",async e=>{const b=e.target.closest("[data-read-id]");if(!b)return;b.disabled=true;const id=b.dataset.readId;const {error}=await supabase.from("client_notifications").update({is_read:true}).eq("id",id).eq("user_id",currentUserId);if(error){console.error(error);b.disabled=false;statusBox.textContent="Could not update this notification.";return}const item=notifications.find(n=>n.id===id);if(item)item.is_read=true;render()});
-markAllButton.addEventListener("click",async()=>{markAllButton.disabled=true;const {error}=await supabase.from("client_notifications").update({is_read:true}).eq("user_id",currentUserId).eq("is_read",false);if(error){console.error(error);statusBox.textContent="Could not mark notifications as read.";render();return}notifications.forEach(n=>n.is_read=true);render()});
-refreshButton.addEventListener("click",async()=>{refreshButton.disabled=true;refreshButton.textContent="Refreshing...";try{await load()}catch(e){console.error(e);statusBox.textContent="Unable to refresh notifications."}finally{refreshButton.disabled=false;refreshButton.textContent="↻ Refresh"}});
-function subscribe(){notificationChannel=supabase.channel("client-notifications-"+currentUserId).on("postgres_changes",{event:"*",schema:"public",table:"client_notifications",filter:"user_id=eq."+currentUserId},load).subscribe()}
-supabase.auth.onAuthStateChange((event,session)=>{if(event==="SIGNED_OUT"||!session)location.replace("signin.html")});
-window.addEventListener("beforeunload",()=>{if(notificationChannel)supabase.removeChannel(notificationChannel)});
+list.addEventListener("click",async function(event){
+var button=event.target.closest("[data-read-id]");if(!button)return;
+button.disabled=true;var id=button.getAttribute("data-read-id");
+try{var result=await client.from("client_notifications").update({is_read:true}).eq("id",id).eq("user_id",userId);
+if(result.error)throw result.error;
+var item=notifications.find(function(n){return n.id===id;});if(item)item.is_read=true;render();setStatus("Notification marked as read.",false);
+}catch(error){console.error(error);button.disabled=false;setStatus(error&&error.message?error.message:"Could not update this notification.",true);}
+});
+markAllButton.addEventListener("click",async function(){
+markAllButton.disabled=true;
+try{var result=await client.from("client_notifications").update({is_read:true}).eq("user_id",userId).eq("is_read",false);if(result.error)throw result.error;
+notifications.forEach(function(n){n.is_read=true;});render();setStatus("All notifications have been marked as read.",false);
+}catch(error){console.error(error);setStatus(error&&error.message?error.message:"Could not mark notifications as read.",true);render();}
+});
+refreshButton.addEventListener("click",async function(){refreshButton.disabled=true;refreshButton.textContent="Refreshing…";await load();refreshButton.disabled=false;refreshButton.textContent="↻ Refresh";});
+Array.prototype.forEach.call(document.querySelectorAll("[data-filter]"),function(button){button.addEventListener("click",function(){
+activeFilter=button.getAttribute("data-filter");
+Array.prototype.forEach.call(document.querySelectorAll("[data-filter]"),function(b){b.classList.toggle("active",b===button);});
+render();
+});});
+client.auth.onAuthStateChange(function(event,session){if(event==="SIGNED_OUT"||!session)location.replace("signin.html");});
+window.addEventListener("beforeunload",function(){if(channel)client.removeChannel(channel);});
 init();
-
+})();
 </script>
-
-<script>(()=>{const s=document.getElementById("dashboardSidebar"),b=document.getElementById("dashBackdrop"),t=document.getElementById("dashMenuToggle");if(!s||!b||!t)return;const c=()=>{s.classList.remove("is-open");b.classList.remove("is-visible")};t.addEventListener("click",()=>{s.classList.toggle("is-open");b.classList.toggle("is-visible")});b.addEventListener("click",c);s.querySelectorAll("a").forEach(a=>a.addEventListener("click",c));})();</script>
+<script>
+(function(){var sidebar=document.getElementById("dashboardSidebar"),backdrop=document.getElementById("dashBackdrop"),toggle=document.getElementById("dashMenuToggle");if(!sidebar||!backdrop||!toggle)return;function close(){sidebar.classList.remove("is-open");backdrop.classList.remove("is-visible");}toggle.addEventListener("click",function(){sidebar.classList.toggle("is-open");backdrop.classList.toggle("is-visible");});backdrop.addEventListener("click",close);Array.prototype.forEach.call(sidebar.querySelectorAll("a"),function(a){a.addEventListener("click",close);});})();
+</script>
 </body>
-  </html>
+</html>
