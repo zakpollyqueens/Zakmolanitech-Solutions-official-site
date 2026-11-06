@@ -144,7 +144,8 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>\n
+<script>
+
 const SUPABASE_URL="https://jjcptobdzreckuhtcuzm.supabase.co",SUPABASE_KEY="sb_publishable_5AyVE6y2FGY8S_NoLC5a-w_URf-Mfxc";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const loading=document.getElementById("loading"),dashboard=document.getElementById("dashboard");
@@ -202,7 +203,8 @@ document.getElementById("projectRequestForm").addEventListener("submit",async e=
 });
 document.getElementById("logoutButton").addEventListener("click",async function(){const b=this;b.disabled=true;b.textContent="Signing out…";const {error}=await supabaseClient.auth.signOut();if(error){console.error(error);b.disabled=false;b.textContent="Sign Out";return}location.replace("signin.html")});
 loadDashboard();
-\n
+
+
 </script>
 </body>
                                                       </html>
