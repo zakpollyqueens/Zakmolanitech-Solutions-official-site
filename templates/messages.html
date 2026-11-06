@@ -168,157 +168,186 @@
 <script>
 const SUPABASE_URL="https://jjcptobdzreckuhtcuzm.supabase.co";
 const SUPABASE_KEY="sb_publishable_5AyVE6y2FGY8S_NoLC5a-w_URf-Mfxc";
-if(!window.supabase||typeof window.supabase.createClient!=="function"){const n=document.getElementById("notice");if(n){n.textContent="The messaging service could not load. Check your internet connection, then refresh this page.";n.className="notice show error";}throw new Error("Supabase client library failed to load.");}
-const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const projectList=document.getElementById("projectList");
-const projectSearch=document.getElementById("projectSearch");
-const projectCount=document.getElementById("projectCount");
-const messageList=document.getElementById("messageList");
-const messageStatus=document.getElementById("messageStatus");
-const messageForm=document.getElementById("messageForm");
-const messageInput=document.getElementById("messageInput");
-const sendButton=document.getElementById("sendButton");
-const voiceButton=document.getElementById("voiceButton");
-const composerHint=document.getElementById("composerHint");
-const notice=document.getElementById("notice");
-const conversationTitle=document.getElementById("conversationTitle");
-const conversationSubtitle=document.getElementById("conversationSubtitle");
-let currentUserId=null,currentProjectId=null,currentProject=null,channel=null,projects=[];
-let mediaRecorder=null,voiceStream=null,voiceChunks=[],voiceRecording=false,sending=false;
-const esc=v=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-const niceDate=v=>new Date(v).toLocaleString(undefined,{dateStyle:"medium",timeStyle:"short"});
-function showNotice(message,type=""){notice.textContent=message;notice.className="notice show"+(type?" "+type:"");}
+if(!window.supabase||typeof window.supabase.createClient!=="function"){var n=document.getElementById("notice");if(n){n.textContent="The messaging service could not load. Check your internet connection and refresh.";n.className="notice show error";}throw new Error("Supabase client library failed to load.");}
+var supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+var projectList=document.getElementById("projectList"),projectSearch=document.getElementById("projectSearch"),projectCount=document.getElementById("projectCount");
+var messageList=document.getElementById("messageList"),messageStatus=document.getElementById("messageStatus"),messageForm=document.getElementById("messageForm");
+var messageInput=document.getElementById("messageInput"),sendButton=document.getElementById("sendButton"),voiceButton=document.getElementById("voiceButton");
+var composerHint=document.getElementById("composerHint"),notice=document.getElementById("notice"),conversationTitle=document.getElementById("conversationTitle"),conversationSubtitle=document.getElementById("conversationSubtitle");
+var currentUserId=null,currentProjectId=null,currentProject=null,channel=null,projects=[];
+var mediaRecorder=null,voiceStream=null,voiceChunks=[],sending=false,selectingProject=false;
+function esc(v){return String(v===null||typeof v==="undefined"?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
+function niceDate(v){return new Date(v).toLocaleString();}
+function showNotice(message,type){notice.textContent=message;notice.className="notice show"+(type?" "+type:"");}
+function setControls(enabled){messageInput.disabled=false;sendButton.disabled=!enabled||sending;voiceButton.disabled=!enabled||sending;}
 function emptyState(title,description){messageList.innerHTML='<div class="message-empty"><div><div class="empty-illustration">✉</div><strong>'+esc(title)+'</strong><p>'+esc(description)+'</p></div></div>';}
 function renderProjects(){
- const q=projectSearch.value.trim().toLowerCase();
- const filtered=projects.filter(p=>(p.project_name||"").toLowerCase().includes(q));
+ var q=projectSearch.value.trim().toLowerCase();
+ var filtered=projects.filter(function(p){return (p.project_name||"").toLowerCase().indexOf(q)!==-1;});
  projectCount.textContent=String(projects.length);
- if(!filtered.length){projectList.innerHTML='<div class="rail-empty">'+(projects.length?'No projects match that search.':'No projects have been created yet. Submit an idea from My Projects to begin.')+'</div>';return;}
- projectList.innerHTML=filtered.map(p=>'<button type="button" class="project-choice '+(p.id===currentProjectId?'active':'')+'" data-project="'+esc(p.id)+'"><span class="project-initial">'+esc((p.project_name||"P").trim().charAt(0).toUpperCase())+'</span><span class="project-choice-copy"><strong>'+esc(p.project_name||"Untitled project")+'</strong><small>'+esc((p.status||"in progress").replace(/_/g," "))+'</small></span><span class="project-arrow">›</span></button>').join("");
- projectList.querySelectorAll("[data-project]").forEach(button=>button.addEventListener("click",()=>selectProject(button.dataset.project)));
+ if(!filtered.length){projectList.innerHTML='<div class="rail-empty">'+(projects.length?"No projects match that search.":"No projects have been created yet. Submit an idea from My Projects to begin.")+'</div>';return;}
+ projectList.innerHTML=filtered.map(function(p){return '<button type="button" class="project-choice '+(p.id===currentProjectId?"active":"")+'" data-project="'+esc(p.id)+'"><span class="project-initial">'+esc((p.project_name||"P").trim().charAt(0).toUpperCase())+'</span><span class="project-choice-copy"><strong>'+esc(p.project_name||"Untitled project")+'</strong><small>'+esc((p.status||"in progress").replace(/_/g," "))+'</small></span><span class="project-arrow">›</span></button>';}).join("");
+ var buttons=projectList.querySelectorAll("[data-project]");
+ for(var i=0;i<buttons.length;i++){buttons[i].addEventListener("click",function(){selectProject(this.getAttribute("data-project"));});}
 }
 async function init(){
- try {
- const {data,error}=await supabase.auth.getSession();
- if(error)throw error;
- if(!data.session){location.replace("signin.html");return;}
- currentUserId=data.session.user.id;
- const {data:rows,error:projectError}=await supabase.from("client_projects").select("id,project_name,status").order("created_at",{ascending:false});
- if(projectError){console.error("Project list load failed:",projectError);showNotice("Your projects could not be loaded: "+projectError.message,"error");projectList.innerHTML='<div class="rail-empty">Projects are temporarily unavailable. Refresh to try again.</div>';messageStatus.textContent="Project access could not be verified.";return;}
- projects=rows||[];renderProjects();
- if(!projects.length){conversationSubtitle.textContent="No project selected";messageStatus.textContent="A project is required before messaging can begin.";emptyState("Create a project to start messaging","Open My Projects and submit your idea. Once a project appears here, the message and voice-note tools will be enabled.");composerHint.textContent="Create a project first to open a conversation with the team.";messageInput.placeholder="Your project conversation will appear here…";messageInput.placeholder="Select a project to start messaging…";return;}
- const requested=new URLSearchParams(location.search).get("project");
- const chosen=projects.find(p=>p.id===requested)||projects[0];
- await selectProject(chosen.id);
- } catch(initError) { console.error("Messages page initialization failed:",initError); showNotice("The messaging tools could not start: "+(initError.message||"Please refresh the page or update your browser."),"error"); }
+ try{
+  var sessionResult=await supabase.auth.getSession();
+  if(sessionResult.error)throw sessionResult.error;
+  if(!sessionResult.data||!sessionResult.data.session){location.replace("signin.html");return;}
+  currentUserId=sessionResult.data.session.user.id;
+  var projectResult=await supabase.from("client_projects").select("id,project_name,status").order("created_at",{ascending:false});
+  if(projectResult.error){console.error("Project list load failed:",projectResult.error);showNotice("Your projects could not be loaded: "+projectResult.error.message,"error");projectList.innerHTML='<div class="rail-empty">Projects are temporarily unavailable. Refresh to try again.</div>';messageStatus.textContent="Project access could not be verified.";return;}
+  projects=projectResult.data||[];renderProjects();
+  if(!projects.length){conversationSubtitle.textContent="No project selected";messageStatus.textContent="A project is required before messaging can begin.";emptyState("Create a project to start messaging","Open My Projects and submit your idea. Once a project appears here, the message and voice-note tools will be enabled.");composerHint.textContent="Create a project first to open a conversation with the team.";messageInput.placeholder="Select a project to start messaging…";setControls(false);return;}
+  var requested=new URLSearchParams(location.search).get("project");
+  var chosen=projects[0];
+  for(var j=0;j<projects.length;j++){if(projects[j].id===requested){chosen=projects[j];break;}}
+  await selectProject(chosen.id);
+ }catch(error){console.error("Messages initialization failed:",error);showNotice("Messages could not start: "+(error.message||"Refresh the page and try again."),"error");}
 }
 async function selectProject(id){
- if(channel){await supabase.removeChannel(channel);channel=null;}
- currentProject=projects.find(p=>p.id===id)||null;currentProjectId=currentProject?.id||null;
- renderProjects();messageInput.value="";
- if(!currentProject){messageInput.placeholder="Select a project to start messaging…";return;}
- conversationTitle.textContent=currentProject.project_name||"Project conversation";
- conversationSubtitle.textContent="Conversation with the Zakmolanitech team";
- messageInput.disabled=false;sendButton.disabled=false;voiceButton.disabled=false;
- await loadMessages();
- channel=supabase.channel("client-project-messages-"+id).on("postgres_changes",{event:"*",schema:"public",table:"project_messages",filter:"project_id=eq."+id},loadMessages).subscribe();
+ if(selectingProject)return;
+ selectingProject=true;setControls(false);
+ try{
+  if(channel){await supabase.removeChannel(channel);channel=null;}
+  currentProject=null;currentProjectId=null;
+  for(var i=0;i<projects.length;i++){if(projects[i].id===id){currentProject=projects[i];break;}}
+  currentProjectId=currentProject?currentProject.id:null;
+  renderProjects();messageInput.value="";
+  if(!currentProject){messageInput.placeholder="Select a project to start messaging…";return;}
+  conversationTitle.textContent=currentProject.project_name||"Project conversation";
+  conversationSubtitle.textContent="Conversation with the Zakmolanitech team";
+  messageInput.placeholder="Write a message to your project team…";
+  await loadMessages();
+  channel=supabase.channel("client-project-messages-"+id).on("postgres_changes",{event:"*",schema:"public",table:"project_messages",filter:"project_id=eq."+id},function(){loadMessages();}).subscribe();
+  composerHint.textContent="Messages are shared with your assigned project team.";
+  setControls(true);
+ }catch(error){console.error("Project conversation selection failed:",error);showNotice("This project conversation could not open: "+(error.message||"Please try again."),"error");setControls(false);}
+ finally{selectingProject=false;}
 }
 async function loadMessages(){
- if(!currentProjectId)return;
+ if(!currentProjectId)return false;
  messageStatus.textContent="Loading conversation…";
- const {data,error}=await supabase.from("project_messages").select("id,project_id,sender_id,message,message_type,audio_path,created_at").eq("project_id",currentProjectId).order("created_at",{ascending:true}).limit(200);
- if(error){console.error(error);messageStatus.textContent="Messages are temporarily unavailable.";emptyState("Couldn't load messages","Please check your connection and try again.");return;}
- const count=data?.length||0;messageStatus.textContent=count+" message"+(count===1?"":"s")+" · "+(count?"Your project conversation":"A new conversation");
- if(!count){emptyState("Start the conversation","Send your first message and our project team will get back to you here.");return;}
- const rendered=await Promise.all(data.map(async m=>{
-  let body='<div class="message-text">'+esc(m.message)+'</div>';
-  if(m.message_type==="voice"&&m.audio_path){
-   const {data:audioData,error:audioError}=await supabase.storage.from("project-voice-messages").createSignedUrl(m.audio_path,3600);
-   body=audioError?'<div class="message-text">🎙 Voice message unavailable</div>':'<audio controls preload="metadata" style="display:block;width:min(290px,65vw);max-width:100%;height:42px" src="'+esc(audioData.signedUrl)+'"></audio>';
+ try{
+  var result=await supabase.from("project_messages").select("id,project_id,sender_id,message,message_type,audio_path,created_at").eq("project_id",currentProjectId).order("created_at",{ascending:true}).limit(200);
+  if(result.error)throw result.error;
+  var rows=result.data||[];
+  messageStatus.textContent=rows.length+" message"+(rows.length===1?"":"s")+" · "+(rows.length?"Your project conversation":"A new conversation");
+  if(!rows.length){emptyState("Start the conversation","Send your first message and our project team will get back to you here.");return true;}
+  var rendered=[];
+  for(var i=0;i<rows.length;i++){
+   var m=rows[i],body='<div class="message-text">'+esc(m.message)+'</div>';
+   if(m.message_type==="voice"&&m.audio_path){
+    var audio=await supabase.storage.from("project-voice-messages").createSignedUrl(m.audio_path,3600);
+    body=audio.error?'<div class="message-text">Voice message unavailable: '+esc(audio.error.message)+'</div>':'<audio controls preload="metadata" style="display:block;width:min(290px,65vw);max-width:100%;height:42px" src="'+esc(audio.data.signedUrl)+'"></audio>';
+   }
+   rendered.push('<article class="message '+(m.sender_id===currentUserId?"mine":"")+'"><div class="message-bubble"><div class="message-author">'+(m.sender_id===currentUserId?"YOU":"ZAKMOLANITECH TEAM")+'</div>'+body+'<div class="message-time">'+esc(niceDate(m.created_at))+'</div></div></article>');
   }
-  return '<article class="message '+(m.sender_id===currentUserId?"mine":"")+'"><div class="message-bubble"><div class="message-author">'+(m.sender_id===currentUserId?"YOU":"ZAKMOLANITECH TEAM")+'</div>'+body+'<div class="message-time">'+esc(niceDate(m.created_at))+'</div></div></article>';
- }));
- messageList.innerHTML=rendered.join("");
- messageList.scrollTop=messageList.scrollHeight;
+  messageList.innerHTML=rendered.join("");messageList.scrollTop=messageList.scrollHeight;return true;
+ }catch(error){console.error("Loading project messages failed:",error);messageStatus.textContent="We couldn't load this conversation.";emptyState("Messages could not load",error.message||"Check your connection and refresh.");showNotice("Unable to load messages: "+(error.message||"Please try again."),"error");return false;}
 }
 projectSearch.addEventListener("input",renderProjects);
 async function sendTextMessage(){
- const message=messageInput.value.trim();
+ var message=messageInput.value.trim();
  if(!message){messageInput.focus();return;}
- if(!currentProjectId||!currentUserId){showNotice("Select a project before sending a message.","error");return;}
+ if(!currentProjectId||!currentUserId){showNotice("Select one of your projects before sending a message.","error");return;}
  if(sending)return;
- sending=true;sendButton.disabled=true;voiceButton.disabled=true;sendButton.innerHTML="<span>…</span>";
- try {
-  const {error}=await supabase.from("project_messages").insert({project_id:currentProjectId,sender_id:currentUserId,message:message,message_type:"text"});
-  if(error) throw error;
-  messageInput.value="";messageInput.style.height="";showNotice("Message sent.","success");await loadMessages();
- } catch(error) {
-  console.error("Message send failed:",error);
-  showNotice("Message not sent: "+(error.message||"Please check your connection and try again."),"error");
- } finally {
-  sending=false;sendButton.disabled=!currentProjectId;voiceButton.disabled=!currentProjectId;sendButton.innerHTML='<span class="icon-send" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m21 3-7.2 18-3.7-7.1L3 10.2 21 3Z"></path><path d="m10.1 13.9 4.4-4.4"></path></svg></span><span class="send-label">Send</span>';
- }
+ sending=true;setControls(false);sendButton.innerHTML='<span class="icon-send">…</span><span class="send-label">Sending</span>';
+ try{
+  var result=await supabase.from("project_messages").insert({project_id:currentProjectId,sender_id:currentUserId,message:message,message_type:"text"});
+  if(result.error)throw result.error;
+  messageInput.value="";messageInput.style.height="";
+  showNotice("Your message was saved and sent to the project conversation.","success");
+  await loadMessages();
+ }catch(error){console.error("Message send failed:",error);showNotice("Message not sent: "+(error.message||"Check your connection and try again."),"error");}
+ finally{sending=false;setControls(!!currentProjectId);sendButton.innerHTML='<span class="icon-send" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m21 3-7.2 18-3.7-7.1L3 10.2 21 3Z"></path><path d="m10.1 13.9 4.4-4.4"></path></svg></span><span class="send-label">Send</span>';}
 }
-messageForm.addEventListener("submit",async event=>{event.preventDefault();await sendTextMessage();});
-sendButton.addEventListener("click",event=>{event.preventDefault();if(!messageForm.reportValidity || messageForm.reportValidity())sendTextMessage();});
+messageForm.addEventListener("submit",function(event){event.preventDefault();sendTextMessage();});
+sendButton.addEventListener("click",function(event){event.preventDefault();sendTextMessage();});
 function supportedAudioType(){
- const types=["audio/webm;codecs=opus","audio/webm","audio/ogg;codecs=opus","audio/mp4"];
  if(!window.MediaRecorder)return "";
- try{return types.find(type=>MediaRecorder.isTypeSupported(type))||"";}catch(_){return "";}
+ var types=["audio/webm;codecs=opus","audio/webm","audio/ogg;codecs=opus","audio/mp4"];
+ if(typeof MediaRecorder.isTypeSupported!=="function")return "";
+ for(var i=0;i<types.length;i++){try{if(MediaRecorder.isTypeSupported(types[i]))return types[i];}catch(error){}}
+ return "";
+}
+function micErrorMessage(error){
+ var name=error&&error.name?error.name:"";
+ if(name==="NotAllowedError"||name==="PermissionDeniedError"||name==="SecurityError")return "Microphone access was blocked. Allow microphone access for this website in your browser's site settings, then tap the microphone again.";
+ if(name==="NotFoundError"||name==="DevicesNotFoundError")return "No microphone was found. Check that your device has a working microphone.";
+ if(name==="NotReadableError"||name==="TrackStartError")return "Your microphone is busy in another app. Close other apps using it and try again.";
+ if(name==="OverconstrainedError")return "The microphone does not support the requested audio settings. Try again.";
+ return "Microphone could not start: "+(error&&error.message?error.message:"Please check browser permissions and try again.");
 }
 function setVoiceState(recording){
- voiceRecording=recording;voiceButton.classList.toggle("is-recording",recording);
+ voiceButton.classList.toggle("is-recording",recording);
  voiceButton.innerHTML=recording?'<span class="icon-stop" aria-hidden="true">■</span>':'<span class="icon-mic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="9" y="2.5" width="6" height="12" rx="3"></rect><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3.5M8.5 21.5h7"></path></svg></span>';
  voiceButton.title=recording?"Stop and send voice message":"Record a voice message";
  voiceButton.setAttribute("aria-label",voiceButton.title);
- composerHint.textContent=recording?"Recording… tap the red button to stop and send.":"Messages are shared with your assigned project team.";
+ composerHint.textContent=recording?"Recording now · tap the red button to finish and send.":"Messages are shared with your assigned project team.";
 }
 async function startVoiceRecording(){
  if(!currentProjectId){showNotice("Choose a project from the project list before recording a voice message.","error");return;}
- if(sending)return;
- if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){showNotice("Voice recording is not supported by this browser. Try an updated Chrome browser.","error");return;}
+ if(sending||selectingProject)return;
+ if(!navigator.mediaDevices||typeof navigator.mediaDevices.getUserMedia!=="function"){showNotice("This browser cannot request microphone access. Open this page in an updated Chrome browser over HTTPS.","error");return;}
+ if(!window.MediaRecorder){showNotice("Your browser can access a microphone but does not support voice recording. Update Chrome or use a newer browser.","error");return;}
+ voiceButton.disabled=true;composerHint.textContent="Requesting microphone permission… Allow microphone access if your browser asks.";
+ showNotice("Requesting microphone access. Choose Allow when your browser prompts you.","");
  try{
-  const type=supportedAudioType();
-  voiceStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
-  voiceChunks=[];mediaRecorder=new MediaRecorder(voiceStream,type?{mimeType:type}:undefined);
-  mediaRecorder.ondataavailable=event=>{if(event.data&&event.data.size)voiceChunks.push(event.data);};
-  mediaRecorder.onerror=event=>{console.error("Voice recorder error:",event.error);showNotice("Recording stopped because of a microphone error.","error");};
-  mediaRecorder.onstop=async()=>{
-   const blob=new Blob(voiceChunks,{type:mediaRecorder.mimeType||type});
-   voiceStream?.getTracks().forEach(track=>track.stop());voiceStream=null;mediaRecorder=null;voiceChunks=[];
-   setVoiceState(false);
-   if(blob.size)await sendVoiceMessage(blob);else showNotice("No audio was captured. Please try again.","error");
+  voiceStream=await navigator.mediaDevices.getUserMedia({audio:true});
+  voiceChunks=[];
+  var type=supportedAudioType();
+  mediaRecorder=type?new MediaRecorder(voiceStream,{mimeType:type}):new MediaRecorder(voiceStream);
+  mediaRecorder.ondataavailable=function(event){if(event.data&&event.data.size)voiceChunks.push(event.data);};
+  mediaRecorder.onerror=function(event){console.error("Voice recorder error:",event.error);showNotice("The recording encountered a microphone error.","error");};
+  mediaRecorder.onstop=async function(){
+   var mime=mediaRecorder&&mediaRecorder.mimeType?mediaRecorder.mimeType:"audio/webm";
+   var blob=new Blob(voiceChunks,{type:mime});
+   if(voiceStream){voiceStream.getTracks().forEach(function(track){track.stop();});voiceStream=null;}
+   mediaRecorder=null;voiceChunks=[];setVoiceState(false);
+   if(blob.size){await sendVoiceMessage(blob);}else{setControls(!!currentProjectId);showNotice("No audio was captured. Please speak after recording starts and try again.","error");}
   };
-  mediaRecorder.start();setVoiceState(true);showNotice("Recording started. Tap the red microphone button when you finish.","success");
- }catch(error){console.error("Microphone access:",error);showNotice(error.name==="NotAllowedError"?"Microphone permission was denied. Allow microphone access in your browser settings and try again.":"Could not access the microphone. Please try again.","error");}
+  mediaRecorder.start(250);setVoiceState(true);voiceButton.disabled=false;
+  showNotice("Recording is live. Speak now, then tap the red stop button to send.","success");
+ }catch(error){
+  console.error("Microphone permission or recording failed:",error);
+  if(voiceStream){voiceStream.getTracks().forEach(function(track){track.stop();});voiceStream=null;}
+  mediaRecorder=null;setVoiceState(false);setControls(!!currentProjectId);
+  showNotice(micErrorMessage(error),"error");
+ }
 }
 async function sendVoiceMessage(blob){
- if(!currentProjectId||sending)return;
- if(blob.size>20*1024*1024){showNotice("That recording is too large. Please record a shorter voice message.","error");return;}
- sending=true;sendButton.disabled=true;voiceButton.disabled=true;composerHint.textContent="Uploading your voice message…";
- const mime=(blob.type||"audio/webm").split(";")[0];
- const ext={"audio/webm":"webm","audio/ogg":"ogg","audio/mp4":"m4a","audio/mpeg":"mp3","audio/wav":"wav","audio/x-wav":"wav"}[mime]||"webm";
- const voiceId=window.crypto?.randomUUID?crypto.randomUUID():Date.now().toString(36)+"-"+Math.random().toString(36).slice(2);
- const path=currentUserId+"/"+currentProjectId+"/"+voiceId+"."+ext;
- const {error:uploadError}=await supabase.storage.from("project-voice-messages").upload(path,blob,{contentType:mime,cacheControl:"3600",upsert:false});
- if(uploadError){console.error("Voice upload failed:",uploadError);showNotice("Voice message upload failed: "+uploadError.message,"error");}
- else{
-  const {error}=await supabase.from("project_messages").insert({project_id:currentProjectId,sender_id:currentUserId,message:"Voice message",message_type:"voice",audio_path:path});
-  if(error){await supabase.storage.from("project-voice-messages").remove([path]);console.error("Voice message record failed:",error);showNotice("Voice message could not be sent: "+error.message,"error");}
-  else{showNotice("Voice message sent.","success");await loadMessages();}
- }
- sending=false;sendButton.disabled=!currentProjectId;voiceButton.disabled=!currentProjectId;composerHint.textContent="Messages are shared with your assigned project team.";
+ if(!currentProjectId||sending){setControls(!!currentProjectId);return;}
+ if(blob.size>20*1024*1024){setControls(true);showNotice("That recording is too large. Please record a shorter voice message.","error");return;}
+ sending=true;setControls(false);composerHint.textContent="Uploading your voice note…";
+ try{
+  var mime=blob.type?blob.type.split(";")[0]:"audio/webm";
+  var extensions={"audio/webm":"webm","audio/ogg":"ogg","audio/mp4":"m4a","audio/mpeg":"mp3","audio/wav":"wav","audio/x-wav":"wav"};
+  var ext=extensions[mime]||"webm";
+  var voiceId=window.crypto&&typeof window.crypto.randomUUID==="function"?window.crypto.randomUUID():Date.now().toString(36)+"-"+Math.random().toString(36).slice(2);
+  var path=currentUserId+"/"+currentProjectId+"/"+voiceId+"."+ext;
+  var upload=await supabase.storage.from("project-voice-messages").upload(path,blob,{contentType:mime,cacheControl:"3600",upsert:false});
+  if(upload.error)throw upload.error;
+  var insert=await supabase.from("project_messages").insert({project_id:currentProjectId,sender_id:currentUserId,message:"Voice message",message_type:"voice",audio_path:path});
+  if(insert.error){await supabase.storage.from("project-voice-messages").remove([path]);throw insert.error;}
+  showNotice("Your voice note was sent successfully.","success");
+  await loadMessages();
+ }catch(error){console.error("Voice message send failed:",error);showNotice("Voice note not sent: "+(error.message||"Check your connection and try again."),"error");}
+ finally{sending=false;setControls(!!currentProjectId);composerHint.textContent="Messages are shared with your assigned project team.";}
 }
-voiceButton.addEventListener("click",async()=>{
- if(mediaRecorder&&mediaRecorder.state==="recording"){voiceButton.disabled=true;composerHint.textContent="Finishing and sending your recording…";try{mediaRecorder.stop();}catch(error){console.error("Could not stop recording:",error);voiceButton.disabled=false;showNotice("The recording could not be stopped. Please try again.","error");}}
- else await startVoiceRecording();
+voiceButton.addEventListener("click",function(event){
+ event.preventDefault();
+ if(mediaRecorder&&mediaRecorder.state==="recording"){
+  voiceButton.disabled=true;composerHint.textContent="Finishing your voice note…";
+  try{mediaRecorder.stop();}catch(error){console.error("Could not stop recording:",error);setControls(true);showNotice("Could not finish recording: "+(error.message||"Please try again."),"error");}
+ }else{startVoiceRecording();}
 });
-messageInput.addEventListener("input",()=>{messageInput.style.height="auto";messageInput.style.height=Math.min(messageInput.scrollHeight,130)+"px";});
-messageInput.addEventListener("keydown",event=>{if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();if(typeof messageForm.requestSubmit==="function")messageForm.requestSubmit();else sendTextMessage();}});
-supabase.auth.onAuthStateChange((event,session)=>{if(event==="SIGNED_OUT"||!session)location.replace("signin.html");});
-window.addEventListener("beforeunload",()=>{if(channel)supabase.removeChannel(channel);});
-init();
-</script>
+messageInput.addEventListener("input",function(){messageInput.style.height="auto";messageInput.style.height=Math.min(messageInput.scrollHeight,130)+"px";});
+messageInput.addEventListener("keydown",function(event){if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();if(typeof messageForm.requestSubmit==="function")messageForm.requestSubmit();else sendTextMessage();}});
+supabase.auth.onAuthStateChange(function(event,session){if(event==="SIGNED_OUT"||!session)location.replace("signin.html");});
+window.addEventListener("beforeunload",function(){if(channel)supabase.removeChannel(channel);if(voiceStream)voiceStream.getTracks().forEach(function(track){track.stop();});});
+init();</script>
 <script>
 (()=>{const sidebar=document.getElementById("dashboardSidebar"),backdrop=document.getElementById("dashBackdrop"),toggle=document.getElementById("dashMenuToggle");if(!sidebar||!backdrop||!toggle)return;const close=()=>{sidebar.classList.remove("is-open");backdrop.classList.remove("is-visible");};toggle.addEventListener("click",()=>{sidebar.classList.toggle("is-open");backdrop.classList.toggle("is-visible");});backdrop.addEventListener("click",close);sidebar.querySelectorAll("a").forEach(link=>link.addEventListener("click",close));})();
 (()=>{const viewport=window.visualViewport;if(!viewport)return;const update=()=>{const keyboard=Math.max(0,window.innerHeight-(viewport.height+viewport.offsetTop));document.documentElement.style.setProperty("--portal-vh",viewport.height+"px");document.documentElement.style.setProperty("--keyboard-offset",keyboard+"px");};viewport.addEventListener("resize",update);viewport.addEventListener("scroll",update);window.addEventListener("resize",update);update();})();
