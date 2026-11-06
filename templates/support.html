@@ -311,5 +311,6 @@ $("subjectGroup").style.display="block";$("messageGroup").style.display="block";
 <script>(()=>{const s=document.getElementById("dashboardSidebar"),b=document.getElementById("dashBackdrop"),t=document.getElementById("dashMenuToggle");if(!s||!b||!t)return;const c=()=>{s.classList.remove("is-open");b.classList.remove("is-visible")};t.addEventListener("click",()=>{s.classList.toggle("is-open");b.classList.toggle("is-visible")});b.addEventListener("click",c);s.querySelectorAll("a").forEach(a=>a.addEventListener("click",c));})();</script>
 <script id="keyboard-viewport-fix">(()=>{const vv=window.visualViewport;if(!vv)return;const update=()=>{const bottom=Math.max(0,window.innerHeight-(vv.height+vv.offsetTop));document.documentElement.style.setProperty("--keyboard-offset",bottom+"px");document.documentElement.style.setProperty("--portal-vh",vv.height+"px")};vv.addEventListener("resize",update);vv.addEventListener("scroll",update);window.addEventListener("resize",update);document.addEventListener("focusin",e=>{if(e.target.matches("textarea,input"))setTimeout(()=>{update();e.target.scrollIntoView({block:"nearest",behavior:"smooth"})},180)});update()})();</script>
 <script src="../static/js/molano-support-widget.js"></script>
+<script src="../static/js/portal-app-lock.js"></script>
 </body>
                                    </html>l
