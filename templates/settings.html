@@ -240,6 +240,27 @@
 .client-portal .settings-inline-status{margin:12px 0}
 .client-portal [hidden]{display:none!important}
 @media(max-width:600px){.client-portal .settings-security-actions{display:grid}.client-portal .settings-security-actions button{width:100%}.client-portal .settings-security-card{padding:20px!important}}
+
+/* Settings hub and account preference pages */
+.settings-hub-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:18px 0 22px}
+.settings-hub-link{display:flex;gap:15px;align-items:flex-start;padding:20px;border:1px solid #e2ebf1;border-radius:16px;background:#fff;color:#25445a;text-decoration:none;box-shadow:0 8px 24px #173b5208;transition:transform .18s,box-shadow .18s}
+.settings-hub-link:hover{transform:translateY(-2px);box-shadow:0 14px 30px #173b5212}
+.settings-hub-icon{width:46px;height:46px;flex:0 0 46px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(135deg,#d9f5f8,#e2eaff);color:#087f9d;font-size:22px}
+.settings-hub-link strong{display:block;color:#21445b;font-size:14px;margin:1px 0 5px}
+.settings-hub-link small{display:block;color:#8294a3;font-size:12px;line-height:1.5}
+.preference-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.preference-option{display:flex;align-items:center;gap:12px;padding:13px;border:1px solid #e2ebf1;border-radius:13px;background:#f8fbfd;color:#456176;cursor:pointer}
+.preference-option input{accent-color:#078da9}
+.wallpaper-choice{min-height:94px;border:2px solid transparent;border-radius:14px;cursor:pointer;position:relative;overflow:hidden}
+.wallpaper-choice[aria-pressed=true]{border-color:#078da9;box-shadow:0 0 0 3px #078da922}
+.wallpaper-choice span{position:absolute;left:10px;bottom:9px;padding:5px 8px;border-radius:8px;background:#ffffffd9;color:#24445b;font-size:11px;font-weight:800}
+.accent-choice{width:38px;height:38px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1px #ccd9e2;cursor:pointer}
+.accent-choice[aria-pressed=true]{box-shadow:0 0 0 3px #234f6a}
+.settings-preview{padding:18px;border:1px solid #dfe9ef;border-radius:16px;background:linear-gradient(130deg,#effaff,#f7f8ff);color:#36556a}
+.settings-preview-card{padding:17px;border-radius:13px;background:#fff;box-shadow:0 8px 20px #173b520d}
+.settings-page .settings-card h2{margin-bottom:8px}
+.settings-page .settings-hub-link:focus-visible,.settings-page .wallpaper-choice:focus-visible,.settings-page .accent-choice:focus-visible{outline:3px solid #48aeca66;outline-offset:3px}
+@media(max-width:620px){.settings-hub-grid,.preference-grid{grid-template-columns:1fr}.settings-hub-link{padding:16px}.wallpaper-choice{min-height:78px}}
 </style>
 </head>
 
@@ -281,6 +302,7 @@
 <div id="appLockStatus" class="status settings-inline-status" role="status"></div>
 <p class="settings-security-help" style="margin-top:14px">Full phone storage encryption is managed by Android or your phone manufacturer. Enable screen lock and device encryption in your phone’s Security settings.</p></section>
 
+<section class="settings-card"><h2>Personalize your workspace</h2><p>Make your client workspace feel the way you like it. These preferences are saved on this browser.</p><div class="settings-hub-grid"><a class="settings-hub-link" href="appearance.html"><span class="settings-hub-icon">◐</span><span><strong>Appearance &amp; themes</strong><small>Choose light or dark mode, wallpapers, accent colours and layout density.</small></span></a><a class="settings-hub-link" href="privacy.html"><span class="settings-hub-icon">⌑</span><span><strong>Privacy &amp; data</strong><small>Export your account information, manage local preferences and review session controls.</small></span></a></div></section>
     <section class="settings-card">
 
       <h2>Change password</h2>
@@ -489,6 +511,7 @@ loadSettings();
 </script>
 
 <script>(()=>{const s=document.getElementById("dashboardSidebar"),b=document.getElementById("dashBackdrop"),t=document.getElementById("dashMenuToggle");if(!s||!b||!t)return;const c=()=>{s.classList.remove("is-open");b.classList.remove("is-visible")};t.addEventListener("click",()=>{s.classList.toggle("is-open");b.classList.toggle("is-visible")});b.addEventListener("click",c);s.querySelectorAll("a").forEach(a=>a.addEventListener("click",c));})();</script>
+<script src="../static/js/portal-appearance.js"></script>
 <script src="../static/js/portal-app-lock.js"></script>
 </body>
         </html>
