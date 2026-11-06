@@ -14,6 +14,9 @@
 @media(max-width:800px){.support-page{padding:85px 12px 45px}.support-layout{grid-template-columns:1fr}.conversation-list{max-height:300px}.chat-panel{min-height:580px}.messages{min-height:350px}.chat-header{align-items:flex-start}.chat-actions{flex-direction:column}.message-bubble{max-width:88%}}
 @media(max-width:500px){.composer{align-items:stretch}.send-btn{min-width:65px}.chat-header{flex-direction:column}.chat-actions{flex-direction:row;width:100%}}
 .support-page .composer[style*="display:none"]{display:none!important}
+/* The legacy bottom composer is intentionally removed; replies use the Reply modal. */
+.support-page .composer,.support-page #composerNote{display:none!important}
+.molano-support-section{margin:0 0 22px;padding:22px;border:1px solid #dcebf1;border-radius:22px;background:linear-gradient(115deg,#fff,#eef9fc);box-shadow:0 12px 30px #173b5209}.molano-support-intro{display:flex;align-items:center;gap:16px}.molano-support-orb{width:54px;height:54px;flex:0 0 54px;display:grid;place-items:center;border-radius:17px;background:linear-gradient(145deg,#12b9d5,#536dff);color:white;font-size:27px;box-shadow:0 10px 22px #258bb533}.molano-support-kicker{font-size:9px;font-weight:900;letter-spacing:1.5px;color:#1685a3}.molano-support-intro h2{margin:4px 0;color:#18374d;font-size:21px}.molano-support-intro p{margin:0;color:#71879a;font-size:12px;line-height:1.55}.molano-support-intro>button{margin-left:auto;white-space:nowrap;border:0;border-radius:11px;padding:12px 16px;background:linear-gradient(120deg,#167f9c,#286abd);color:white;font-weight:800;cursor:pointer}.molano-support-intro>button span{margin-left:8px}.molano-support-section .molano-guide-panel{position:static;width:100%;height:0;min-height:0;margin-top:0;display:none;border:1px solid #dce8ef;border-radius:16px;background:#f8fbfd;box-shadow:none;color:#25445a}.molano-support-section .molano-guide-panel.open{display:flex;height:440px;margin-top:18px}.molano-support-section .molano-guide-head{background:linear-gradient(120deg,#e8f7fa,#edf1ff);color:#24465b}.molano-support-section .molano-guide-head small{color:#71879a}.molano-support-section .molano-guide-close{background:#dfeaf0;color:#35566c}.molano-support-section .molano-guide-log{background:#f8fbfd}.molano-support-section .molano-guide-bubble{background:#e9f2f7;color:#29485e}.molano-support-section .molano-guide-bubble.user{background:#d9f1f5;color:#20556b}.molano-support-section .molano-guide-compose{background:#fff;border-color:#e1ebf0}.molano-support-section .molano-guide-compose textarea{background:#f7fafc;color:#25445a;border-color:#d8e5ec}.molano-support-section .molano-guide-send{background:#168eac;color:#fff}.molano-support-section .molano-guide-escalate{color:#71879a}.molano-support-section .molano-guide-escalate a{color:#1685a3}
 </style>
 <style id="workspace-quality-overrides">
 /* Unified light workspace language — aligned to My Projects */
@@ -241,6 +244,8 @@
   <article class="support-benefit"><span class="benefit-icon benefit-green">◷</span><div><strong>Pick up anytime</strong><p>Return to an open request whenever you need.</p></div></article>
 </section>
 <div id="globalError" class="error-box"></div>
+<section class="molano-support-section" aria-labelledby="molanoSupportTitle"><div class="molano-support-intro"><div class="molano-support-orb">✦</div><div><span class="molano-support-kicker">ZAKITECH AI ASSISTANT</span><h2 id="molanoSupportTitle">Chat with Molano</h2><p>Ask questions, get help navigating your workspace, or explain an issue. Molano is available right here.</p></div><button id="molanoOpenChat" type="button">Chat with Molano <span>→</span></button></div><div id="molanoChatMount"></div></section>
+
 <section class="support-layout">
 <aside class="support-card">
 <div class="panel-head"><h2>My Conversations</h2><div style="display:flex;gap:7px"><button id="refreshBtn" class="refresh-btn" type="button">↻</button><div class="support-new-wrap"><button id="newBtn" class="new-btn" type="button" aria-expanded="false">＋ New <span>⌄</span></button><div id="newMenu" class="support-new-menu"><button type="button" data-new-action="conversation">✉ <span><b>New Conversation</b><small>Start a conversation with ZakiTech</small></span></button><button type="button" data-new-action="support">◈ <span><b>Contact Support</b><small>Send a request, complaint or voice note</small></span></button><button type="button" data-new-action="contact">＋ <span><b>New Contact</b><small>Save a contact in your workspace</small></span></button></div></div></div></div>
@@ -249,13 +254,7 @@
 <section class="support-card chat-panel">
 <div id="chatHeader" class="chat-header" style="display:none"><div class="chat-title"><h2 id="chatSubject">Support conversation</h2><p id="chatStatus"></p></div><div class="chat-actions"><span id="chatStatusBadge" class="status open">open</span><button id="replyConversationBtn" class="new-btn" type="button">↩ Reply</button><button id="closeConversationBtn" class="close-btn" type="button">Close</button></div></div>
 <div id="messages" class="messages"><div class="empty-chat"><div><strong>Welcome to Support</strong>Select a conversation or create a new support request.</div></div></div>
-<form id="messageForm" class="composer" style="display:none">
-<div class="composer-field"><textarea id="messageInput" maxlength="5000" placeholder="Write your message..." required></textarea><span class="composer-hint">Enter to send · Shift + Enter for a new line</span></div>
-<div class="composer-actions">
-<button id="voiceBtn" class="composer-icon-btn voice-btn" type="button" aria-label="Voice typing" title="Voice typing"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="12" rx="3"></rect><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3.5M8.5 21.5h7"></path></svg></button>
-<button id="sendBtn" class="composer-send-btn" type="submit"><span id="sendLabel">Send</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"></path></svg></button>
-</div></form>
-<div id="composerNote" class="composer-note" style="display:none"></div>
+
 </section>
 </section></div></main>
 
