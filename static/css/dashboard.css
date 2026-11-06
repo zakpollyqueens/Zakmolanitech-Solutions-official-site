@@ -280,3 +280,8 @@ body.client-portal .portal-shell.is-ready{opacity:1;transform:translateY(0)}
 .idea-file-remove{padding:5px 8px;border:0;border-radius:7px;background:#f5f7f8;color:#8a5960;font-size:9px;cursor:pointer}
 .idea-composer .idea-tool-button:focus-visible,.idea-file-remove:focus-visible{outline:3px solid #58b9cf55;outline-offset:2px}
 @media(max-width:600px){.idea-composer{padding:15px}.idea-tools{grid-template-columns:1fr}.idea-composer-head h3{font-size:17px}}
+
+/* Shared logo image treatment across dashboard and dedicated portal pages */
+.brand-symbol img,.startup-logo img{display:block;width:100%;height:100%;object-fit:contain;border-radius:8px}
+.workspace-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+@media(max-width:600px){.workspace-actions{display:grid;grid-template-columns:1fr}.workspace-actions .outline-action{width:100%;justify-content:center}}
