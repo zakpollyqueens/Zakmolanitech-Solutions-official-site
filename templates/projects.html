@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Projects | Zakmolanitech Solutions</title>
+<meta name="description" content="Manage your Zakmolanitech projects, updates and support in one secure workspace.">
+<meta name="theme-color" content="#071321">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../static/css/main.css">
+<link rel="stylesheet" href="../static/css/dashboard.css">
+</head>
+<body class="client-portal">
+<section id="loading" class="portal-loading" aria-live="polite" aria-label="Preparing your workspace">
+  <div class="startup-top"><a class="startup-brand" href="../index.html"><span class="startup-logo">Z</span><span><strong>ZAKMOLANITECH</strong><small>CLIENT WORKSPACE</small></span></a><span class="startup-secure"><i></i> SECURE CLIENT ACCESS</span></div>
+  <div class="startup-content">
+    <div class="startup-message">
+      <span class="startup-eyebrow"><i></i> YOUR NEXT CHAPTER STARTS HERE</span>
+      <h1>Good things<br>are <em>taking shape.</em></h1>
+      <p>We're getting your personal workspace ready. Your projects, progress and conversations will be right where you left them.</p>
+      <div class="startup-countdown-row"><div class="startup-count-number" id="startupCountdown">05</div><div><strong id="startupStage">Preparing your workspace</strong><span id="startupSubstage">Bringing everything together for you</span></div></div>
+      <div class="startup-progress"><span id="startupProgressFill"></span></div>
+      <div class="startup-progress-meta"><span id="startupProgressLabel">INITIALIZING YOUR EXPERIENCE</span><strong id="startupPercent">0%</strong></div>
+    </div>
+    <div class="startup-showcase" aria-label="Zakmolanitech work showcase">
+      <div class="showcase-glow"></div>
+      <article class="showcase-main">
+        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&amp;fit=crop&amp;w=1100&amp;q=85" alt="Modern software development workspace">
+        <div class="showcase-overlay"><span>01 / DIGITAL EXPERIENCES</span><strong>Ideas into<br>real solutions.</strong></div>
+      </article>
+      <article class="showcase-side showcase-side-top"><img src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&amp;fit=crop&amp;w=600&amp;q=85" alt="Creative digital design and branding"><span>CREATIVE DESIGN</span></article>
+      <article class="showcase-side showcase-side-bottom"><img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&amp;fit=crop&amp;w=600&amp;q=85" alt="Technology team collaborating"><span>TECHNOLOGY THAT CONNECTS</span></article>
+      <div class="showcase-floating"><span class="showcase-floating-icon">✦</span><span><strong>Built around you</strong><small>Your work. Your progress. One place.</small></span></div>
+      <div class="showcase-pagination"><i class="active"></i><i></i><i></i></div>
+    </div>
+  </div>
+  <div class="startup-bottom"><span>Equipping minds with IT solutions.</span><span><i></i> YOUR WORKSPACE IS ON ITS WAY</span></div>
+</section>
+<div id="dashboard" class="portal-shell" hidden>
+<aside id="dashboardSidebar" class="portal-sidebar">
+  <a class="portal-brand" href="../index.html" aria-label="Zakmolanitech home">
+    <span class="brand-symbol">Z</span><span class="brand-copy"><strong>ZAKMOLANITECH</strong><small>CLIENT WORKSPACE</small></span>
+  </a>
+  <div class="sidebar-section-label">WORKSPACE</div>
+  <nav class="portal-nav" aria-label="Workspace navigation">
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">⌂</span><span>Overview</span></a>
+    <a class="nav-item is-current" href="projects.html"><span class="nav-icon">▤</span><span>My projects</span></a>
+    <a class="nav-item" href="messages.html"><span class="nav-icon">✉</span><span>Messages</span></a>
+    <a class="nav-item" href="notifications.html"><span class="nav-icon">◉</span><span>Notifications</span></a>
+    <a class="nav-item" href="support.html"><span class="nav-icon">?</span><span>Help & support</span></a>
+  </nav>
+  <div class="sidebar-section-label account-label">PERSONAL</div>
+  <nav class="portal-nav" aria-label="Account navigation">
+    <a class="nav-item" href="profile.html"><span class="nav-icon">◎</span><span>My profile</span></a>
+    <a class="nav-item" href="settings.html"><span class="nav-icon">⚙</span><span>Account settings</span></a>
+    <a class="nav-item" href="../index.html"><span class="nav-icon">↗</span><span>Visit website</span></a>
+  </nav>
+  <div class="sidebar-account">
+    <div class="account-avatar" id="sidebarAvatar">Z</div>
+    <div class="account-copy"><strong id="userName">Your account</strong><span id="userEmail">—</span><small id="userPhone">Phone not added</small></div>
+  </div>
+  <button id="logoutButton" class="sidebar-logout" type="button"><span>↪</span> Sign out</button>
+</aside>
+<div id="dashBackdrop" class="portal-backdrop"></div>
+<main class="portal-main">
+  <header class="portal-topbar">
+    <div class="topbar-left">
+      <button id="dashMenuToggle" class="menu-toggle" type="button" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <div class="breadcrumb"><span>Workspace</span><i>/</i><strong>My projects</strong></div>
+    </div>
+    <div class="topbar-right">
+      <a class="topbar-link" href="notifications.html" aria-label="Notifications" title="Notifications">🔔</a>
+      <span class="topbar-divider"></span>
+      <div class="topbar-user"><span class="topbar-avatar" id="dashAvatar">Z</span><span>My workspace</span></div>
+      <a id="staffWorkspaceLink" class="staff-link" href="admin.html" hidden>Staff workspace ↗</a>
+    </div>
+  </header>
+
+  <section class="welcome-panel">
+    <div class="welcome-copy">
+      <span class="section-kicker"><span class="kicker-dot"></span> YOUR DIGITAL WORKSPACE</span>
+      <h1>Your projects<br><em>in motion.</em></h1>
+      <p id="welcomeText">Track your projects, follow progress and start something new.</p>
+      <a class="welcome-cta" href="#my-projects">Explore your projects <span>→</span></a>
+    </div>
+    <div class="welcome-art" aria-hidden="true">
+      <div class="art-grid"></div><div class="art-ring ring-large"></div><div class="art-ring ring-small"></div>
+      <div class="art-glow"></div><div class="art-cube"><span>Z</span><i>+</i></div>
+      <div class="art-orbit orbit-top"></div><div class="art-orbit orbit-bottom"></div>
+      <span class="art-tag tag-left">IDEAS</span><span class="art-tag tag-right">IN MOTION</span>
+    </div>
+    <div class="welcome-foot"><span class="secure-indicator">●</span> Secure client portal <span class="welcome-foot-divider"></span> Equipping minds with IT solutions.</div>
+  </section>
+
+  <section class="overview-heading">
+    <div><span class="section-kicker">AT A GLANCE</span><h2>Your project overview</h2></div>
+    <span class="live-status"><i></i> Workspace active</span>
+  </section>
+  <section class="metrics-grid" aria-label="Project summary">
+    <article class="metric-card metric-total"><span class="metric-icon">▤</span><span class="metric-label">All projects</span><strong id="metricTotal">—</strong><small>Requests in your workspace</small></article>
+    <article class="metric-card"><span class="metric-icon icon-blue">◷</span><span class="metric-label">In progress</span><strong id="metricActive">—</strong><small>Being handled by our team</small></article>
+    <article class="metric-card"><span class="metric-icon icon-violet">◇</span><span class="metric-label">Awaiting your review</span><strong id="metricReview">—</strong><small>Items needing your attention</small></article>
+    <article class="metric-card"><span class="metric-icon icon-green">✓</span><span class="metric-label">Completed</span><strong id="metricDone">—</strong><small>Successfully delivered</small></article>
+  </section>
+
+  <section class="workspace-heading" id="my-projects">
+    <div><span class="section-kicker">YOUR WORK, IN ONE PLACE</span><h2>Project workspace</h2><p>Track delivery, follow team updates and keep the conversation moving.</p></div>
+    <a class="outline-action" href="#new-project">＋ New project request</a>
+  </section>
+  <section class="project-area">
+    <div class="project-list-panel">
+      <div class="panel-heading"><div><h3>Your projects</h3><span id="projectCount">Loading projects…</span></div><span class="panel-mark">Z / WORKSPACE</span></div>
+      <div id="clientProjectList" class="client-project-list"><div class="project-empty-state"><span class="empty-symbol">▤</span><strong>Loading your projects</strong><p>Your project cards will appear here.</p></div></div>
+    </div>
+    <aside class="project-aside">
+      <div class="support-card">
+        <div class="support-card-visual"><span class="support-orbit"></span><span class="support-bubble">✦</span><span class="support-mini">WE'RE HERE</span></div>
+        <span class="section-kicker">PERSONAL SUPPORT</span><h3>Need a hand?</h3><p>Have a question or need an update? Our team is one message away.</p>
+        <a href="support.html">Contact our team <span>→</span></a>
+      </div>
+      <div class="explore-card">
+        <span class="section-kicker">DISCOVER MORE</span><h3>Let's build<br>what's next.</h3>
+        <div class="explore-art" aria-hidden="true"><span class="explore-shape shape-one"></span><span class="explore-shape shape-two"></span><span class="explore-shape shape-three"></span><b>Z</b></div>
+        <a href="services.html">Explore our services <span>↗</span></a>
+        <a href="portfolio.html">See selected work <span>↗</span></a>
+      </div>
+    </aside>
+  </section>
+
+  <section class="new-project-section" id="new-project">
+    <div class="new-project-intro"><span class="section-kicker">START SOMETHING NEW</span><h2>Have another idea<br>in mind?</h2><p>Tell us what you’re planning. We’ll review your request and get back to you.</p><div class="new-project-decoration" aria-hidden="true"><span>✳</span><i></i></div></div>
+    <div class="new-project-form-panel">
+      <div class="panel-heading"><div><h3>Submit a project request</h3><span>Share a few details to get started.</span></div><span class="form-step">01 <i>/</i> 01</span></div>
+      <form id="projectRequestForm" class="project-form">
+        <div class="project-form-grid">
+          <label>Project name<input id="projectName" maxlength="120" required placeholder="e.g. Business website"></label>
+          <label>Project type<select id="projectType"><option>Website</option><option>Web application</option><option>Mobile application</option><option>Branding and design</option><option>IT support</option><option>Other</option></select></label>
+          <label>Budget range <span>Optional</span><input id="projectBudget" maxlength="100" placeholder="Your estimated budget"></label>
+          <label>Desired timeline <span>Optional</span><input id="projectTimeline" maxlength="100" placeholder="e.g. 4–6 weeks"></label>
+        </div>
+        <label class="description-label">Tell us about your idea<textarea id="projectDescription" rows="4" maxlength="5000" required placeholder="What would you like us to create or help you with?"></textarea></label>
+        <div class="form-submit-row"><div id="projectFormStatus" class="project-feedback" role="status" aria-live="polite"></div><button id="submitProjectButton" class="submit-project-btn" type="submit">Send project request <span>→</span></button></div>
+      </form>
+    </div>
+  </section>
+
+  <footer class="portal-footer"><a href="../index.html">ZAKMOLANITECH SOLUTIONS</a><span>Equipping minds with IT solutions.</span><span>© <span id="footerYear">2026</span></span></footer>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+
+const SUPABASE_URL="https://jjcptobdzreckuhtcuzm.supabase.co",SUPABASE_KEY="sb_publishable_5AyVE6y2FGY8S_NoLC5a-w_URf-Mfxc";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const loading=document.getElementById("loading"),dashboard=document.getElementById("dashboard");
+let currentUser=null;
+const el=(tag,cls,txt)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=String(txt);return n};
+const labels={submitted:"Submitted",reviewing:"Under review",planning:"Planning",in_progress:"In progress",review:"Client review",completed:"Completed",on_hold:"On hold",cancelled:"Cancelled"};
+function feedback(msg,bad=false){const n=document.getElementById("projectFormStatus");n.textContent=msg;n.className="project-feedback "+(bad?"error":"success")}
+async function activity(id,updates,messages){
+ const [u,m]=await Promise.all([
+  supabaseClient.from("project_updates").select("title,body,created_at").eq("project_id",id).eq("client_visible",true).order("created_at",{ascending:false}).limit(5),
+  supabaseClient.from("project_messages").select("sender_id,message,created_at").eq("project_id",id).order("created_at",{ascending:true}).limit(30)
+ ]);
+ updates.replaceChildren();
+ if(u.error||!u.data.length)updates.append(el("p","project-empty",u.error?"Updates temporarily unavailable.":"No team updates yet."));
+ else u.data.forEach(x=>{const n=el("div","project-update");n.append(el("strong","",x.title),el("p","",x.body),el("small","",new Date(x.created_at).toLocaleString()));updates.append(n)});
+ messages.replaceChildren();
+ if(m.error||!m.data.length)messages.append(el("p","project-empty",m.error?"Messages temporarily unavailable.":"No messages yet. Send the first message."));
+ else m.data.forEach(x=>{const n=el("div",x.sender_id===currentUser.id?"project-message own":"project-message");n.append(el("p","",x.message),el("small","",new Date(x.created_at).toLocaleString()));messages.append(n)});
+}
+async function loadProjects(){
+ const list=document.getElementById("clientProjectList");list.replaceChildren(el("p","project-empty","Loading your projects…"));
+ const {data,error}=await supabaseClient.from("client_projects").select("id,project_name,project_type,description,budget_range,desired_timeline,status,progress,created_at").order("created_at",{ascending:false});
+ if(error){console.error(error);list.replaceChildren(el("p","project-empty","Couldn't load projects. Please refresh and try again."));return}
+ document.getElementById("projectCount").textContent=data.length+" project"+(data.length===1?"":"s");
+ const activeCount=data.filter(p=>["submitted","reviewing","planning","in_progress","on_hold"].includes(p.status)).length;
+ const reviewCount=data.filter(p=>p.status==="review").length;
+ const doneCount=data.filter(p=>p.status==="completed").length;
+ document.getElementById("metricTotal").textContent=data.length;
+ document.getElementById("metricActive").textContent=activeCount;
+ document.getElementById("metricReview").textContent=reviewCount;
+ document.getElementById("metricDone").textContent=doneCount;
+ if(!data.length){list.replaceChildren(el("p","project-empty","No projects yet. Submit your first project request above."));return}
+ list.replaceChildren();
+ data.forEach(p=>{
+  const card=el("article","client-project-card"),top=el("div","client-project-top"),head=el("div");
+  head.append(el("h4","",p.project_name),el("p","project-type",p.project_type+" · "+new Date(p.created_at).toLocaleDateString()));
+  top.append(head,el("span","project-state",labels[p.status]||"Submitted"));card.append(top,el("p","project-description",p.description));
+  if(p.budget_range||p.desired_timeline){const meta=el("div","project-meta");if(p.budget_range)meta.append(el("span","","Budget: "+p.budget_range));if(p.desired_timeline)meta.append(el("span","","Timeline: "+p.desired_timeline));card.append(meta)}
+  const prog=el("div","project-progress"),ph=el("div","project-progress-head");ph.append(el("span","","Project progress"),el("strong","",(p.progress||0)+"%"));
+  const track=el("div","project-progress-track"),fill=el("span","project-progress-fill");fill.style.width=Math.max(0,Math.min(100,p.progress||0))+"%";track.append(fill);prog.append(ph,track);card.append(prog);
+  const act=el("div","project-activity"),uTitle=el("h5","","Latest team updates"),u=el("div","project-updates","Loading…"),mTitle=el("h5","","Project conversation"),m=el("div","project-messages","Loading…");
+  const form=document.createElement("form");form.className="project-message-form";const input=document.createElement("textarea");input.rows=2;input.maxLength=3000;input.required=true;input.placeholder="Write a message to our team…";
+  const send=el("button","btn","Send message");send.type="submit";form.append(input,send);act.append(uTitle,u,mTitle,m,form);card.append(act);list.append(card);activity(p.id,u,m);
+  form.addEventListener("submit",async e=>{e.preventDefault();const message=input.value.trim();if(!message)return;send.disabled=true;send.textContent="Sending…";const r=await supabaseClient.from("project_messages").insert({project_id:p.id,sender_id:currentUser.id,message});if(r.error){console.error(r.error);feedback("Message could not be sent. Please try again.",true)}else{input.value="";await activity(p.id,u,m)}send.disabled=false;send.textContent="Send message"});
+ });
+}
+async function loadDashboard(){
+ let countdownTimer=null;
+ let began=0;
+ const minimumDuration=5000;
+ const countdown=document.getElementById("startupCountdown");
+ const progress=document.getElementById("startupProgressFill");
+ const percent=document.getElementById("startupPercent");
+ const stage=document.getElementById("startupStage");
+ const substage=document.getElementById("startupSubstage");
+ const progressLabel=document.getElementById("startupProgressLabel");
+ const updateStartup=()=>{
+  const elapsed=Date.now()-began;
+  const ratio=Math.min(1,elapsed/minimumDuration);
+  const remaining=Math.max(0,Math.ceil((minimumDuration-elapsed)/1000));
+  countdown.textContent=String(remaining).padStart(2,"0");
+  const value=Math.round(ratio*100);
+  progress.style.width=value+"%";percent.textContent=value+"%";
+  if(value<35){stage.textContent="Preparing your workspace";substage.textContent="Bringing everything together for you";progressLabel.textContent="INITIALIZING YOUR EXPERIENCE"}
+  else if(value<72){stage.textContent="Gathering your projects";substage.textContent="Loading your personal project space";progressLabel.textContent="LOADING YOUR WORKSPACE"}
+  else{stage.textContent="Almost ready";substage.textContent="Putting the finishing touches in place";progressLabel.textContent="FINALIZING YOUR EXPERIENCE"}
+ };
+ try{
+  const {data,error}=await supabaseClient.auth.getSession();if(error)throw error;if(!data.session){location.replace("signin.html");return}
+  currentUser=data.session.user;
+  const staffRole=currentUser.app_metadata?.staff_role;
+  if(["admin","manager","staff"].includes(staffRole))document.getElementById("staffWorkspaceLink").hidden=false;
+  const meta=currentUser.user_metadata||{},name=meta.full_name||meta.name||"Zakmolanitech User";
+  const initial=(name.trim()[0]||"Z").toUpperCase();
+  document.getElementById("dashAvatar").textContent=initial;
+  document.getElementById("sidebarAvatar").textContent=initial;
+  document.getElementById("userName").textContent=name;
+  document.getElementById("welcomeText").textContent="Welcome back, "+name+". Your workspace is ready when you are.";
+  document.getElementById("footerYear").textContent=new Date().getFullYear();
+  document.getElementById("userEmail").textContent=currentUser.email||"Not available";
+  document.getElementById("userPhone").textContent=meta.phone||currentUser.phone||"Not provided";
+  began=Date.now();updateStartup();countdownTimer=setInterval(updateStartup,100);
+  await loadProjects();
+  const remaining=Math.max(0,minimumDuration-(Date.now()-began));
+  if(remaining)await new Promise(resolve=>setTimeout(resolve,remaining));
+  updateStartup();clearInterval(countdownTimer);
+  loading.classList.add("is-leaving");
+  await new Promise(resolve=>setTimeout(resolve,520));
+  loading.hidden=true;dashboard.hidden=false;
+  requestAnimationFrame(()=>dashboard.classList.add("is-ready"));
+ }catch(e){
+  if(countdownTimer)clearInterval(countdownTimer);
+  console.error(e);location.replace("signin.html");
+ }
+}
+document.getElementById("projectRequestForm").addEventListener("submit",async e=>{
+ e.preventDefault();const b=document.getElementById("submitProjectButton");b.disabled=true;b.textContent="Submitting…";
+ const payload={owner_id:currentUser.id,project_name:document.getElementById("projectName").value.trim(),project_type:document.getElementById("projectType").value,description:document.getElementById("projectDescription").value.trim(),budget_range:document.getElementById("projectBudget").value.trim()||null,desired_timeline:document.getElementById("projectTimeline").value.trim()||null};
+ const {error}=await supabaseClient.from("client_projects").insert(payload);
+ if(error){console.error(error);feedback("Project request could not be submitted. Please try again.",true)}else{e.target.reset();feedback("Your project request has been submitted.");await loadProjects()}
+ b.disabled=false;b.textContent="＋ Submit project request";
+});
+document.getElementById("logoutButton").addEventListener("click",async function(){const b=this;b.disabled=true;b.textContent="Signing out…";const {error}=await supabaseClient.auth.signOut();if(error){console.error(error);b.disabled=false;b.textContent="Sign Out";return}location.replace("signin.html")});
+const menu=document.getElementById("dashMenuToggle"),side=document.getElementById("dashboardSidebar"),back=document.getElementById("dashBackdrop");function toggleMenu(open){side.classList.toggle("is-open",open);back.classList.toggle("is-visible",open);document.body.classList.toggle("dash-menu-open",open)}menu.addEventListener("click",()=>toggleMenu(!side.classList.contains("is-open")));back.addEventListener("click",()=>toggleMenu(false));side.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>toggleMenu(false)));loadDashboard();
+
+
+</script>
+</body>
+                                                      </html>
