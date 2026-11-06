@@ -107,7 +107,7 @@
 
   <section class="workspace-heading" id="my-projects">
     <div><span class="section-kicker">YOUR WORK, IN ONE PLACE</span><h2>All your projects</h2><p>Every request, active build, update and delivery in one place.</p></div>
-    <a class="outline-action" href="#new-project">＋ New project request</a>
+    <a class="outline-action" href="#new-project">Tell us about your idea <span>→</span></a>
   </section>
   <section class="project-area">
     <div class="project-list-panel">
@@ -263,7 +263,7 @@ function renderIdeaFiles(){fileList.replaceChildren();ideaFiles.forEach((file,in
 filePicker.addEventListener("change",()=>{for(const file of [...filePicker.files]){if(!allowedExt.test(file.name)){feedback("Only Word, PowerPoint and PDF documents are accepted.",true);continue}if(file.size>15*1024*1024){feedback(file.name+" is larger than the 15 MB limit.",true);continue}if(!ideaFiles.some(x=>x.name===file.name&&x.size===file.size))ideaFiles.push(file)}filePicker.value="";renderIdeaFiles()});
 recordButton.addEventListener("click",async()=>{
  if(isRecording){if(speechRecognition){try{speechRecognition.stop()}catch(_){}}if(mediaRecorder&&mediaRecorder.state!=="inactive")mediaRecorder.stop();isRecording=false;recordButton.classList.remove("recording");recordButton.querySelector("strong").textContent="Record your idea";recordingHint.textContent="Recording stopped";recordingStatus.textContent="Finishing your recording…";return}
- if(!navigator.mediaDevices?.getUserMedia){recordingStatus.textContent="This browser does not support microphone recording. You can type or upload a document instead.";return}
+ if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){recordingStatus.textContent="This browser does not support microphone recording. You can type or upload a document instead.";return}
  try{
   const stream=await navigator.mediaDevices.getUserMedia({audio:true});recordedChunks=[];
   const mime=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":"audio/webm";
