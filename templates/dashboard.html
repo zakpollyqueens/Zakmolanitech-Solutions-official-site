@@ -13,7 +13,31 @@
 <link rel="stylesheet" href="../static/css/dashboard.css">
 </head>
 <body class="client-portal">
-<div id="loading" class="portal-loading"><span class="loading-mark">Z</span><span>Preparing your workspace…</span></div>
+<section id="loading" class="portal-loading" aria-live="polite" aria-label="Preparing your workspace">
+  <div class="startup-top"><a class="startup-brand" href="../index.html"><span class="startup-logo">Z</span><span><strong>ZAKMOLANITECH</strong><small>CLIENT WORKSPACE</small></span></a><span class="startup-secure"><i></i> SECURE CLIENT ACCESS</span></div>
+  <div class="startup-content">
+    <div class="startup-message">
+      <span class="startup-eyebrow"><i></i> YOUR NEXT CHAPTER STARTS HERE</span>
+      <h1>Good things<br>are <em>taking shape.</em></h1>
+      <p>We're getting your personal workspace ready. Your projects, progress and conversations will be right where you left them.</p>
+      <div class="startup-countdown-row"><div class="startup-count-number" id="startupCountdown">05</div><div><strong id="startupStage">Preparing your workspace</strong><span id="startupSubstage">Bringing everything together for you</span></div></div>
+      <div class="startup-progress"><span id="startupProgressFill"></span></div>
+      <div class="startup-progress-meta"><span id="startupProgressLabel">INITIALIZING YOUR EXPERIENCE</span><strong id="startupPercent">0%</strong></div>
+    </div>
+    <div class="startup-showcase" aria-label="Zakmolanitech work showcase">
+      <div class="showcase-glow"></div>
+      <article class="showcase-main">
+        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&amp;fit=crop&amp;w=1100&amp;q=85" alt="Modern software development workspace">
+        <div class="showcase-overlay"><span>01 / DIGITAL EXPERIENCES</span><strong>Ideas into<br>real solutions.</strong></div>
+      </article>
+      <article class="showcase-side showcase-side-top"><img src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&amp;fit=crop&amp;w=600&amp;q=85" alt="Creative digital design and branding"><span>CREATIVE DESIGN</span></article>
+      <article class="showcase-side showcase-side-bottom"><img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&amp;fit=crop&amp;w=600&amp;q=85" alt="Technology team collaborating"><span>TECHNOLOGY THAT CONNECTS</span></article>
+      <div class="showcase-floating"><span class="showcase-floating-icon">✦</span><span><strong>Built around you</strong><small>Your work. Your progress. One place.</small></span></div>
+      <div class="showcase-pagination"><i class="active"></i><i></i><i></i></div>
+    </div>
+  </div>
+  <div class="startup-bottom"><span>Equipping minds with IT solutions.</span><span><i></i> YOUR WORKSPACE IS ON ITS WAY</span></div>
+</section>
 <div id="dashboard" class="portal-shell" hidden>
 <aside id="dashboardSidebar" class="portal-sidebar">
   <a class="portal-brand" href="../index.html" aria-label="Zakmolanitech home">
@@ -175,13 +199,53 @@ async function loadProjects(){
  });
 }
 async function loadDashboard(){
+ let countdownTimer=null;
+ const began=Date.now();
+ const minimumDuration=5000;
+ const countdown=document.getElementById("startupCountdown");
+ const progress=document.getElementById("startupProgressFill");
+ const percent=document.getElementById("startupPercent");
+ const stage=document.getElementById("startupStage");
+ const substage=document.getElementById("startupSubstage");
+ const progressLabel=document.getElementById("startupProgressLabel");
+ const updateStartup=()=>{
+  const elapsed=Date.now()-began;
+  const ratio=Math.min(1,elapsed/minimumDuration);
+  const remaining=Math.max(0,Math.ceil((minimumDuration-elapsed)/1000));
+  countdown.textContent=String(remaining).padStart(2,"0");
+  const value=Math.round(ratio*100);
+  progress.style.width=value+"%";percent.textContent=value+"%";
+  if(value<35){stage.textContent="Preparing your workspace";substage.textContent="Bringing everything together for you";progressLabel.textContent="INITIALIZING YOUR EXPERIENCE"}
+  else if(value<72){stage.textContent="Gathering your projects";substage.textContent="Loading your personal project space";progressLabel.textContent="LOADING YOUR WORKSPACE"}
+  else{stage.textContent="Almost ready";substage.textContent="Putting the finishing touches in place";progressLabel.textContent="FINALIZING YOUR EXPERIENCE"}
+ };
  try{
   const {data,error}=await supabaseClient.auth.getSession();if(error)throw error;if(!data.session){location.replace("signin.html");return}
-  currentUser=data.session.user;const staffRole=currentUser.app_metadata?.staff_role;if(["admin","manager","staff"].includes(staffRole))document.getElementById("staffWorkspaceLink").hidden=false;const meta=currentUser.user_metadata||{},name=meta.full_name||meta.name||"Zakmolanitech User";
-  const initial=(name.trim()[0]||"Z").toUpperCase();document.getElementById("dashAvatar").textContent=initial;document.getElementById("sidebarAvatar").textContent=initial;document.getElementById("userName").textContent=name;document.getElementById("welcomeText").textContent="Welcome back, "+name+". Your workspace is ready when you are.";document.getElementById("footerYear").textContent=new Date().getFullYear();
-  document.getElementById("userEmail").textContent=currentUser.email||"Not available";document.getElementById("userPhone").textContent=meta.phone||currentUser.phone||"Not provided";
-  loading.hidden=true;dashboard.hidden=false;await loadProjects();
- }catch(e){console.error(e);location.replace("signin.html")}
+  currentUser=data.session.user;
+  const staffRole=currentUser.app_metadata?.staff_role;
+  if(["admin","manager","staff"].includes(staffRole))document.getElementById("staffWorkspaceLink").hidden=false;
+  const meta=currentUser.user_metadata||{},name=meta.full_name||meta.name||"Zakmolanitech User";
+  const initial=(name.trim()[0]||"Z").toUpperCase();
+  document.getElementById("dashAvatar").textContent=initial;
+  document.getElementById("sidebarAvatar").textContent=initial;
+  document.getElementById("userName").textContent=name;
+  document.getElementById("welcomeText").textContent="Welcome back, "+name+". Your workspace is ready when you are.";
+  document.getElementById("footerYear").textContent=new Date().getFullYear();
+  document.getElementById("userEmail").textContent=currentUser.email||"Not available";
+  document.getElementById("userPhone").textContent=meta.phone||currentUser.phone||"Not provided";
+  updateStartup();countdownTimer=setInterval(updateStartup,100);
+  await loadProjects();
+  const remaining=Math.max(0,minimumDuration-(Date.now()-began));
+  if(remaining)await new Promise(resolve=>setTimeout(resolve,remaining));
+  updateStartup();clearInterval(countdownTimer);
+  loading.classList.add("is-leaving");
+  await new Promise(resolve=>setTimeout(resolve,520));
+  loading.hidden=true;dashboard.hidden=false;
+  requestAnimationFrame(()=>dashboard.classList.add("is-ready"));
+ }catch(e){
+  if(countdownTimer)clearInterval(countdownTimer);
+  console.error(e);location.replace("signin.html");
+ }
 }
 document.getElementById("projectRequestForm").addEventListener("submit",async e=>{
  e.preventDefault();const b=document.getElementById("submitProjectButton");b.disabled=true;b.textContent="Submitting…";
