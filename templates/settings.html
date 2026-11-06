@@ -255,7 +255,7 @@ async function loadSettings(){
     data.session.user.email || "";
 }
 
-passwordForm.addEventListener("submit", async function(event){
+document.getElementById("savePreferences").addEventListener("click",async()=>{const button=document.getElementById("savePreferences"),box=document.getElementById("preferencesStatus");button.disabled=true;button.textContent="Saving...";const{error}=await supabaseClient.auth.updateUser({data:{workspace_preferences:{project_updates:document.getElementById("prefProject").checked,messages:document.getElementById("prefMessages").checked,support:document.getElementById("prefSupport").checked}}});box.textContent=error?error.message:"Your communication preferences have been saved to your account.";box.className="status show "+(error?"error":"success");button.disabled=false;button.textContent="Save preferences"});passwordForm.addEventListener("submit", async function(event){
 
   event.preventDefault();
 
