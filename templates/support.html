@@ -119,11 +119,89 @@
  .client-portal .notification{padding:17px!important}
 }
 </style>
+<style id="support-premium-redesign">
+.support-page{background:#f3f7fb!important;color:#18354b!important;padding:0 32px 58px!important}
+.support-wrap{max-width:1180px!important}
+.support-hero{position:relative;display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:20px;min-height:300px;padding:36px 42px;margin:0 0 20px;border:1px solid #e2edf3;border-radius:25px;overflow:hidden;background:linear-gradient(115deg,#fff 0%,#f0f9fc 58%,#e8f4fa 100%);box-shadow:0 16px 40px rgba(29,70,96,.07)}
+.support-hero:before{content:"";position:absolute;width:440px;height:440px;border-radius:50%;right:5%;top:-265px;background:radial-gradient(circle,rgba(51,174,199,.15),transparent 68%);pointer-events:none}
+.support-hero-copy{position:relative;z-index:2;max-width:650px}
+.support-eyebrow{display:inline-flex;align-items:center;gap:9px;color:#27819a;font-size:10px;font-weight:900;letter-spacing:1.8px;margin-bottom:18px}
+.support-live-dot{width:8px;height:8px;border-radius:50%;background:#2ab58c;box-shadow:0 0 0 4px #2ab58c1c}
+.support-hero h1{margin:0 0 13px;color:#18374d;font:800 clamp(30px,4vw,46px)/1.08 Manrope,"DM Sans",sans-serif;letter-spacing:-1.8px}
+.support-hero h1 span{color:#1685a3}
+.support-hero-copy>p{max-width:560px;margin:0;color:#71879a;font-size:14px;line-height:1.8}
+.support-hero-points{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:23px}
+.support-hero-points span{display:flex;align-items:center;gap:7px;color:#526f82;font-size:11px;font-weight:700}
+.support-hero-points i{display:grid;place-items:center;width:17px;height:17px;border-radius:50%;background:#e0f4ef;color:#219a79;font-size:10px;font-style:normal}
+.support-hero-art{position:relative;min-height:235px;display:grid;place-items:center}
+.support-art-orbit{position:absolute;border:1px solid #9dcbd7;border-radius:50%;transform:rotate(-22deg)}
+.orbit-one{width:245px;height:155px}.orbit-two{width:195px;height:235px;transform:rotate(35deg);border-color:#c2d9e7}
+.support-art-core{position:relative;z-index:1;width:142px;height:142px;border-radius:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:linear-gradient(145deg,#1d9ab3,#215f9b);box-shadow:0 22px 44px #1a7c9c35,inset 0 1px 0 #ffffff66;transform:rotate(-7deg)}
+.support-headset{color:#fff;font-size:46px;line-height:1;font-weight:800}.support-headset b{font-size:25px;vertical-align:middle}
+.support-art-core>span{color:#e9fbff;font-size:9px;letter-spacing:2px;font-weight:900}
+.support-art-card{position:absolute;z-index:2;display:flex;align-items:center;gap:10px;padding:11px 14px;border:1px solid #e4edf2;border-radius:14px;background:#ffffffed;box-shadow:0 12px 28px #234e6817;backdrop-filter:blur(8px)}
+.support-art-card b,.support-art-card small{display:block}.support-art-card b{color:#24465b;font-size:11px}.support-art-card small{margin-top:3px;color:#8195a3;font-size:9px}
+.art-card-top{top:14px;right:0}.art-card-bottom{bottom:12px;left:0}
+.art-card-icon,.art-card-check{display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:#e9f5fa;color:#1687a5;font-size:16px;font-weight:900}
+.art-card-check{background:#e7f7ef;color:#239b75}
+.support-benefits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:0 0 22px}
+.support-benefit{display:flex;align-items:center;gap:13px;padding:17px 18px;border:1px solid #e5edf2;border-radius:17px;background:#fff;box-shadow:0 8px 22px #1b45600a}
+.benefit-icon{flex:0 0 42px;width:42px;height:42px;display:grid;place-items:center;border-radius:13px;font-size:22px;font-weight:800}
+.benefit-blue{background:#e8f5fa;color:#2786a5}.benefit-violet{background:#f0edff;color:#7867c8}.benefit-green{background:#e8f7f0;color:#299c77}
+.support-benefit strong{display:block;color:#294a60;font-size:12px;font-weight:800}.support-benefit p{margin:4px 0 0;color:#8194a2;font-size:10px;line-height:1.45}
+.support-layout{grid-template-columns:minmax(260px,350px) minmax(0,1fr)!important;gap:18px!important}
+.support-card{background:#fff!important;border:1px solid #e4edf2!important;border-radius:19px!important;box-shadow:0 12px 32px #173b520a!important}
+.support-page .panel-head{padding:19px 20px!important;background:#fbfdfe!important;border-bottom:1px solid #edf2f5!important}
+.support-page .panel-head h2{font-size:14px!important;font-weight:850!important;color:#24465c!important}
+.support-page .new-btn{background:linear-gradient(130deg,#167f9c,#286abd)!important;box-shadow:0 7px 16px #167f9c20!important}
+.support-page .refresh-btn,.support-page .cancel-btn{background:#f0f6f9!important;color:#527084!important;border:1px solid #e2ebf0!important}
+.support-page .conversation-item{padding:17px 19px!important;border-bottom:1px solid #edf2f5!important}
+.support-page .conversation-subject{color:#31536a!important;font-size:12px!important}
+.support-page .conversation-meta{color:#8a9ba8!important}
+.support-page .conversation-item.active{background:#eaf7fa!important;border-left:3px solid #1b91ad!important}
+.support-page .status{background:#e8f6ef!important;color:#278765!important}
+.support-page .status.closed{background:#fff0f0!important;color:#bb6666!important}
+.support-page .chat-panel{min-height:640px!important}
+.support-page .chat-header{padding:20px 22px!important;background:#fbfdfe!important;border-bottom:1px solid #edf2f5!important}
+.support-page .chat-title h2{font-size:16px!important;color:#24465c!important}
+.support-page .chat-title p{color:#8a9ba8!important}
+.support-page .messages{background:radial-gradient(#dceaf0 1px,transparent 1px),linear-gradient(180deg,#fbfdfe,#f5f9fb)!important;background-size:18px 18px,auto!important}
+.support-page .message-bubble{background:#fff!important;color:#38576b!important;border:1px solid #e5edf2!important;box-shadow:0 5px 15px #173b5208!important}
+.support-page .message-row.mine .message-bubble{background:#e8f6fa!important;border-color:#cdeaf0!important;color:#28566b!important}
+.support-page .composer{background:#fff!important;border-top:1px solid #edf2f5!important}
+.support-page .composer textarea,.support-page .form-input{background:#f8fbfd!important;color:#29475b!important;border:1px solid #dfe9ef!important;border-radius:13px!important}
+.support-page .send-btn{background:linear-gradient(130deg,#167f9c,#286abd)!important;box-shadow:0 7px 16px #167f9c20!important}
+.support-page .empty-chat{color:#8296a4!important}
+.support-page .empty-chat strong{color:#31566c!important}
+.support-page .modal-card{border-radius:21px!important}
+@media(max-width:900px){.support-page{padding:0 18px 42px!important}.support-hero{padding:28px 27px;grid-template-columns:1.1fr .9fr}.support-benefit{padding:14px}}
+@media(max-width:760px){.support-page{padding:0 13px 36px!important}.support-hero{grid-template-columns:1fr;min-height:0;padding:26px 23px 18px;border-radius:20px}.support-hero h1{font-size:34px}.support-hero-art{min-height:190px;margin-top:2px}.support-art-core{width:112px;height:112px;border-radius:34px}.support-headset{font-size:37px}.orbit-one{width:210px;height:130px}.orbit-two{width:165px;height:195px}.art-card-top{right:2px;top:0}.art-card-bottom{left:2px;bottom:0}.support-benefits{grid-template-columns:1fr;gap:9px}.support-benefit{padding:13px 15px}.support-layout{grid-template-columns:1fr!important}.support-page .conversation-list{max-height:230px!important}.support-page .chat-panel{min-height:calc(var(--portal-vh,100dvh) - 170px)!important;height:calc(var(--portal-vh,100dvh) - 170px)!important}}
+@media(max-width:430px){.support-hero{padding:23px 18px 15px}.support-hero h1{font-size:30px}.support-hero-copy>p{font-size:13px}.support-hero-points{gap:8px 12px}.support-hero-points span{font-size:10px}.support-art-card{padding:9px 10px}.support-art-card b{font-size:10px}.support-art-card small{font-size:8px}}
+@media(prefers-reduced-motion:no-preference){.support-benefit,.support-card{transition:box-shadow .2s,transform .2s}.support-benefit:hover{transform:translateY(-2px);box-shadow:0 14px 28px #173b5212}}
+</style>
 </head>
 <body class="client-portal page-workspace">
 <aside id="dashboardSidebar" class="portal-sidebar"><a class="portal-brand" href="../index.html"><span class="brand-symbol"><img src="../static/assets/logo.png" alt="Zakmolanitech Solutions"></span><span class="brand-copy"><strong>ZAKMOLANITECH</strong><small>CLIENT WORKSPACE</small></span></a><div class="sidebar-section-label">WORKSPACE</div><nav class="portal-nav"><a class="nav-item " href="dashboard.html"><span class="nav-icon">⌂</span><span>Overview</span></a><a class="nav-item " href="projects.html"><span class="nav-icon">▤</span><span>My projects</span></a><a class="nav-item " href="messages.html"><span class="nav-icon">✉</span><span>Messages</span></a><a class="nav-item " href="notifications.html"><span class="nav-icon">◉</span><span>Notifications</span></a><a class="nav-item is-current" href="support.html"><span class="nav-icon">?</span><span>Help &amp; support</span></a></nav><div class="sidebar-section-label account-label">PERSONAL</div><nav class="portal-nav"><a class="nav-item " href="profile.html"><span class="nav-icon">◎</span><span>My profile</span></a><a class="nav-item " href="settings.html"><span class="nav-icon">⚙</span><span>Account settings</span></a><a class="nav-item" href="../index.html"><span class="nav-icon">↗</span><span>Visit website</span></a></nav><div class="sidebar-account"><div class="account-avatar">Z</div><div class="account-copy"><strong>My account</strong><span>Client workspace</span></div></div></aside><div id="dashBackdrop" class="portal-backdrop"></div>
 <main class="support-page portal-main page-content"><header class="portal-topbar"><div class="topbar-left"><button id="dashMenuToggle" class="menu-toggle" type="button" aria-label="Open menu"><span></span><span></span><span></span></button><div class="breadcrumb"><span>Workspace</span><i>/</i><strong>Help & support</strong></div></div><div class="topbar-right"><a class="topbar-link" href="notifications.html" aria-label="Notifications" title="Notifications">🔔</a><span class="topbar-divider"></span><div class="topbar-user"><span class="topbar-avatar">Z</span><span>My workspace</span></div></div></header><div class="support-wrap">
-<header class="support-header"><h1>Help & Support</h1><p>Need assistance? Start a conversation with the Zakmolanitech Solutions support team and keep track of your previous requests.</p></header>
+<section class="support-hero">
+  <div class="support-hero-copy">
+    <div class="support-eyebrow"><span class="support-live-dot"></span> ZAKMOLANITECH CARE CENTRE</div>
+    <h1>We’re here to<br><span>help you move forward.</span></h1>
+    <p>Get clear answers, share an issue, or follow up with our team. Every support request stays organized right here in your workspace.</p>
+    <div class="support-hero-points"><span><i>✓</i> Personal assistance</span><span><i>✓</i> Trackable conversations</span><span><i>✓</i> One secure workspace</span></div>
+  </div>
+  <div class="support-hero-art" aria-hidden="true">
+    <div class="support-art-orbit orbit-one"></div><div class="support-art-orbit orbit-two"></div>
+    <div class="support-art-core"><div class="support-headset">◖<b>?</b>◗</div><span>SUPPORT</span></div>
+    <div class="support-art-card art-card-top"><span class="art-card-icon">✦</span><span><b>We’ve got you</b><small>Help is one message away</small></span></div>
+    <div class="support-art-card art-card-bottom"><span class="art-card-check">✓</span><span><b>Stay in the loop</b><small>Follow every conversation</small></span></div>
+  </div>
+</section>
+<section class="support-benefits" aria-label="Support benefits">
+  <article class="support-benefit"><span class="benefit-icon benefit-blue">⌁</span><div><strong>One-to-one support</strong><p>Talk directly with our support team.</p></div></article>
+  <article class="support-benefit"><span class="benefit-icon benefit-violet">▤</span><div><strong>Everything organized</strong><p>Keep questions and replies together.</p></div></article>
+  <article class="support-benefit"><span class="benefit-icon benefit-green">◷</span><div><strong>Pick up anytime</strong><p>Return to an open request whenever you need.</p></div></article>
+</section>
 <div id="globalError" class="error-box"></div>
 <section class="support-layout">
 <aside class="support-card">
@@ -133,7 +211,7 @@
 <section class="support-card chat-panel">
 <div id="chatHeader" class="chat-header" style="display:none"><div class="chat-title"><h2 id="chatSubject">Support conversation</h2><p id="chatStatus"></p></div><div class="chat-actions"><span id="chatStatusBadge" class="status open">open</span><button id="closeConversationBtn" class="close-btn" type="button">Close</button></div></div>
 <div id="messages" class="messages"><div class="empty-chat"><div><strong>Welcome to Support</strong>Select a conversation or create a new support request.</div></div></div>
-<form id="messageForm" class="composer" style="display:none"><textarea id="messageInput" maxlength="5000" placeholder="Write your message..." required></textarea><button id="voiceBtn" class="refresh-btn voice-btn" type="button" aria-label="Record voice message" title="Record voice message">🎙</button><button id="sendBtn" class="send-btn" type="submit">Send</button></form>
+<form id="messageForm" class="composer" style="display:none"><textarea id="messageInput" maxlength="5000" placeholder="Write your message..." required></textarea><button id="voiceBtn" class="refresh-btn voice-btn" type="button" aria-label="Voice typing" title="Voice typing">🎙</button><button id="sendBtn" class="send-btn" type="submit">Send</button></form>
 <div id="composerNote" class="composer-note" style="display:none">Press Enter to send. Use Shift + Enter for a new line.</div>
 </section>
 </section></div></main>
@@ -149,7 +227,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-(()=>{const SUPABASE_URL="https://jjcptobdzreckuhtcuzm.supabase.co",SUPABASE_KEY="sb_publishable_5AyVE6y2FGY8S_NoLC5a-w_URf-Mfxc",supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);let currentUser=null,conversations=[],selectedConversation=null,realtimeChannel=null,voiceRecognition=null,voiceActive=false;const $=id=>document.getElementById(id);function escapeHtml(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}function showError(m,t=$("globalError")){t.textContent=m;t.style.display="block"}function hideError(t){t.textContent="";t.style.display="none"}function formatDate(v){if(!v)return"";const d=new Date(v);return Number.isNaN(d.getTime())?"":d.toLocaleString([],{dateStyle:"medium",timeStyle:"short"})}function shortDate(v){if(!v)return"";const d=new Date(v);return Number.isNaN(d.getTime())?"":d.toLocaleDateString([],{month:"short",day:"numeric"})}
+(()=>{const SUPABASE_URL="https://jjcptobdzreckuhtcuzm.supabase.co",SUPABASE_KEY="sb_publishable_5AyVE6y2FGY8S_NoLC5a-w_URf-Mfxc",supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);let currentUser=null,conversations=[],selectedConversation=null,realtimeChannel=null,voiceRecognition=null,voiceActive=false;const $=id=>document.getElementById(id);function escapeHtml(v){return String(v==null?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}function showError(m,t=$("globalError")){t.textContent=m;t.style.display="block"}function hideError(t){t.textContent="";t.style.display="none"}function formatDate(v){if(!v)return"";const d=new Date(v);return Number.isNaN(d.getTime())?"":d.toLocaleString([],{dateStyle:"medium",timeStyle:"short"})}function shortDate(v){if(!v)return"";const d=new Date(v);return Number.isNaN(d.getTime())?"":d.toLocaleDateString([],{month:"short",day:"numeric"})}
 async function requireSession(){const{data,error}=await supabaseClient.auth.getSession();if(error||!data.session){location.href="signin.html";return false}currentUser=data.session.user;return true}
 async function loadConversations(){hideError($("globalError"));const{data,error}=await supabaseClient.from("support_conversations").select("id,user_id,assigned_admin_id,subject,status,created_at,updated_at").eq("user_id",currentUser.id).order("updated_at",{ascending:false});if(error){console.error(error);showError("Unable to load your support conversations right now.");return}conversations=data||[];renderConversationList();if(selectedConversation){const u=conversations.find(x=>x.id===selectedConversation.id);if(u){selectedConversation=u;await loadMessages(u.id)}else{selectedConversation=null;showEmptyChat()}}else if(conversations.length){const requested=new URLSearchParams(location.search).get("conversation");await selectConversation(conversations.find(x=>x.id===requested)||conversations[0])}else showEmptyChat()}
 function renderConversationList(){const list=$("conversationList");if(!conversations.length){list.innerHTML='<div class="empty-list">You do not have any support conversations yet..<br><br>Tap <strong>+ New</strong> to contact support.</div>';return}list.innerHTML=conversations.map(c=>{const active=selectedConversation&&selectedConversation.id===c.id;return `<div class="conversation-item ${active?"active":""}" data-id="${escapeHtml(c.id)}"><div class="conversation-subject">${escapeHtml(c.subject||"Support request")}</div><div class="conversation-meta"><span>${shortDate(c.updated_at)}</span><span class="status ${c.status==="closed"?"closed":"open"}">${escapeHtml(c.status||"open")}</span></div></div>`}).join("");list.querySelectorAll(".conversation-item").forEach(i=>i.addEventListener("click",async()=>{const c=conversations.find(x=>x.id===i.dataset.id);if(c)await selectConversation(c)}))}
