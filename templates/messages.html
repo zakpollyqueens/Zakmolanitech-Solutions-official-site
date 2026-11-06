@@ -279,7 +279,6 @@ async function startVoiceRecording(){
  if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){showNotice("Voice recording is not supported by this browser. Try an updated Chrome browser.","error");return;}
  try{
   const type=supportedAudioType();
-  if(!type){showNotice("This browser does not support a compatible voice recording format.","error");return;}
   voiceStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
   voiceChunks=[];mediaRecorder=new MediaRecorder(voiceStream,type?{mimeType:type}:undefined);
   mediaRecorder.ondataavailable=event=>{if(event.data&&event.data.size)voiceChunks.push(event.data);};
