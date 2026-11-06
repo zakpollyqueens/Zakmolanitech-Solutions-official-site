@@ -22,7 +22,8 @@
 .project-description{margin-top:14px;color:#c1ccda;font-size:13px;line-height:1.7;white-space:pre-wrap}.project-meta{display:flex;gap:15px;flex-wrap:wrap;margin-top:12px}.project-progress{margin-top:17px}.project-progress-head{display:flex;justify-content:space-between;margin-bottom:8px;color:var(--muted);font-size:11px}.project-progress-head strong{color:var(--cyan)}.project-progress-track{height:7px;overflow:hidden;border-radius:10px;background:rgba(255,255,255,.09)}.project-progress-fill{display:block;height:100%;border-radius:10px;background:linear-gradient(90deg,#00bfff,#6c7cff)}
 .project-activity{display:grid;gap:10px;margin-top:20px;padding-top:17px;border-top:1px solid var(--line)}.project-activity h5{font-size:12px;color:#dce8f5}.project-update,.project-message{padding:11px 13px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.025)}.project-update strong{font-size:12px}.project-update p,.project-message p{margin-top:5px;color:#c1ccda;font-size:12px;line-height:1.6;white-space:pre-wrap}.project-update small,.project-message small{display:block;margin-top:7px;color:var(--muted);font-size:10px}.project-messages{display:grid;gap:8px}.project-message.own{border-color:rgba(0,190,255,.2);background:rgba(0,190,255,.055)}.project-message-form{display:grid;gap:8px}.project-message-form button{justify-self:start}
 @media(max-width:650px){.project-form-grid{grid-template-columns:1fr}.client-projects-card{padding:18px}.client-project-top{display:grid}.project-list-heading{flex-direction:column}}
-</style>\n</head>
+</style>
+</head>
 <body>
 <main class="dashboard-page">
 <div id="loading" class="loading">Checking your account...</div>
@@ -31,10 +32,12 @@
 
 <div class="dashboard-top">
 <div><span class="eyebrow">PERSONAL DASHBOARD</span><h1>Welcome.</h1><p id="welcomeText">Your account is ready.</p></div>
-<a id="staffWorkspaceLink" class="btn" href="admin.html" hidden>Staff workspace</a>\n<button id="logoutButton" class="btn logout-btn" type="button">Sign Out</button>
+<a id="staffWorkspaceLink" class="btn" href="admin.html" hidden>Staff workspace</a>
+<button id="logoutButton" class="btn logout-btn" type="button">Sign Out</button>
 </div>
 
-<div class="dashboard-grid">\n<section class="client-projects-card">
+<div class="dashboard-grid">
+<section class="client-projects-card">
 <div class="communication-head"><div><span class="eyebrow">CLIENT PROJECT SPACE</span><h2>My projects</h2><p>Submit a project request, follow its progress and communicate with our team.</p></div></div>
 <form id="projectRequestForm" class="project-form">
 <div class="project-form-grid">
@@ -200,5 +203,6 @@ document.getElementById("projectRequestForm").addEventListener("submit",async e=
 document.getElementById("logoutButton").addEventListener("click",async function(){const b=this;b.disabled=true;b.textContent="Signing out…";const {error}=await supabaseClient.auth.signOut();if(error){console.error(error);b.disabled=false;b.textContent="Sign Out";return}location.replace("signin.html")});
 loadDashboard();
 \n
+</script>
 </body>
                                                       </html>
