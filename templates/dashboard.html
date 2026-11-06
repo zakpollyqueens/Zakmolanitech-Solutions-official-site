@@ -223,7 +223,7 @@ async function loadDashboard(){
   const {data,error}=await supabaseClient.auth.getSession();if(error)throw error;if(!data.session){location.replace("signin.html");return}
   currentUser=data.session.user;
   const staffRole=currentUser.app_metadata?.staff_role;
-  if(["admin","manager","staff"].includes(staffRole))document.getElementById("staffWorkspaceLink").hidden=false;
+  if(["admin","manager","staff","architect"].includes(staffRole))document.getElementById("staffWorkspaceLink").hidden=false;
   const meta=currentUser.user_metadata||{},name=meta.full_name||meta.name||"Zakmolanitech User";
   const initial=(name.trim()[0]||"Z").toUpperCase();
   document.getElementById("dashAvatar").textContent=initial;
