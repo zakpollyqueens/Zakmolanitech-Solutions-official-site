@@ -200,7 +200,7 @@ async function loadProjects(){
 }
 async function loadDashboard(){
  let countdownTimer=null;
- const began=Date.now();
+ let began=0;
  const minimumDuration=5000;
  const countdown=document.getElementById("startupCountdown");
  const progress=document.getElementById("startupProgressFill");
@@ -233,7 +233,7 @@ async function loadDashboard(){
   document.getElementById("footerYear").textContent=new Date().getFullYear();
   document.getElementById("userEmail").textContent=currentUser.email||"Not available";
   document.getElementById("userPhone").textContent=meta.phone||currentUser.phone||"Not provided";
-  updateStartup();countdownTimer=setInterval(updateStartup,100);
+  began=Date.now();updateStartup();countdownTimer=setInterval(updateStartup,100);
   await loadProjects();
   const remaining=Math.max(0,minimumDuration-(Date.now()-began));
   if(remaining)await new Promise(resolve=>setTimeout(resolve,remaining));
