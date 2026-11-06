@@ -97,6 +97,7 @@ button,input{font:inherit}
 .oauth-button:disabled{opacity:.55;cursor:wait;transform:none}
 .oauth-button svg{width:19px;height:19px}
 @media(max-width:420px){.oauth-buttons{grid-template-columns:1fr}.oauth-button{height:48px}}
+.mfa-login-panel[hidden]{display:none!important}.mfa-login-panel .field{margin-top:6px}.mfa-login-panel .input-wrap input{padding-left:16px;text-align:center;letter-spacing:5px;font-size:20px}.mfa-login-panel .security-note{background:#f4f6ff;border-color:#e6e8f5}.mfa-login-panel .security-note strong{color:#263254}.mfa-login-panel .security-note small{color:#76809d}
 </style>
 </head>
 <body>
@@ -157,7 +158,15 @@ button,input{font:inherit}
           <button id="signinButton" class="submit-btn" type="submit">Sign in to your account <span aria-hidden="true">→</span></button>
           <div id="status" class="status" role="alert" aria-live="polite"></div>
         </form>
-        <div class="card-bottom">Don’t have an account? <a class="create-link" href="signup.html">Create an account →</a></div>
+        <section id="loginMfaPanel" class="mfa-login-panel" hidden>
+  <div class="security-note" style="margin:0 0 20px"><span class="security-icon">🔐</span><span><strong>Verify it’s you</strong><small>Enter the current code from your authenticator app or the code sent to your enrolled phone.</small></span></div>
+  <form id="loginMfaForm">
+    <div class="field"><label for="loginMfaCode">Verification code</label><div class="input-wrap"><input id="loginMfaCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="Enter your code" required></div></div>
+    <button id="loginMfaButton" class="submit-btn" type="submit">Verify and continue →</button>
+    <div id="loginMfaStatus" class="status" role="alert" aria-live="polite"></div>
+  </form>
+</section>
+<div class="card-bottom">Don’t have an account? <a class="create-link" href="signup.html">Create an account →</a></div>
       </section>
       <div class="security-note">
         <span class="security-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6l8-3Z"/><rect x="9" y="10" width="6" height="5" rx="1"/><path d="M10 10V8.5a2 2 0 0 1 4 0V10"/></svg></span>
@@ -176,6 +185,8 @@ const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const form = document.getElementById("signinForm");
 const button = document.getElementById("signinButton");
 const statusBox = document.getElementById("status");
+let loginMfaFactorId = null;
+let loginMfaChallengeId = null;
 document.getElementById("year").textContent = new Date().getFullYear();
 
 function showStatus(message,type){
@@ -263,14 +274,57 @@ form.addEventListener("submit",async function(event){
       throw error;
     }
     if(!data || !data.session) throw new Error("Login was not completed. Please try again.");
+    const factorResult = await supabaseClient.auth.mfa.listFactors();
+    if(factorResult.error) throw factorResult.error;
+    const assurance = await supabaseClient.auth.mfa.getAuthenticatorAssuranceLevel();
+    if(assurance.error) throw assurance.error;
+    const verifiedFactor = [...(factorResult.data.totp||[]),...(factorResult.data.phone||[])].find(f=>f.status==="verified");
+    if(verifiedFactor && assurance.data.nextLevel==="aal2" && assurance.data.currentLevel!=="aal2"){
+      const challenge = await supabaseClient.auth.mfa.challenge({factorId:verifiedFactor.id});
+      if(challenge.error) throw challenge.error;
+      loginMfaFactorId=verifiedFactor.id;
+      loginMfaChallengeId=challenge.data.id;
+      document.getElementById("signinForm").hidden=true;
+      document.querySelector(".oauth-options").hidden=true;
+      document.querySelector(".card-bottom").hidden=true;
+      document.getElementById("loginMfaPanel").hidden=false;
+      document.getElementById("loginMfaCode").focus();
+      showStatus("Enter the verification code to finish signing in.","success");
+      button.disabled=false;
+      button.innerHTML='Sign in to your account <span aria-hidden="true">→</span>';
+      return;
+    }
     showStatus("Login successful. Opening your account…","success");
     window.setTimeout(function(){window.location.replace("dashboard.html");},350);
   }catch(error){
+    document.getElementById("signinForm").hidden=false;
+    document.querySelector(".oauth-options").hidden=false;
+    document.querySelector(".card-bottom").hidden=false;
+    document.getElementById("loginMfaPanel").hidden=true;
     console.error("Signin error:",error);
     showStatus(error.message || "Unable to sign in. Please check your details.","error");
     button.disabled = false;
     button.innerHTML = 'Sign in to your account <span aria-hidden="true">→</span>';
   }
+});
+
+document.getElementById("loginMfaForm").addEventListener("submit",async function(event){
+  event.preventDefault();
+  const code=document.getElementById("loginMfaCode").value.trim();
+  const mfaButton=document.getElementById("loginMfaButton");
+  const mfaStatus=document.getElementById("loginMfaStatus");
+  if(!/^\\d{6,8}$/.test(code)){mfaStatus.textContent="Enter the verification code.";mfaStatus.className="status show error";return}
+  mfaButton.disabled=true;mfaButton.textContent="Verifying…";
+  try{
+    const {error}=await supabaseClient.auth.mfa.verify({factorId:loginMfaFactorId,challengeId:loginMfaChallengeId,code});
+    if(error)throw error;
+    mfaStatus.textContent="Verification successful. Opening your account…";mfaStatus.className="status show success";
+    window.setTimeout(()=>window.location.replace("dashboard.html"),350);
+  }catch(error){
+    mfaStatus.textContent=error.message||"The code could not be verified. Please try again.";
+    mfaStatus.className="status show error";
+    document.getElementById("loginMfaCode").value="";
+  }finally{mfaButton.disabled=false;mfaButton.textContent="Verify and continue →"}
 });
 
 document.getElementById("forgotPassword").addEventListener("click",async function(event){
