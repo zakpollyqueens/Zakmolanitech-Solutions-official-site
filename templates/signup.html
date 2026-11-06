@@ -8,50 +8,91 @@
 <meta name="theme-color" content="#050b14">
 <link rel="stylesheet" href="../static/css/main.css">
 <style>
-.account-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:90px 20px 50px;background:radial-gradient(circle at top left,rgba(0,200,255,.12),transparent 35%),radial-gradient(circle at bottom right,rgba(0,255,150,.08),transparent 35%),#050b14}
-.account-card{width:100%;max-width:520px;padding:34px;border:1px solid rgba(255,255,255,.09);border-radius:22px;background:rgba(10,18,30,.94);box-shadow:0 25px 70px rgba(0,0,0,.4)}
-.account-logo{text-align:center;margin-bottom:25px}.account-logo h1{margin:0;font-size:28px;color:#fff}.account-logo p{margin:8px 0 0;color:#9caabd;font-size:14px}
-.form-group{margin-bottom:18px}.form-group label{display:block;margin-bottom:7px;color:#dbe7f5;font-size:14px;font-weight:600}.form-group input{width:100%;box-sizing:border-box;padding:13px 14px;border:1px solid rgba(255,255,255,.12);border-radius:10px;outline:none;background:#091321;color:#fff;font-size:15px}.form-group input:focus{border-color:#00c8ff;box-shadow:0 0 0 3px rgba(0,200,255,.08)}.form-group input::placeholder{color:#64748b}
-.password-note{margin-top:6px;color:#7f8da1;font-size:12px}.signup-button{width:100%;margin-top:8px;cursor:pointer}.signup-button:disabled{opacity:.6;cursor:not-allowed}
-.status{display:none;margin-bottom:18px;padding:12px 14px;border-radius:10px;font-size:14px;line-height:1.5}.status.show{display:block}.status.success{color:#b9ffd9;background:rgba(0,200,120,.1);border:1px solid rgba(0,220,130,.25)}.status.error{color:#ffd0d0;background:rgba(255,70,70,.1);border:1px solid rgba(255,70,70,.25)}
-.account-footer{text-align:center;margin-top:24px;color:#8d9bad;font-size:14px}.account-footer a{color:#00c8ff;text-decoration:none;font-weight:600}.account-footer a:hover{text-decoration:underline}.back-home{display:block;text-align:center;margin-top:18px;color:#718096;text-decoration:none;font-size:13px}.back-home:hover{color:#00c8ff}
-@media(max-width:600px){.account-page{padding:70px 14px 30px}.account-card{padding:25px 20px;border-radius:18px}.account-logo h1{font-size:24px}}
-
-.oauth-options{margin:24px 0 25px}
-.oauth-divider{display:flex;align-items:center;gap:13px;margin:0 0 17px;color:#9aa3bb;font-size:9px;font-weight:800;letter-spacing:1.7px}
-.oauth-divider:before,.oauth-divider:after{content:"";height:1px;flex:1;background:#e9ecf5}
-.oauth-buttons{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.oauth-button{height:51px;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #dfe3ef;border-radius:11px;background:#fff;color:#222943;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
-.oauth-button:hover{background:#f8f9ff;border-color:#aeb8e9;transform:translateY(-1px)}
-.oauth-button:disabled{opacity:.55;cursor:wait;transform:none}
-.oauth-button svg{width:19px;height:19px}
-@media(max-width:420px){.oauth-buttons{grid-template-columns:1fr}.oauth-button{height:48px}}
+:root{color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f3f5ff;color:#151a35}
+.signup-shell{min-height:100vh;display:grid;grid-template-columns:minmax(320px,.92fr) minmax(440px,1.08fr)}
+.brand-panel{position:relative;overflow:hidden;display:flex;flex-direction:column;padding:42px clamp(28px,5vw,76px);background:radial-gradient(circle at 85% 12%,rgba(0,204,255,.23),transparent 28%),radial-gradient(circle at 8% 80%,rgba(97,79,255,.2),transparent 34%),linear-gradient(145deg,#071225,#101d3b 62%,#101b35);color:#fff}
+.brand-top{display:flex;align-items:center;gap:13px;color:#fff;text-decoration:none;position:relative;z-index:2}
+.brand-mark{width:52px;height:52px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.17);border-radius:15px;background:rgba(255,255,255,.08);box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.brand-mark img{width:37px;height:37px;object-fit:contain}
+.brand-name{font-size:12px;font-weight:900;letter-spacing:1.2px;line-height:1.5}.brand-name span{display:block;color:#69dcff;font-size:10px;letter-spacing:3px}
+.brand-content{position:relative;z-index:2;margin:auto 0;max-width:560px;padding:60px 0}
+.kicker{display:inline-flex;align-items:center;gap:9px;color:#78e5ff;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+.kicker:before{content:"";width:24px;height:1px;background:#50dfff}
+.brand-content h2{margin:20px 0 16px;font-size:clamp(38px,5vw,62px);line-height:1.05;letter-spacing:-2.8px;font-weight:850}
+.brand-content h2 em{font-style:normal;color:#68dcff}
+.brand-content>p{max-width:460px;margin:0;color:#b5c3d9;font-size:15px;line-height:1.85}
+.benefits{display:grid;grid-template-columns:1fr 1fr;gap:22px 24px;margin-top:42px}
+.benefit{display:flex;align-items:flex-start;gap:12px}.benefit-icon{width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center;border:1px solid rgba(112,218,255,.2);border-radius:12px;background:rgba(60,174,255,.1);color:#71e3ff}.benefit-icon svg{width:20px;height:20px}
+.benefit strong{display:block;margin:2px 0 5px;color:#f4f8ff;font-size:12px}.benefit small{display:block;color:#91a3bd;font-size:10px;line-height:1.6}
+.brand-art{position:absolute;right:-75px;bottom:70px;width:280px;height:280px;border:1px solid rgba(91,213,255,.12);border-radius:50%;box-shadow:0 0 0 28px rgba(91,213,255,.025),0 0 0 58px rgba(91,213,255,.02)}
+.brand-art:before,.brand-art:after{content:"";position:absolute;border:1px solid rgba(91,213,255,.16);border-radius:50%;inset:34px}.brand-art:after{inset:70px;background:radial-gradient(circle,rgba(31,187,255,.18),transparent 68%)}
+.brand-art span{position:absolute;inset:0;display:grid;place-items:center;font-size:104px;font-weight:900;font-style:italic;color:transparent;-webkit-text-stroke:1px rgba(123,227,255,.55);text-shadow:0 0 45px rgba(0,196,255,.25)}
+.brand-foot{position:relative;z-index:2;color:#879ab5;font-size:11px;letter-spacing:.2px}
+.access-panel{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:42px clamp(20px,4vw,64px) 26px;background:radial-gradient(ellipse at 85% 7%,rgba(117,111,255,.08),transparent 33%),linear-gradient(145deg,#fbfbff,#f1f3ff)}
+.access-inner{width:min(100%,560px)}
+.signup-card{padding:clamp(26px,3vw,42px);border:1px solid rgba(102,119,174,.13);border-radius:26px;background:rgba(255,255,255,.94);box-shadow:0 25px 75px rgba(42,54,117,.1),0 3px 12px rgba(42,54,117,.04)}
+.card-brand{display:flex;justify-content:center;margin:0 auto 13px}.card-brand img{width:54px;height:54px;object-fit:contain;padding:7px;border-radius:15px;background:#f3f4ff;border:1px solid #e9eaff}
+.signup-card h1{margin:0;text-align:center;font-size:32px;line-height:1.2;font-weight:850;letter-spacing:-1.3px;color:#111630}
+.card-intro{margin:9px 0 23px;text-align:center;color:#6a7391;font-size:13px;line-height:1.7}.card-intro strong{color:#3e50d8}
+.oauth-options{margin:0 0 21px}.oauth-divider{display:flex;align-items:center;gap:13px;margin:0 0 14px;color:#9aa3bb;font-size:9px;font-weight:800;letter-spacing:1.7px}.oauth-divider:before,.oauth-divider:after{content:"";height:1px;flex:1;background:#e9ecf5}
+.oauth-buttons{display:grid;grid-template-columns:1fr 1fr;gap:11px}.oauth-button{height:47px;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #dfe3ef;border-radius:11px;background:#fff;color:#222943;font-size:12px;font-weight:750;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}.oauth-button:hover{background:#f8f9ff;border-color:#aeb8e9;transform:translateY(-1px)}.oauth-button:disabled{opacity:.55;cursor:wait;transform:none}.oauth-button svg{width:18px;height:18px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 13px}.form-group{margin-bottom:15px}.form-group label{display:block;margin-bottom:7px;color:#202744;font-size:11px;font-weight:750}.form-group input{width:100%;height:48px;padding:0 13px;border:1px solid #dce1f0;border-radius:11px;outline:none;background:#fff;color:#161d3a;font-size:13px;transition:border-color .2s,box-shadow .2s}.form-group input::placeholder{color:#9aa2b8}.form-group input:focus{border-color:#7777f4;box-shadow:0 0 0 4px rgba(94,96,238,.1)}
+.password-note{margin-top:6px;color:#8992aa;font-size:10px}
+.signup-button{width:100%;height:52px;margin-top:4px;border:0;border-radius:12px;background:linear-gradient(105deg,#6544f5,#3d67f6 58%,#08bfe5);box-shadow:0 12px 25px rgba(76,84,232,.22);color:#fff;font-size:12px;font-weight:800;letter-spacing:.25px;cursor:pointer;transition:transform .2s,box-shadow .2s,opacity .2s}.signup-button:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(76,84,232,.28)}.signup-button:disabled{opacity:.65;cursor:wait;transform:none}
+.status{display:none;margin:14px 0 0;padding:12px 13px;border-radius:10px;font-size:11px;line-height:1.6}.status.show{display:block}.status.error{border:1px solid #ffd1d5;background:#fff3f4;color:#a52839}.status.success{border:1px solid #b9efd3;background:#effcf5;color:#16734b}
+.account-footer{margin-top:20px;padding-top:18px;border-top:1px solid #edf0f7;text-align:center;color:#737d98;font-size:11px}.account-footer a,.back-home{color:#4658e8;font-weight:750;text-decoration:none}.account-footer a:hover,.back-home:hover{text-decoration:underline}
+.back-home{display:block;margin-top:16px;text-align:center;font-size:11px}
+.security-note{display:flex;align-items:center;gap:12px;margin:18px 7px 0;padding:13px 15px;border:1px solid rgba(109,119,203,.09);border-radius:14px;background:rgba(255,255,255,.62)}.security-icon{width:36px;height:36px;flex:0 0 36px;display:grid;place-items:center;border-radius:50%;background:#eff0ff;color:#4f57e8}.security-icon svg{width:18px;height:18px}.security-note strong{display:block;margin-bottom:3px;color:#273052;font-size:10px}.security-note small{color:#7d86a2;font-size:9px;line-height:1.5}
+.access-foot{width:min(100%,1080px);display:flex;justify-content:space-between;gap:18px;margin-top:auto;padding-top:25px;color:#8992ad;font-size:10px}.access-foot a{color:#4959dd;font-weight:700}
+@media(max-width:900px){.signup-shell{grid-template-columns:1fr}.brand-panel{min-height:auto;padding:25px 30px 22px}.brand-content{margin:30px 0 12px;padding:0}.brand-content h2{font-size:40px}.benefits{margin-top:24px}.brand-art{display:none}.brand-foot{margin-top:20px}.access-panel{min-height:auto;padding:32px 22px 24px}.access-foot{margin-top:28px}}
+@media(max-width:560px){.brand-panel{padding:21px 20px}.brand-mark{width:45px;height:45px}.brand-content{margin:27px 0 8px}.brand-content h2{font-size:34px;letter-spacing:-1.6px}.brand-content>p{font-size:13px}.benefits{gap:15px 12px}.benefit{gap:9px}.benefit-icon{width:35px;height:35px;flex-basis:35px}.benefit strong{font-size:10px}.benefit small{font-size:9px}.brand-foot{font-size:10px}.access-panel{padding:25px 13px 20px}.signup-card{padding:25px 19px;border-radius:21px}.signup-card h1{font-size:29px}.form-grid{grid-template-columns:1fr;gap:0}.form-group{margin-bottom:13px}.form-group input{height:46px}.access-foot{font-size:9px;flex-direction:column;align-items:center;text-align:center}.security-note{margin-left:0;margin-right:0}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-<main class="account-page">
-<section class="account-card">
-<div class="account-logo"><h1>Create Your Account</h1><p>Join Zakmolanitech Solutions</p></div>
-<div id="status" class="status"></div>
-        <div class="oauth-options" aria-label="Other sign-in options">
-          <div class="oauth-divider"><span>OR CONTINUE WITH</span></div>
-          <div class="oauth-button signup-oauth-buttons">
-            <button type="button" class="oauth-button signup-oauth-button" data-provider="google"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M21.6 12.23c0-.72-.06-1.42-.18-2.09H12v3.96h5.38a4.6 4.6 0 0 1-2 3.02v2.46h3.24c1.9-1.75 2.98-4.33 2.98-7.35Z"/><path fill="#34A853" d="M12 22c2.7 0 4.96-.9 6.62-2.42l-3.24-2.46c-.9.6-2.04.96-3.38.96-2.6 0-4.8-1.76-5.58-4.12H3.07v2.54A10 10 0 0 0 12 22Z"/><path fill="#FBBC05" d="M6.42 13.96A6 6 0 0 1 6.1 12c0-.68.12-1.34.32-1.96V7.5H3.07A10 10 0 0 0 2 12c0 1.62.39 3.15 1.07 4.5l3.35-2.54Z"/><path fill="#EA4335" d="M12 5.92c1.47 0 2.79.5 3.83 1.52l2.87-2.87C16.95 2.96 14.7 2 12 2a10 10 0 0 0-8.93 5.5l3.35 2.54C7.2 7.68 9.4 5.92 12 5.92Z"/></svg><span>Google</span></button>
-            <button type="button" class="oauth-button signup-oauth-button" data-provider="github"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.53v-2.08c-3.1.68-3.76-1.32-3.76-1.32-.5-1.3-1.24-1.65-1.24-1.65-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1 .1.76 2.02 3.1 1.54.1-.73.4-1.23.7-1.52-2.48-.28-5.09-1.24-5.09-5.53 0-1.22.44-2.22 1.16-3-.12-.28-.5-1.42.11-2.96 0 0 .95-.3 3.05 1.15a10.6 10.6 0 0 1 5.55 0c2.1-1.42 3.04-1.15 3.04-1.15.61 1.54.23 2.68.12 2.96.72.78 1.15 1.78 1.15 3 0 4.3-2.62 5.25-5.12 5.52.4.34.75 1 .75 2.02V22c0 .3.2.64.77.53A11.1 11.1 0 0 0 12 .9Z"/></svg><span>GitHub</span></button>
-          </div>
-        </div>
+<main class="signup-shell">
+<aside class="brand-panel" aria-label="About Zakmolanitech Solutions">
+<a class="brand-top" href="../index.html" aria-label="Zakmolanitech Solutions home"><span class="brand-mark"><img src="../static/assets/logo.png" alt=""></span><span class="brand-name">ZAKMOLANITECH<span>SOLUTIONS</span></span></a>
+<div class="brand-content">
+<span class="kicker">A better way to work together</span>
+<h2>Make room for<br><em>what’s possible.</em></h2>
+<p>Create your account and get a dedicated place to follow projects, share ideas and work directly with the Zakmolanitech Solutions team.</p>
+<div class="benefits">
+<div class="benefit"><span class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6l8-3Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg></span><span><strong>Secure account</strong><small>Your details and workspace stay protected.</small></span></div>
+<div class="benefit"><span class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5m0 14h17"/><path d="m7 15 4-4 3 2 6-7"/></svg></span><span><strong>Project visibility</strong><small>See milestones, progress and updates.</small></span></div>
+<div class="benefit"><span class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></svg></span><span><strong>Direct support</strong><small>Stay in touch with our team.</small></span></div>
+<div class="benefit"><span class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h6M7 16h8"/></svg></span><span><strong>One workspace</strong><small>Keep your project activity together.</small></span></div>
+</div></div>
+<div class="brand-art" aria-hidden="true"><span>Z</span></div><div class="brand-foot">Equipping minds with IT solutions.</div>
+</aside>
+<section class="access-panel" aria-label="Create your account"><div class="access-inner">
+<section class="signup-card">
+<div class="card-brand"><img src="../static/assets/logo.png" alt="Zakmolanitech Solutions logo"></div>
+<h1>Create your account</h1><p class="card-intro">Join <strong>Zakmolanitech Solutions</strong> and get started.</p>
+<div id="status" class="status" role="alert" aria-live="polite"></div>
+<div class="oauth-options" aria-label="Create account with another provider"><div class="oauth-divider"><span>CREATE ACCOUNT WITH</span></div><div class="oauth-buttons">
+<button type="button" class="oauth-button signup-oauth-button" data-provider="google"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M21.6 12.23c0-.72-.06-1.42-.18-2.09H12v3.96h5.38a4.6 4.6 0 0 1-2 3.02v2.46h3.24c1.9-1.75 2.98-4.33 2.98-7.35Z"/><path fill="#34A853" d="M12 22c2.7 0 4.96-.9 6.62-2.42l-3.24-2.46c-.9.6-2.04.96-3.38.96-2.6 0-4.8-1.76-5.58-4.12H3.07v2.54A10 10 0 0 0 12 22Z"/><path fill="#FBBC05" d="M6.42 13.96A6 6 0 0 1 6.1 12c0-.68.12-1.34.32-1.96V7.5H3.07A10 10 0 0 0 2 12c0 1.62.39 3.15 1.07 4.5l3.35-2.54Z"/><path fill="#EA4335" d="M12 5.92c1.47 0 2.79.5 3.83 1.52l2.87-2.87C16.95 2.96 14.7 2 12 2a10 10 0 0 0-8.93 5.5l3.35 2.54C7.2 7.68 9.4 5.92 12 5.92Z"/></svg><span>Google</span></button>
+<button type="button" class="oauth-button signup-oauth-button" data-provider="github"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.53v-2.08c-3.1.68-3.76-1.32-3.76-1.32-.5-1.3-1.24-1.65-1.24-1.65-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1 .1.76 2.02 3.1 1.54.1-.73.4-1.23.7-1.52-2.48-.28-5.09-1.24-5.09-5.53 0-1.22.44-2.22 1.16-3-.12-.28-.5-1.42.11-2.96 0 0 .95-.3 3.05 1.15a10.6 10.6 0 0 1 5.55 0c2.1-1.42 3.04-1.15 3.04-1.15.61 1.54.23 2.68.12 2.96.72.78 1.15 1.78 1.15 3 0 4.3-2.62 5.25-5.12 5.52.4.34.75 1 .75 2.02V22c0 .3.2.64.77.53A11.1 11.1 0 0 0 12 .9Z"/></svg><span>GitHub</span></button>
+</div></div>
 <form id="signupForm" autocomplete="on">
-<div class="form-group"><label for="fullName">Full Name</label><input type="text" id="fullName" name="fullName" placeholder="Enter your full name" autocomplete="name" required></div>
-<div class="form-group"><label for="email">Email Address</label><input type="email" id="email" name="email" placeholder="Enter your email" autocomplete="email" required></div>
-<div class="form-group"><label for="phone">Phone Number</label><input type="tel" id="phone" name="phone" placeholder="Enter your phone number" autocomplete="tel" required></div>
-<div class="form-group"><label for="password">Password</label><input type="password" id="password" name="password" placeholder="Create a password" autocomplete="new-password" minlength="6" required><div class="password-note">At least 6 characters.</div></div>
-<div class="form-group"><label for="confirmPassword">Confirm Password</label><input type="password" id="confirmPassword" name="confirmPassword" placeholder="Enter your password again" autocomplete="new-password" minlength="6" required></div>
-<button type="submit" id="signupButton" class="btn btn-primary signup-button">Create Account</button>
+<div class="form-grid">
+<div class="form-group"><label for="fullName">Full name</label><input type="text" id="fullName" name="fullName" placeholder="Your full name" autocomplete="name" required></div>
+<div class="form-group"><label for="phone">Phone number</label><input type="tel" id="phone" name="phone" placeholder="Your phone number" autocomplete="tel" required></div>
+<div class="form-group"><label for="email">Email address</label><input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required></div>
+<div class="form-group"><label for="password">Create password</label><input type="password" id="password" name="password" placeholder="At least 6 characters" autocomplete="new-password" minlength="6" required><div class="password-note">Use at least 6 characters.</div></div>
+</div>
+<div class="form-group"><label for="confirmPassword">Confirm password</label><input type="password" id="confirmPassword" name="confirmPassword" placeholder="Enter your password again" autocomplete="new-password" minlength="6" required></div>
+<button type="submit" id="signupButton" class="signup-button">Create account <span aria-hidden="true">→</span></button>
 </form>
-<div class="account-footer">Already have an account? <a href="signin.html">Sign In</a></div>
-<a class="back-home" href="../index.html">← Back to Home</a>
+<div class="account-footer">Already have an account? <a href="signin.html">Sign in →</a></div>
+<a class="back-home" href="../index.html">← Back to home</a>
 </section>
-</main>
+<div class="security-note"><span class="security-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6l8-3Z"/><rect x="9" y="10" width="6" height="5" rx="1"/><path d="M10 10V8.5a2 2 0 0 1 4 0V10"/></svg></span><span><strong>Your information stays protected</strong><small>Secure authentication keeps your account and project information private.</small></span></div>
+</div>
+<footer class="access-foot"><span>© <span id="year"></span> Zakmolanitech Solutions. All rights reserved.</span><span>Need help? <a href="contact.html">Contact support</a></span></footer>
+</section></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
@@ -75,7 +116,7 @@ this.innerHTML=provider==="google"?"<span>Google</span>":"<span>GitHub</span>";
 });
 });
 
-function show(message,type){status.textContent=message;status.className="status show "+type}
+function show(message,type){status.textContent=message;status.className="status show "+type}\ndocument.getElementById("year").textContent=new Date().getFullYear();
 form.addEventListener("submit",async e=>{
 e.preventDefault();
 const fullName=document.getElementById("fullName").value.trim(),email=document.getElementById("email").value.trim(),phone=document.getElementById("phone").value.trim(),password=document.getElementById("password").value,confirm=document.getElementById("confirmPassword").value;
