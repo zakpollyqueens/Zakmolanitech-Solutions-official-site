@@ -233,7 +233,7 @@ async function loadProfile(){
   const user = data.session.user;
   const metadata = user.user_metadata || {};
 
-  document.getElementById("fullName").value =
+  const displayName=metadata.full_name||metadata.name||"Your workspace profile";document.getElementById("profileDisplayName").textContent=displayName;document.getElementById("profileDisplayEmail").textContent=user.email||"Account details";document.getElementById("profileMark").textContent=(displayName.trim()[0]||"Z").toUpperCase();\n  document.getElementById("fullName").value =
     metadata.full_name ||
     metadata.name ||
     "";
