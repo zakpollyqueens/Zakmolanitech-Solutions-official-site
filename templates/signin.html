@@ -2,628 +2,260 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sign In | Zakmolanitech Solutions</title>
-<meta name="description" content="Sign in to your Zakmolanitech Solutions account.">
-<meta name="theme-color" content="#050b14">
-<link rel="stylesheet" href="../static/css/main.css">
-
+<meta name="description" content="Securely sign in to your Zakmolanitech Solutions client account.">
+<meta name="theme-color" content="#080d2b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* A polished account portal that shares the visual language of the new company site. */
-.account-page{
-  position:relative;isolation:isolate;min-height:100svh;padding:112px 28px 64px;
-  display:grid;place-items:center;overflow:hidden;
-  background:
-    radial-gradient(ellipse at 12% 16%,rgba(91,225,232,.16),transparent 34%),
-    radial-gradient(ellipse at 88% 80%,rgba(154,124,255,.18),transparent 38%),
-    linear-gradient(135deg,#07111f 0%,#0b1728 48%,#080f1d 100%);
-}
-.account-page:before,.account-page:after{content:"";position:absolute;z-index:-1;pointer-events:none}
-.account-page:before{
-  inset:0;opacity:.22;
-  background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
-  background-size:52px 52px;mask-image:linear-gradient(to bottom,black,transparent 90%);
-}
-.account-page:after{
-  width:620px;height:620px;right:-230px;top:-250px;border:1px solid rgba(91,225,232,.2);
-  border-radius:50%;box-shadow:0 0 0 45px rgba(91,225,232,.025),0 0 0 95px rgba(154,124,255,.025);
-}
-.account-wrap{width:min(1120px,100%);position:relative}
-.back-home{
-  display:inline-flex;align-items:center;gap:10px;margin:0 0 25px 4px;
-  color:#b5c2d2;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
-  transition:color .2s,transform .2s;
-}
-.back-home:hover{color:#fff;transform:translateX(-3px)}
-.account-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(390px,.88fr);align-items:stretch;gap:22px}
-.account-showcase{
-  position:relative;min-height:610px;padding:42px;display:flex;flex-direction:column;justify-content:space-between;
-  overflow:hidden;border:1px solid rgba(255,255,255,.13);border-radius:30px;
-  background:linear-gradient(145deg,rgba(18,39,62,.9),rgba(8,19,34,.88));
-  box-shadow:0 30px 90px rgba(0,0,0,.28);
-}
-.account-showcase:before{
-  content:"";position:absolute;width:430px;height:430px;right:-95px;top:95px;border-radius:50%;
-  border:1px solid rgba(91,225,232,.2);box-shadow:0 0 0 35px rgba(91,225,232,.035),0 0 0 75px rgba(154,124,255,.035),inset 0 0 65px rgba(91,225,232,.045);
-}
-.account-showcase:after{
-  content:"";position:absolute;width:250px;height:250px;right:0;top:185px;border-radius:50%;
-  background:radial-gradient(circle,rgba(91,225,232,.2),rgba(115,107,231,.12) 42%,transparent 72%);
-  filter:blur(12px);
-}
-.account-brand{position:relative;z-index:1;display:flex;align-items:center;gap:15px}
-.account-logo{width:66px;height:66px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.18);border-radius:19px;background:linear-gradient(145deg,rgba(91,225,232,.18),rgba(154,124,255,.2));box-shadow:0 12px 35px rgba(0,0,0,.22)}
-.account-logo img{width:82%;height:82%;object-fit:contain}
-.account-brand-name{font-size:12px;font-weight:900;letter-spacing:1.7px;color:#fff}
-.account-brand-name small{display:block;margin-top:5px;color:#aab9ca;font-size:9px;letter-spacing:3px}
-.showcase-copy{position:relative;z-index:1;max-width:510px;margin-top:65px}
-.showcase-kicker{display:inline-flex;align-items:center;gap:10px;color:#9deaf0;font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase}
-.showcase-kicker:before{content:"";width:23px;height:1px;background:#5be1e8}
-.showcase-copy h2{margin:19px 0 17px;font:800 clamp(42px,5vw,66px)/1.02 Manrope,Inter,sans-serif;letter-spacing:-3px;color:#fff}
-.showcase-copy h2 em{font-style:normal;color:#a895ff}
-.showcase-copy p{max-width:420px;color:#b2c0d0;font-size:15px;line-height:1.85}
-.showcase-art{position:relative;z-index:1;display:flex;align-items:center;gap:12px;margin-top:55px}
-.art-line{height:1px;width:44px;background:linear-gradient(90deg,#5be1e8,transparent)}
-.art-caption{color:#c7d2df;font-size:10px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase}
-.account-card{
-  position:relative;padding:44px 40px;align-self:center;
-  border:1px solid rgba(255,255,255,.15);border-radius:30px;
-  background:linear-gradient(150deg,rgba(20,35,55,.96),rgba(8,17,31,.96));
-  box-shadow:0 30px 90px rgba(0,0,0,.42),0 0 55px rgba(91,225,232,.055);
-  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
-}
-.account-card:before{content:"";position:absolute;inset:0 22% auto;height:1px;background:linear-gradient(90deg,transparent,rgba(91,225,232,.7),rgba(154,124,255,.7),transparent)}
-.account-card .eyebrow{display:inline-flex;margin-bottom:17px;color:#9b8bff;font-size:10px;font-weight:900;letter-spacing:2.6px}
-.account-card h1{margin:0;color:#fff;font:800 clamp(36px,4vw,48px)/1.05 Manrope,Inter,sans-serif;letter-spacing:-2.4px}
-.intro{margin:13px 0 31px;color:#aebdce;font-size:14px;line-height:1.75}
-.form-field{margin-bottom:21px}
-.form-field label{display:block;margin-bottom:9px;color:#e1e9f3;font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}
-.form-field input{
-  display:block;width:100%;min-height:54px;padding:0 16px;border:1px solid rgba(183,202,224,.18);
-  border-radius:13px;background:rgba(3,11,22,.68);color:#fff;font:500 14px Inter,system-ui,sans-serif;
-  outline:none;transition:border-color .2s,box-shadow .2s,background .2s;
-}
-.form-field input::placeholder{color:#718298}
-.form-field input:focus{border-color:#8d83f7;background:rgba(5,15,28,.92);box-shadow:0 0 0 4px rgba(154,124,255,.12)}
-.forgot{display:block;margin-top:11px;text-align:right;color:#9e91ff;font-size:11px;font-weight:800}
-.forgot:hover{color:#c4bbff;text-decoration:underline}
-.submit-btn{
-  width:100%;min-height:55px;margin-top:8px;border:0;border-radius:13px;cursor:pointer;
-  background:linear-gradient(110deg,#9274f6,#6c87f7 58%,#5be1e8);color:#fff;
-  box-shadow:0 14px 32px rgba(112,111,240,.23);font-size:11px;font-weight:900;letter-spacing:1.6px;
-  transition:transform .2s,box-shadow .2s,filter .2s;
-}
-.submit-btn:hover{transform:translateY(-2px);box-shadow:0 18px 38px rgba(112,111,240,.32);filter:brightness(1.06)}
-.submit-btn:disabled{opacity:.65;cursor:not-allowed;transform:none}
-.status{display:none;margin-top:17px;padding:13px 15px;border-radius:12px;font-size:12px;line-height:1.6}
+:root{color-scheme:light;--navy:#080d2b;--ink:#10152f;--muted:#66708d;--blue:#3c65ff;--cyan:#16c9e8;--purple:#7951f5}
+*{box-sizing:border-box}
+html{min-height:100%;background:#f5f6ff}
+body{margin:0;min-height:100vh;font-family:"DM Sans",sans-serif;color:var(--ink);background:#f5f6ff}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit}
+.auth-shell{min-height:100vh;display:grid;grid-template-columns:minmax(360px,.88fr) minmax(520px,1.12fr);background:#f5f6ff}
+.brand-panel{position:relative;isolation:isolate;overflow:hidden;min-height:100vh;padding:54px clamp(34px,5vw,76px);display:flex;flex-direction:column;justify-content:space-between;color:#fff;background:radial-gradient(ellipse at 78% 72%,rgba(35,89,255,.25),transparent 38%),radial-gradient(ellipse at 12% 15%,rgba(82,54,195,.22),transparent 40%),linear-gradient(150deg,#080d2b 0%,#080e31 58%,#07142d 100%)}
+.brand-panel:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.14;background-image:linear-gradient(rgba(255,255,255,.11) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.11) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 92%)}
+.brand-panel:after{content:"";position:absolute;z-index:-1;width:560px;height:560px;right:-260px;top:25%;border:1px solid rgba(58,202,255,.2);border-radius:50%;box-shadow:0 0 0 45px rgba(58,202,255,.035),0 0 0 100px rgba(135,93,255,.035)}
+.brand-top{display:flex;align-items:center;gap:15px;position:relative;z-index:2}
+.brand-mark{width:58px;height:58px;display:grid;place-items:center;border-radius:17px;background:linear-gradient(145deg,rgba(255,255,255,.15),rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.2);box-shadow:0 12px 32px rgba(0,0,0,.2)}
+.brand-mark img{width:85%;height:85%;object-fit:contain}
+.brand-name{font:800 14px/1.3 Manrope,sans-serif;letter-spacing:1.3px}
+.brand-name span{display:block;margin-top:4px;color:#37d8f3;font-size:10px;letter-spacing:4.6px}
+.brand-content{position:relative;z-index:2;max-width:560px;margin:70px 0 40px}
+.kicker{display:inline-flex;align-items:center;gap:10px;color:#6fe6f5;font-size:10px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase}
+.kicker:before{content:"";width:25px;height:2px;border-radius:2px;background:linear-gradient(90deg,#20d5ef,#9274ff)}
+.brand-content h2{margin:22px 0 18px;font:800 clamp(39px,4.5vw,64px)/1.08 Manrope,sans-serif;letter-spacing:-2.8px}
+.brand-content h2 em{font-style:normal;background:linear-gradient(90deg,#38d9f1,#a18aff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand-content>p{max-width:440px;margin:0;color:#c3cce0;font-size:15px;line-height:1.85}
+.benefits{display:grid;gap:23px;margin-top:42px}
+.benefit{display:flex;align-items:center;gap:15px}
+.benefit-icon{width:46px;height:46px;flex:0 0 46px;display:grid;place-items:center;border:1px solid rgba(75,198,255,.35);border-radius:14px;background:linear-gradient(145deg,rgba(24,118,255,.22),rgba(124,79,255,.15));color:#6ce6ff}
+.benefit-icon svg{width:21px;height:21px}
+.benefit strong{display:block;margin-bottom:4px;color:#fff;font-size:13px;font-weight:700}
+.benefit small{display:block;color:#aebbd4;font-size:12px;line-height:1.5}
+.brand-visual{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;min-height:190px;margin-top:15px}
+.circuit-orbit{position:absolute;width:250px;height:125px;border:1px solid rgba(30,193,255,.42);border-radius:50%;transform:rotate(-17deg);box-shadow:0 0 35px rgba(35,107,255,.12)}
+.circuit-orbit:before,.circuit-orbit:after{content:"";position:absolute;border:1px solid rgba(130,89,255,.45);border-radius:50%;inset:13px -16px;transform:rotate(36deg)}
+.circuit-orbit:after{inset:28px -29px;transform:rotate(-29deg);border-color:rgba(36,207,238,.25)}
+.z-platform{position:relative;width:146px;height:90px;display:grid;place-items:center;transform:perspective(400px) rotateX(55deg) rotateZ(-35deg);border:1px solid rgba(71,221,255,.75);border-radius:18px;background:linear-gradient(145deg,#172b83,#10164b 65%,#321a79);box-shadow:0 18px 0 #0b1641,0 20px 0 1px rgba(52,208,255,.4),0 34px 45px rgba(0,0,0,.35),inset 0 0 30px rgba(41,194,255,.2)}
+.z-platform span{font:800 64px/1 Manrope,sans-serif;font-style:italic;background:linear-gradient(135deg,#fff,#45e4ff 55%,#9a79ff);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 25px rgba(50,207,255,.4)}
+.brand-foot{position:relative;z-index:2;color:#9daac5;font-size:11px;letter-spacing:.2px}
+.access-panel{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:54px clamp(24px,5vw,76px) 28px;background:radial-gradient(ellipse at 85% 7%,rgba(117,111,255,.08),transparent 33%),linear-gradient(145deg,#fbfbff,#f2f4ff)}
+.access-inner{width:min(100%,490px)}
+.mobile-brand{display:none}
+.login-card{padding:clamp(30px,4vw,48px);border:1px solid rgba(102,119,174,.13);border-radius:27px;background:rgba(255,255,255,.91);box-shadow:0 25px 75px rgba(42,54,117,.10),0 3px 12px rgba(42,54,117,.04)}
+.card-brand{display:flex;justify-content:center;margin:0 auto 20px}
+.card-brand img{width:64px;height:64px;object-fit:contain;padding:10px;border-radius:50%;background:#f3f4ff;border:1px solid #e9eaff}
+.login-card h1{margin:0;text-align:center;font:800 36px/1.2 Manrope,sans-serif;letter-spacing:-1.6px;color:#111630}
+.card-intro{margin:10px 0 34px;text-align:center;color:#6a7391;font-size:14px;line-height:1.7}
+.card-intro strong{color:#3e50d8;font-weight:700}
+.field{margin-bottom:21px}
+.field label{display:block;margin-bottom:9px;color:#202744;font-size:12px;font-weight:700}
+.input-wrap{position:relative}
+.input-wrap input{width:100%;height:57px;padding:0 48px 0 17px;border:1px solid #dce1f0;border-radius:12px;outline:none;background:#fff;color:#161d3a;font-size:14px;transition:border-color .2s,box-shadow .2s}
+.input-wrap input::placeholder{color:#9aa2b8}
+.input-wrap input:focus{border-color:#7777f4;box-shadow:0 0 0 4px rgba(94,96,238,.10)}
+.field-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:#8993b0;pointer-events:none}
+.input-wrap.has-icon input{padding-left:46px}
+.reveal-password{position:absolute;right:12px;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:34px;height:34px;border:0;border-radius:8px;background:transparent;color:#7883a2;cursor:pointer}
+.reveal-password:hover{background:#f0f2ff;color:#3e50d8}
+.reveal-password svg{width:19px;height:19px}
+.form-options{display:flex;justify-content:flex-end;margin:-4px 0 24px}
+.forgot-link{color:#4658e8;font-size:12px;font-weight:700}
+.forgot-link:hover,.create-link:hover{text-decoration:underline}
+.submit-btn{width:100%;height:57px;border:0;border-radius:12px;background:linear-gradient(105deg,#6544f5,#3d67f6 58%,#08bfe5);box-shadow:0 12px 25px rgba(76,84,232,.22);color:white;font-size:13px;font-weight:700;letter-spacing:.3px;cursor:pointer;transition:transform .2s,box-shadow .2s,opacity .2s}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(76,84,232,.28)}
+.submit-btn:disabled{opacity:.65;cursor:wait;transform:none}
+.status{display:none;margin-top:17px;padding:13px 14px;border-radius:10px;font-size:12px;line-height:1.6}
 .status.show{display:block}
-.status.error{border:1px solid rgba(255,120,130,.3);background:rgba(255,90,100,.09);color:#ffc0c5}
-.status.success{border:1px solid rgba(91,225,160,.3);background:rgba(91,225,160,.09);color:#a9f4ce}
-.account-footer{margin-top:27px;padding-top:22px;border-top:1px solid rgba(255,255,255,.1);text-align:center;color:#aab8c9;font-size:12px}
-.account-footer a{color:#9f91ff;font-weight:800}
-.account-footer a:hover{color:#c9c0ff}
-@media(max-width:900px){
- .account-layout{grid-template-columns:1fr;max-width:620px;margin:auto}
- .account-showcase{min-height:290px;padding:28px}
- .showcase-copy{margin-top:45px}
- .showcase-copy h2{font-size:43px}
- .showcase-art{margin-top:35px}
- .account-card{padding:38px 34px}
-}
-@media(max-width:560px){
- .account-page{padding:88px 15px 35px}
- .back-home{margin-bottom:18px}
- .account-showcase{min-height:250px;padding:24px;border-radius:23px}
- .account-logo{width:53px;height:53px;border-radius:15px}
- .account-brand-name{font-size:10px}
- .showcase-copy{margin-top:38px}
- .showcase-copy h2{font-size:37px;letter-spacing:-2px}
- .showcase-copy p{font-size:13px}
- .showcase-art{margin-top:28px}
- .account-card{padding:32px 23px;border-radius:23px}
- .account-card h1{font-size:38px}
-}
-@media(prefers-reduced-motion:reduce){
- *,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
-}
+.status.error{border:1px solid #ffd1d5;background:#fff3f4;color:#a52839}
+.status.success{border:1px solid #b9efd3;background:#effcf5;color:#16734b}
+.card-bottom{margin-top:25px;padding-top:22px;border-top:1px solid #edf0f7;text-align:center;color:#737d98;font-size:12px}
+.create-link{margin-left:5px;color:#4658e8;font-weight:700}
+.security-note{display:flex;align-items:center;gap:13px;margin:22px 8px 0;padding:15px 17px;border:1px solid rgba(109,119,203,.09);border-radius:14px;background:rgba(255,255,255,.62)}
+.security-icon{width:39px;height:39px;flex:0 0 39px;display:grid;place-items:center;border-radius:50%;background:#eff0ff;color:#4f57e8}
+.security-icon svg{width:19px;height:19px}
+.security-note strong{display:block;margin-bottom:3px;color:#273052;font-size:11px}
+.security-note small{color:#7d86a2;font-size:10px;line-height:1.5}
+.access-foot{width:min(100%,1080px);display:flex;justify-content:space-between;gap:18px;margin-top:auto;padding-top:35px;color:#8992ad;font-size:11px}
+.access-foot a{color:#4959dd;font-weight:700}
+.support{display:flex;gap:7px;align-items:center}
+@media(max-width:900px){.auth-shell{grid-template-columns:1fr}.brand-panel{min-height:auto;padding:28px 30px 32px}.brand-content{margin:44px 0 20px}.brand-content h2{font-size:42px}.benefits{grid-template-columns:1fr 1fr;gap:17px;margin-top:27px}.brand-visual{display:none}.brand-foot{margin-top:28px}.access-panel{min-height:auto;padding:38px 24px 25px}.access-foot{margin-top:34px}}
+@media(max-width:560px){.brand-panel{padding:22px 21px 25px}.brand-mark{width:48px;height:48px;border-radius:14px}.brand-name{font-size:11px}.brand-content{margin:35px 0 10px}.brand-content h2{font-size:36px;letter-spacing:-1.8px}.brand-content>p{font-size:13px}.benefits{grid-template-columns:1fr 1fr;gap:15px}.benefit{align-items:flex-start;gap:9px}.benefit-icon{width:37px;height:37px;flex-basis:37px;border-radius:11px}.benefit-icon svg{width:18px;height:18px}.benefit strong{font-size:11px}.benefit small{font-size:10px}.brand-foot{font-size:10px}.access-panel{padding:28px 15px 22px}.login-card{padding:29px 22px;border-radius:21px}.login-card h1{font-size:32px}.card-intro{font-size:13px;margin-bottom:27px}.access-foot{font-size:10px;flex-direction:column;align-items:center;text-align:center;padding-top:26px}.security-note{margin-left:0;margin-right:0}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
-
 <body>
-
-<main class="account-page">
-
-  <div class="account-wrap">
-
-    <a class="back-home" href="../index.html">
-      ← Back to home
+<main class="auth-shell">
+  <aside class="brand-panel" aria-label="About Zakmolanitech Solutions">
+    <a class="brand-top" href="../index.html" aria-label="Zakmolanitech Solutions home">
+      <span class="brand-mark"><img src="../static/assets/logo.png" alt=""></span>
+      <span class="brand-name">ZAKMOLANITECH<span>SOLUTIONS</span></span>
     </a>
-
-    <div class="account-layout">
-      <section class="account-showcase" aria-label="Zakmolanitech Solutions account portal">
-        <div class="account-brand">
-          <span class="account-logo"><img src="../static/assets/logo.png" alt="Zakmolanitech Solutions logo"></span>
-          <span class="account-brand-name">ZAKMOLANITECH<small>SOLUTIONS</small></span>
-        </div>
-        <div class="showcase-copy">
-          <span class="showcase-kicker">Your digital workspace</span>
-          <h2>Welcome to a smarter way to <em>work.</em></h2>
-          <p>Access your Zakmolanitech Solutions account, manage your projects and stay connected with the services built to move your ideas forward.</p>
-        </div>
-        <div class="showcase-art"><span class="art-line"></span><span class="art-caption">Equipping minds with IT solutions.</span></div>
-      </section>
-
-    <section class="account-card">
-
-      <span class="eyebrow">ACCOUNT ACCESS</span>
-
-      <h1>Welcome back</h1>
-
-      <p class="intro">
-        Sign in to continue to your Zakmolanitech Solutions account.
-      </p>
-
-      <form id="signinForm" novalidate>
-
-        <div class="form-field">
-
-          <label for="email">
-            Email address
-          </label>
-
-          <input
-            id="email"
-            type="email"
-            autocomplete="email"
-            placeholder="you@example.com"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-field">
-
-          <label for="password">
-            Password
-          </label>
-
-          <input
-            id="password"
-            type="password"
-            autocomplete="current-password"
-            placeholder="Your password"
-            required
-          >
-
-          <a
-            class="forgot"
-            id="forgotPassword"
-            href="#"
-          >
-            Forgot password?
-          </a>
-
-        </div>
-
-
-        <button
-          id="signinButton"
-          class="btn btn-primary submit-btn"
-          type="submit"
-        >
-          Sign In
-        </button>
-
-
-        <div
-          id="status"
-          class="status"
-          role="alert"
-        ></div>
-
-      </form>
-
-
-      <div class="account-footer">
-
-        Don't have an account?
-
-        <a href="signup.html">
-          Create one
-        </a>
-
+    <div class="brand-content">
+      <span class="kicker">Your digital workspace</span>
+      <h2>Welcome back.<br>Let’s build <em>what’s next.</em></h2>
+      <p>One secure place to follow your projects, connect with our team and keep your digital work moving forward.</p>
+      <div class="benefits">
+        <div class="benefit"><span class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6l8-3Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg></span><span><strong>Secure & private</strong><small>Your account and project information stay protected.</small></span></div>
+        <div class="benefit"><span class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5m0 14h17"/><path d="m7 15 4-4 3 2 6-7"/><path d="M16 6h4v4"/></svg></span><span><strong>Track your progress</strong><small>Keep up with project milestones and updates.</small></span></div>
+        <div class="benefit"><span class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></svg></span><span><strong>Stay connected</strong><small>Communicate with our team when you need us.</small></span></div>
+        <div class="benefit"><span class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M3 12h18"/><path d="m5.6 5.6 12.8 12.8m0-12.8L5.6 18.4"/></svg></span><span><strong>Everything in one place</strong><small>Your client workspace, made simpler.</small></span></div>
       </div>
-
-    </section>
     </div>
+    <div class="brand-visual" aria-hidden="true"><span class="circuit-orbit"></span><div class="z-platform"><span>Z</span></div></div>
+    <div class="brand-foot">Equipping minds with IT solutions.</div>
+  </aside>
 
-  </div>
-
+  <section class="access-panel" aria-label="Sign in to your account">
+    <div class="access-inner">
+      <div class="mobile-brand"><!-- Brand identity is presented in the panel above on wider screens. --></div>
+      <section class="login-card">
+        <div class="card-brand"><img src="../static/assets/logo.png" alt="Zakmolanitech Solutions logo"></div>
+        <h1>Sign in</h1>
+        <p class="card-intro">Access your <strong>Zakmolanitech Solutions</strong> account.</p>
+        <form id="signinForm" novalidate>
+          <div class="field">
+            <label for="email">Email address</label>
+            <div class="input-wrap has-icon">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+              <input id="email" type="email" autocomplete="email" placeholder="Enter your email address" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="input-wrap has-icon">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3"/></svg>
+              <input id="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+              <button class="reveal-password" id="togglePassword" type="button" aria-label="Show password" aria-pressed="false">
+                <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="form-options"><a class="forgot-link" id="forgotPassword" href="#">Forgot password?</a></div>
+          </div>
+          <button id="signinButton" class="submit-btn" type="submit">Sign in to your account <span aria-hidden="true">→</span></button>
+          <div id="status" class="status" role="alert" aria-live="polite"></div>
+        </form>
+        <div class="card-bottom">Don’t have an account? <a class="create-link" href="signup.html">Create an account →</a></div>
+      </section>
+      <div class="security-note">
+        <span class="security-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6l8-3Z"/><rect x="9" y="10" width="6" height="5" rx="1"/><path d="M10 10V8.5a2 2 0 0 1 4 0V10"/></svg></span>
+        <span><strong>Your security is our priority</strong><small>We use secure sign-in and account protection to help keep your information safe.</small></span>
+      </div>
+    </div>
+    <footer class="access-foot"><span>© <span id="year"></span> Zakmolanitech Solutions. All rights reserved.</span><span class="support">Need help? <a href="contact.html">Contact support</a></span></footer>
+  </section>
 </main>
 
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-
-const SUPABASE_URL =
-  "https://jjcptobdzreckuhtcuzm.supabase.co";
-
-const SUPABASE_KEY =
-  "sb_publishable_5AyVE6y2FGY8S_NoLC5a-w_URf-Mfxc";
-
-
-const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
-
-
-const form =
-  document.getElementById("signinForm");
-
-const button =
-  document.getElementById("signinButton");
-
-const statusBox =
-  document.getElementById("status");
-
+const SUPABASE_URL = "https://jjcptobdzreckuhtcuzm.supabase.co";
+const SUPABASE_KEY = "sb_publishable_5AyVE6y2FGY8S_NoLC5a-w_URf-Mfxc";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const form = document.getElementById("signinForm");
+const button = document.getElementById("signinButton");
+const statusBox = document.getElementById("status");
+document.getElementById("year").textContent = new Date().getFullYear();
 
 function showStatus(message,type){
-
   statusBox.textContent = message;
-
-  statusBox.className =
-    "status show " + type;
-
+  statusBox.className = "status show " + type;
 }
-
-
-/* -----------------------------------------
-   CLEAN SUPABASE AUTH ERROR URL
------------------------------------------ */
 
 (function handleAuthUrl(){
-
-  const hash =
-    window.location.hash;
-
-  if(!hash){
-    return;
-  }
-
-
-  const params =
-    new URLSearchParams(
-      hash.substring(1)
-    );
-
-
-  const error =
-    params.get("error");
-
-  const errorCode =
-    params.get("error_code");
-
-  const description =
-    params.get("error_description");
-
-
-  /*
-    Supabase can place authentication
-    errors in the URL hash.
-
-    Remove the hash immediately so users
-    never see the long technical URL.
-  */
-
+  const hash = window.location.hash;
+  if(!hash) return;
+  const params = new URLSearchParams(hash.substring(1));
+  const error = params.get("error");
+  const errorCode = params.get("error_code");
+  const description = params.get("error_description");
   if(error || errorCode || description){
-
-    window.history.replaceState(
-      {},
-      document.title,
-      window.location.pathname +
-      window.location.search
-    );
-
-
-    if(
-      errorCode === "otp_expired" ||
-      (
-        description &&
-        description
-          .toLowerCase()
-          .includes("expired")
-      )
-    ){
-
-      showStatus(
-        "Your email confirmation link has expired. Please request a new confirmation email.",
-        "error"
-      );
-
+    window.history.replaceState({},document.title,window.location.pathname + window.location.search);
+    if(errorCode === "otp_expired" || (description && description.toLowerCase().includes("expired"))){
+      showStatus("Your email confirmation link has expired. Please request a new confirmation email.","error");
     }else{
-
-      showStatus(
-        "The email confirmation link is invalid. Please request a new one.",
-        "error"
-      );
-
+      showStatus("The email confirmation link is invalid. Please request a new one.","error");
     }
-
   }
-
 })();
 
-
-/* -----------------------------------------
-   CHECK EXISTING SESSION
------------------------------------------ */
+document.getElementById("togglePassword").addEventListener("click",function(){
+  const passwordInput = document.getElementById("password");
+  const showing = passwordInput.type === "password";
+  passwordInput.type = showing ? "text" : "password";
+  this.setAttribute("aria-pressed",String(showing));
+  this.setAttribute("aria-label",showing ? "Hide password" : "Show password");
+  document.getElementById("eyeIcon").innerHTML = showing
+    ? '<path d="M3 3 21 21"/><path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.1 3.8M6.2 6.2C3.5 8 2 12 2 12s3.6 7 10 7a10 10 0 0 0 4-.8"/>'
+    : '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>';
+});
 
 async function checkExistingSession(){
-
   try{
-
-    const {data,error} =
-      await supabaseClient.auth.getSession();
-
-
-    if(error){
-      console.error(error);
-      return;
-    }
-
-
-    if(data && data.session){
-
-      window.location.replace(
-        "dashboard.html"
-      );
-
-    }
-
-  }catch(error){
-
-    console.error(
-      "Session check error:",
-      error
-    );
-
-  }
-
+    const {data,error} = await supabaseClient.auth.getSession();
+    if(error){console.error(error);return;}
+    if(data && data.session) window.location.replace("dashboard.html");
+  }catch(error){console.error("Session check error:",error);}
 }
-
-
 checkExistingSession();
 
-
-/* -----------------------------------------
-   SIGN IN
------------------------------------------ */
-
-form.addEventListener(
-  "submit",
-  async function(event){
-
-    event.preventDefault();
-
-
-    const email =
-      document
-        .getElementById("email")
-        .value
-        .trim();
-
-
-    const password =
-      document
-        .getElementById("password")
-        .value;
-
-
-    if(!email || !password){
-
-      showStatus(
-        "Please enter your email and password.",
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    button.disabled = true;
-    button.textContent = "Signing in...";
-
-
-    try{
-
-      const {data,error} =
-        await supabaseClient.auth
-          .signInWithPassword({
-
-            email:email,
-            password:password
-
-          });
-
-
-      if(error){
-
-        /*
-          Give a cleaner message for common
-          authentication failures.
-        */
-
-        const message =
-          error.message || "";
-
-
-        if(
-          message
-            .toLowerCase()
-            .includes("email not confirmed")
-        ){
-
-          throw new Error(
-            "Please confirm your email address before signing in."
-          );
-
-        }
-
-
-        throw error;
-
-      }
-
-
-      if(
-        !data ||
-        !data.session
-      ){
-
-        throw new Error(
-          "Login was not completed. Please try again."
-        );
-
-      }
-
-
-      showStatus(
-        "Login successful. Opening your account...",
-        "success"
-      );
-
-
-      setTimeout(function(){
-
-        window.location.replace(
-          "dashboard.html"
-        );
-
-      },350);
-
-
-    }catch(error){
-
-      console.error(
-        "Signin error:",
-        error
-      );
-
-
-      showStatus(
-        error.message ||
-        "Unable to sign in. Please check your details.",
-        "error"
-      );
-
-
-      button.disabled = false;
-      button.textContent = "Sign In";
-
-    }
-
+form.addEventListener("submit",async function(event){
+  event.preventDefault();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  if(!email || !password){
+    showStatus("Please enter your email address and password.","error");
+    return;
   }
-);
-
-
-/* -----------------------------------------
-   PASSWORD RESET
------------------------------------------ */
-
-document
-  .getElementById("forgotPassword")
-  .addEventListener(
-    "click",
-    async function(event){
-
-      event.preventDefault();
-
-
-      const email =
-        document
-          .getElementById("email")
-          .value
-          .trim();
-
-
-      if(!email){
-
-        showStatus(
-          "Enter your email address first, then select Forgot password.",
-          "error"
-        );
-
-        return;
-
+  button.disabled = true;
+  button.textContent = "Signing you in…";
+  try{
+    const {data,error} = await supabaseClient.auth.signInWithPassword({email,password});
+    if(error){
+      const message = error.message || "";
+      if(message.toLowerCase().includes("email not confirmed")){
+        throw new Error("Please confirm your email address before signing in.");
       }
-
-
-      const resetButton = this;
-
-      resetButton.style.pointerEvents =
-        "none";
-
-
-      try{
-
-        const {error} =
-          await supabaseClient.auth
-            .resetPasswordForEmail(
-              email,
-              {
-                redirectTo:
-                  window.location.origin +
-                  "/Zakmolanitech-Solutions-official-site/templates/settings.html"
-              }
-            );
-
-
-        if(error){
-          throw error;
-        }
-
-
-        showStatus(
-          "Password reset instructions have been sent to your email.",
-          "success"
-        );
-
-
-      }catch(error){
-
-        console.error(
-          "Password reset error:",
-          error
-        );
-
-
-        showStatus(
-          error.message ||
-          "Unable to send the password reset email.",
-          "error"
-        );
-
-
-      }finally{
-
-        setTimeout(function(){
-
-          resetButton.style.pointerEvents =
-            "";
-
-        },1000);
-
-      }
-
+      throw error;
     }
-  );
+    if(!data || !data.session) throw new Error("Login was not completed. Please try again.");
+    showStatus("Login successful. Opening your account…","success");
+    window.setTimeout(function(){window.location.replace("dashboard.html");},350);
+  }catch(error){
+    console.error("Signin error:",error);
+    showStatus(error.message || "Unable to sign in. Please check your details.","error");
+    button.disabled = false;
+    button.innerHTML = 'Sign in to your account <span aria-hidden="true">→</span>';
+  }
+});
 
+document.getElementById("forgotPassword").addEventListener("click",async function(event){
+  event.preventDefault();
+  const email = document.getElementById("email").value.trim();
+  if(!email){
+    showStatus("Enter your email address first, then select Forgot password.","error");
+    document.getElementById("email").focus();
+    return;
+  }
+  const resetLink = this;
+  resetLink.style.pointerEvents = "none";
+  try{
+    const {error} = await supabaseClient.auth.resetPasswordForEmail(email,{
+      redirectTo: window.location.origin + "/templates/settings.html"
+    });
+    if(error) throw error;
+    showStatus("Password reset instructions have been sent to your email.","success");
+  }catch(error){
+    console.error("Password reset error:",error);
+    showStatus(error.message || "Unable to send the password reset email.","error");
+  }finally{
+    window.setTimeout(function(){resetLink.style.pointerEvents = "";},1000);
+  }
+});
 </script>
-
 </body>
-  </html>
+</html>
