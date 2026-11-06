@@ -14,7 +14,7 @@
 </head>
 <body class="client-portal">
 <section id="loading" class="portal-loading" aria-live="polite" aria-label="Preparing your workspace">
-  <div class="startup-top"><a class="startup-brand" href="../index.html"><span class="startup-logo">Z</span><span><strong>ZAKMOLANITECH</strong><small>CLIENT WORKSPACE</small></span></a><span class="startup-secure"><i></i> SECURE CLIENT ACCESS</span></div>
+  <div class="startup-top"><a class="startup-brand" href="../index.html"><span class="startup-logo"><img src="../static/assets/logo.png" alt="Zakmolanitech Solutions"></span><span><strong>ZAKMOLANITECH</strong><small>CLIENT WORKSPACE</small></span></a><span class="startup-secure"><i></i> SECURE CLIENT ACCESS</span></div>
   <div class="startup-content">
     <div class="startup-message">
       <span class="startup-eyebrow"><i></i> YOUR NEXT CHAPTER STARTS HERE</span>
@@ -41,7 +41,7 @@
 <div id="dashboard" class="portal-shell" hidden>
 <aside id="dashboardSidebar" class="portal-sidebar">
   <a class="portal-brand" href="../index.html" aria-label="Zakmolanitech home">
-    <span class="brand-symbol">Z</span><span class="brand-copy"><strong>ZAKMOLANITECH</strong><small>CLIENT WORKSPACE</small></span>
+    <span class="brand-symbol"><img src="../static/assets/logo.png" alt="Zakmolanitech Solutions"></span><span class="brand-copy"><strong>ZAKMOLANITECH</strong><small>CLIENT WORKSPACE</small></span>
   </a>
   <div class="sidebar-section-label">WORKSPACE</div>
   <nav class="portal-nav" aria-label="Workspace navigation">
@@ -83,7 +83,7 @@
       <span class="section-kicker"><span class="kicker-dot"></span> YOUR DIGITAL WORKSPACE</span>
       <h1>Your projects<br><em>in motion.</em></h1>
       <p id="welcomeText">Track your projects, follow progress and start something new.</p>
-      <a class="welcome-cta" href="#my-projects">Explore your projects <span>→</span></a>
+      <a class="welcome-cta" href="#my-projects">View all your projects <span>→</span></a>
     </div>
     <div class="welcome-art" aria-hidden="true">
       <div class="art-grid"></div><div class="art-ring ring-large"></div><div class="art-ring ring-small"></div>
@@ -106,7 +106,7 @@
   </section>
 
   <section class="workspace-heading" id="my-projects">
-    <div><span class="section-kicker">YOUR WORK, IN ONE PLACE</span><h2>Project workspace</h2><p>Track delivery, follow team updates and keep the conversation moving.</p></div>
+    <div><span class="section-kicker">YOUR WORK, IN ONE PLACE</span><h2>All your projects</h2><p>Every request, active build, update and delivery in one place.</p></div>
     <a class="outline-action" href="#new-project">＋ New project request</a>
   </section>
   <section class="project-area">
@@ -140,7 +140,16 @@
           <label>Budget range <span>Optional</span><input id="projectBudget" maxlength="100" placeholder="Your estimated budget"></label>
           <label>Desired timeline <span>Optional</span><input id="projectTimeline" maxlength="100" placeholder="e.g. 4–6 weeks"></label>
         </div>
-        <label class="description-label">Tell us about your idea<textarea id="projectDescription" rows="4" maxlength="5000" required placeholder="What would you like us to create or help you with?"></textarea></label>
+        <div class="idea-composer">
+          <div class="idea-composer-head"><div><span class="section-kicker">YOUR IDEA, YOUR WAY</span><h3>Tell us about your idea</h3><p>Write, speak, or attach a prepared document. You can combine all three.</p></div><span class="idea-spark">✦</span></div>
+          <label class="description-label" for="projectDescription">Describe your idea<textarea id="projectDescription" rows="6" maxlength="12000" placeholder="Start writing your idea here. Your voice recording will be transcribed into this same box…"></textarea></label>
+          <div class="idea-tools">
+            <button id="startRecordingButton" class="idea-tool-button" type="button"><span class="idea-tool-icon">●</span><span><strong>Record your idea</strong><small id="recordingHint">Speak naturally; words will appear in the idea box</small></span></button>
+            <label class="idea-tool-button upload-tool" for="projectIdeaFiles"><span class="idea-tool-icon">↑</span><span><strong>Upload documents</strong><small>Word, PowerPoint or PDF · up to 15 MB each</small></span><input id="projectIdeaFiles" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation" multiple hidden></label>
+          </div>
+          <div id="recordingStatus" class="recording-status" role="status" aria-live="polite"></div>
+          <div id="selectedIdeaFiles" class="selected-idea-files"></div>
+        </div>
         <div class="form-submit-row"><div id="projectFormStatus" class="project-feedback" role="status" aria-live="polite"></div><button id="submitProjectButton" class="submit-project-btn" type="submit">Send project request <span>→</span></button></div>
       </form>
     </div>
@@ -247,12 +256,45 @@ async function loadDashboard(){
   console.error(e);location.replace("signin.html");
  }
 }
+const ideaBox=document.getElementById("projectDescription"),filePicker=document.getElementById("projectIdeaFiles"),fileList=document.getElementById("selectedIdeaFiles"),recordButton=document.getElementById("startRecordingButton"),recordingHint=document.getElementById("recordingHint"),recordingStatus=document.getElementById("recordingStatus");
+let ideaFiles=[],mediaRecorder=null,recordedChunks=[],speechRecognition=null,isRecording=false;
+const allowedExt=/\.(pdf|doc|docx|ppt|pptx)$/i;
+function renderIdeaFiles(){fileList.replaceChildren();ideaFiles.forEach((file,index)=>{const row=el("div","idea-file-row");row.append(el("span","idea-file-icon",file.type.startsWith("audio/")?"♫":"▤"),el("span","idea-file-name",file.name),el("span","idea-file-size",(file.size/1024/1024).toFixed(2)+" MB"));const remove=el("button","idea-file-remove","Remove");remove.type="button";remove.addEventListener("click",()=>{ideaFiles.splice(index,1);renderIdeaFiles()});row.append(remove);fileList.append(row)})}
+filePicker.addEventListener("change",()=>{for(const file of [...filePicker.files]){if(!allowedExt.test(file.name)){feedback("Only Word, PowerPoint and PDF documents are accepted.",true);continue}if(file.size>15*1024*1024){feedback(file.name+" is larger than the 15 MB limit.",true);continue}if(!ideaFiles.some(x=>x.name===file.name&&x.size===file.size))ideaFiles.push(file)}filePicker.value="";renderIdeaFiles()});
+recordButton.addEventListener("click",async()=>{
+ if(isRecording){if(speechRecognition){try{speechRecognition.stop()}catch(_){}}if(mediaRecorder&&mediaRecorder.state!=="inactive")mediaRecorder.stop();isRecording=false;recordButton.classList.remove("recording");recordButton.querySelector("strong").textContent="Record your idea";recordingHint.textContent="Recording stopped";recordingStatus.textContent="Finishing your recording…";return}
+ if(!navigator.mediaDevices?.getUserMedia){recordingStatus.textContent="This browser does not support microphone recording. You can type or upload a document instead.";return}
+ try{
+  const stream=await navigator.mediaDevices.getUserMedia({audio:true});recordedChunks=[];
+  const mime=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":"audio/webm";
+  mediaRecorder=new MediaRecorder(stream,{mimeType:mime});
+  mediaRecorder.ondataavailable=event=>{if(event.data.size)recordedChunks.push(event.data)};
+  mediaRecorder.onstop=()=>{const blob=new Blob(recordedChunks,{type:mediaRecorder.mimeType||"audio/webm"});if(blob.size){const stamp=new Date().toISOString().replace(/[:.]/g,"-");ideaFiles.push(new File([blob],"voice-idea-"+stamp+".webm",{type:blob.type}));renderIdeaFiles()}stream.getTracks().forEach(track=>track.stop());recordingStatus.textContent="Your voice recording has been added to this request.";};
+  mediaRecorder.start();
+  const Speech=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(Speech){speechRecognition=new Speech();speechRecognition.continuous=true;speechRecognition.interimResults=true;speechRecognition.lang=navigator.language||"en-US";let finalText="";speechRecognition.onresult=event=>{let interim="";for(let i=event.resultIndex;i<event.results.length;i++){const text=event.results[i][0].transcript;if(event.results[i].isFinal)finalText+=text+" ";else interim+=text}if(finalText.trim()){const current=ideaBox.value.trimEnd();ideaBox.value=(current?current+" ":"")+finalText.trim()+" ";finalText="";ideaBox.dispatchEvent(new Event("input",{bubbles:true}))}recordingStatus.textContent=interim?"Hearing: "+interim:"Your spoken words are being added to the idea box.";};speechRecognition.onerror=()=>{recordingStatus.textContent="Audio is recording. Live transcription is unavailable; your audio will still be attached."};try{speechRecognition.start()}catch(_){}}else{recordingStatus.textContent="Audio is recording. Live speech-to-text is not supported here; the recording will be attached for the team to listen to."}
+  isRecording=true;recordButton.classList.add("recording");recordButton.querySelector("strong").textContent="Stop recording";recordingHint.textContent="Tap to stop and attach your recording";recordingStatus.textContent="Recording… speak clearly. Your transcript will appear in the idea box when supported.";
+ }catch(error){console.error(error);recordingStatus.textContent="Microphone access was blocked. Allow microphone permission and try again."}
+});
 document.getElementById("projectRequestForm").addEventListener("submit",async e=>{
- e.preventDefault();const b=document.getElementById("submitProjectButton");b.disabled=true;b.textContent="Submitting…";
- const payload={owner_id:currentUser.id,project_name:document.getElementById("projectName").value.trim(),project_type:document.getElementById("projectType").value,description:document.getElementById("projectDescription").value.trim(),budget_range:document.getElementById("projectBudget").value.trim()||null,desired_timeline:document.getElementById("projectTimeline").value.trim()||null};
- const {error}=await supabaseClient.from("client_projects").insert(payload);
- if(error){console.error(error);feedback("Project request could not be submitted. Please try again.",true)}else{e.target.reset();feedback("Your project request has been submitted.");await loadProjects()}
- b.disabled=false;b.textContent="＋ Submit project request";
+ e.preventDefault();if(isRecording){recordButton.click();await new Promise(resolve=>setTimeout(resolve,450))}
+ const b=document.getElementById("submitProjectButton"),description=ideaBox.value.trim();
+ if(!description&&!ideaFiles.length){feedback("Please write your idea, record it, or attach a document before submitting.",true);return}
+ b.disabled=true;b.textContent="Submitting request…";
+ const payload={owner_id:currentUser.id,project_name:document.getElementById("projectName").value.trim(),project_type:document.getElementById("projectType").value,description:description||"Project idea provided in attached files or voice recording.",budget_range:document.getElementById("projectBudget").value.trim()||null,desired_timeline:document.getElementById("projectTimeline").value.trim()||null};
+ try{
+  const {data:project,error}=await supabaseClient.from("client_projects").insert(payload).select("id").single();if(error)throw error;
+  const failed=[];
+  for(const file of ideaFiles){
+   const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_").slice(-110),path=currentUser.id+"/"+project.id+"/"+Date.now()+"-"+safeName;
+   const uploaded=await supabaseClient.storage.from("project-request-files").upload(path,file,{contentType:file.type||"application/octet-stream",upsert:false});
+   if(uploaded.error){console.error(uploaded.error);failed.push(file.name);continue}
+   const saved=await supabaseClient.from("project_request_attachments").insert({project_id:project.id,owner_id:currentUser.id,storage_path:path,file_name:file.name,mime_type:file.type||"application/octet-stream",size_bytes:file.size});
+   if(saved.error){console.error(saved.error);await supabaseClient.storage.from("project-request-files").remove([path]);failed.push(file.name)}
+  }
+  e.target.reset();ideaFiles=[];renderIdeaFiles();recordingStatus.textContent="";feedback(failed.length?"Your request was submitted, but some files could not be attached: "+failed.join(", "):"Your project request and supporting material were sent to our project team.");await loadProjects();
+ }catch(error){console.error(error);feedback("Project request could not be submitted. Please try again.",true)}
+ b.disabled=false;b.textContent="Send project request →";
 });
 document.getElementById("logoutButton").addEventListener("click",async function(){const b=this;b.disabled=true;b.textContent="Signing out…";const {error}=await supabaseClient.auth.signOut();if(error){console.error(error);b.disabled=false;b.textContent="Sign Out";return}location.replace("signin.html")});
 const menu=document.getElementById("dashMenuToggle"),side=document.getElementById("dashboardSidebar"),back=document.getElementById("dashBackdrop");function toggleMenu(open){side.classList.toggle("is-open",open);back.classList.toggle("is-visible",open);document.body.classList.toggle("dash-menu-open",open)}menu.addEventListener("click",()=>toggleMenu(!side.classList.contains("is-open")));back.addEventListener("click",()=>toggleMenu(false));side.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>toggleMenu(false)));loadDashboard();
