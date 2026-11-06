@@ -190,7 +190,7 @@ async function loadDashboard(){
  try{
   const {data,error}=await supabaseClient.auth.getSession();if(error)throw error;if(!data.session){location.replace("signin.html");return}
   currentUser=data.session.user;const staffRole=currentUser.app_metadata?.staff_role;if(["admin","manager","staff"].includes(staffRole))document.getElementById("staffWorkspaceLink").hidden=false;const meta=currentUser.user_metadata||{},name=meta.full_name||meta.name||"Zakmolanitech User";
-  document.getElementById("userName").textContent=name;document.getElementById("dashAvatar").textContent=(name.trim()[0]||"Z").toUpperCase();document.getElementById("welcomeText").textContent="Welcome back, "+name+".";
+  document.getElementById("dashAvatar").textContent=(name.trim()[0]||"Z").toUpperCase();document.getElementById("welcomeText").textContent="Welcome back, "+name+". Your workspace is ready when you are.";
   document.getElementById("userEmail").textContent=currentUser.email||"Not available";document.getElementById("userPhone").textContent=meta.phone||currentUser.phone||"Not provided";
   loading.hidden=true;dashboard.hidden=false;await loadProjects();
  }catch(e){console.error(e);location.replace("signin.html")}
