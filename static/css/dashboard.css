@@ -253,3 +253,30 @@ body.client-portal .portal-shell.is-ready{opacity:1;transform:translateY(0)}
 @media(max-width:700px){body.client-portal .portal-loading{padding:18px 19px 14px;min-height:100svh}.startup-secure{font-size:7px;letter-spacing:.8px}.startup-logo{width:38px;height:38px}.startup-brand strong{font-size:9px}.startup-content{display:flex;flex-direction:column;align-items:stretch;gap:15px;margin:18px auto}.startup-message{max-width:none;padding:0}.startup-eyebrow{font-size:8px}.startup-message h1{margin:12px 0 8px;font-size:clamp(37px,10vw,49px);letter-spacing:-2.3px}.startup-message>p{max-width:480px;font-size:10px;line-height:1.6}.startup-countdown-row{gap:11px;margin-top:15px}.startup-count-number{width:43px;height:43px;border-radius:12px;font-size:20px}.startup-countdown-row>div:last-child strong{font-size:10px}.startup-countdown-row>div:last-child span{font-size:8px}.startup-progress{margin-top:12px}.startup-progress-meta{margin-top:6px;font-size:7px}.startup-showcase{width:100%;max-width:490px;min-height:clamp(230px,53vw,320px);margin:0 auto}.showcase-main{width:72%;height:82%;border-width:5px;border-radius:16px}.showcase-side{width:39%;height:43%;border-width:4px;border-radius:13px}.showcase-overlay{left:13px;bottom:13px}.showcase-overlay span{font-size:6px;margin-bottom:5px}.showcase-overlay strong{font-size:24px}.showcase-side span{left:8px;bottom:8px;font-size:6px}.showcase-floating{left:5%;padding:8px 10px;gap:7px}.showcase-floating-icon{width:25px;height:25px}.showcase-floating strong{font-size:8px}.showcase-floating small{font-size:7px}.showcase-pagination{right:5%;bottom:7%}.startup-bottom{font-size:8px}.startup-bottom>span:first-child{font-size:8px}.startup-bottom>span:last-child{font-size:6px;letter-spacing:.7px}}
 @media(max-width:390px){.startup-secure{font-size:6px}.startup-message h1{font-size:36px}.startup-showcase{min-height:215px}.showcase-overlay strong{font-size:20px}.startup-bottom>span:last-child{max-width:130px;text-align:right}}
 @media(prefers-reduced-motion:reduce){.showcase-main,.showcase-main>img,.showcase-side-top,.showcase-side-bottom,.showcase-floating,.showcase-pagination i{animation:none!important}body.client-portal .portal-shell{transition:none}}
+
+/* Project request composer: writing, voice and supporting files */
+.idea-composer{margin-top:22px;padding:22px;border:1px solid #e0ebf1;border-radius:17px;background:linear-gradient(145deg,#fbfdfe,#f2f8fa)}
+.idea-composer-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}
+.idea-composer-head h3{margin:7px 0 5px;color:#1c3b51;font:800 19px Manrope,sans-serif}
+.idea-composer-head p{margin:0;color:#8497a5;font-size:11px;line-height:1.6}
+.idea-spark{width:36px;height:36px;display:grid;place-items:center;border-radius:11px;background:#e4f5f7;color:#1686a3;font-size:18px}
+.idea-composer .description-label{display:block;color:#526c7e;font-size:11px;font-weight:800}
+.idea-composer .description-label textarea{width:100%;margin-top:9px;min-height:145px;padding:15px 16px;border:1px solid #dce7ee;border-radius:13px;background:#fff;color:#29465b;font:13px/1.65 "DM Sans",sans-serif;resize:vertical;outline:0;transition:border-color .2s,box-shadow .2s}
+.idea-composer .description-label textarea:focus{border-color:#57b7cd;box-shadow:0 0 0 4px #55b8d21b}
+.idea-tools{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.idea-tool-button{display:flex;align-items:center;gap:12px;min-width:0;padding:14px;border:1px solid #dfeaf0;border-radius:13px;background:#fff;color:#315166;text-align:left;cursor:pointer;transition:.2s}
+.idea-tool-button:hover{border-color:#8fcbd8;transform:translateY(-1px);box-shadow:0 8px 20px #17445b0b}
+.idea-tool-icon{width:36px;height:36px;flex:0 0 auto;display:grid;place-items:center;border-radius:10px;background:#e9f6f8;color:#1684a0;font-size:17px;font-weight:900}
+.idea-tool-button strong,.idea-tool-button small{display:block}
+.idea-tool-button strong{font-size:11px;font-weight:800}
+.idea-tool-button small{margin-top:4px;color:#91a1ad;font-size:9px;line-height:1.45}
+.idea-tool-button.recording{border-color:#e8a4a4;background:#fff8f8}
+.idea-tool-button.recording .idea-tool-icon{background:#ffe7e7;color:#c53b4b;animation:recordPulse 1.3s infinite}
+@keyframes recordPulse{50%{box-shadow:0 0 0 7px #d8494918}}
+.recording-status{min-height:18px;margin-top:10px;color:#27839c;font-size:10px}
+.selected-idea-files{display:grid;gap:7px;margin-top:9px}
+.idea-file-row{display:flex;align-items:center;gap:9px;min-width:0;padding:9px 11px;border:1px solid #e4edf2;border-radius:10px;background:#fff}
+.idea-file-icon{color:#2387a2}.idea-file-name{flex:1;min-width:0;overflow:hidden;color:#476276;font-size:10px;text-overflow:ellipsis;white-space:nowrap}.idea-file-size{color:#9aabb7;font-size:9px;white-space:nowrap}
+.idea-file-remove{padding:5px 8px;border:0;border-radius:7px;background:#f5f7f8;color:#8a5960;font-size:9px;cursor:pointer}
+.idea-composer .idea-tool-button:focus-visible,.idea-file-remove:focus-visible{outline:3px solid #58b9cf55;outline-offset:2px}
+@media(max-width:600px){.idea-composer{padding:15px}.idea-tools{grid-template-columns:1fr}.idea-composer-head h3{font-size:17px}}
