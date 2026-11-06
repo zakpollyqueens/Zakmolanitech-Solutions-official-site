@@ -4,6 +4,10 @@
 
 This repository contains the official Zakmolanitech Solutions website. The current rebuild focuses on a visual-first corporate experience, responsive layouts, clear service discovery, selected company products, and accessible navigation.
 
+## Live website
+
+- Cloudflare Pages: https://zakmolanitech-solutions.pages.dev/
+
 ## Development
 
 - Main entry: `index.html`
