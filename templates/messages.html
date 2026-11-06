@@ -393,5 +393,6 @@ init();
 </script>
 
 <script>(()=>{const s=document.getElementById("dashboardSidebar"),b=document.getElementById("dashBackdrop"),t=document.getElementById("dashMenuToggle");if(!s||!b||!t)return;const c=()=>{s.classList.remove("is-open");b.classList.remove("is-visible")};t.addEventListener("click",()=>{s.classList.toggle("is-open");b.classList.toggle("is-visible")});b.addEventListener("click",c);s.querySelectorAll("a").forEach(a=>a.addEventListener("click",c));})();</script>
+<script>if(window.visualViewport){const syncPortalViewport=()=>document.documentElement.style.setProperty("--portal-vh",window.visualViewport.height+"px");window.visualViewport.addEventListener("resize",syncPortalViewport);syncPortalViewport()}</script>
 </body>
   </html> 
