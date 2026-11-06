@@ -13,3 +13,32 @@ body.client-portal.page-workspace{min-height:100vh;background:#f4f8fb;color:#304
 .page-workspace main.page-content .messages-wrap,.page-workspace main.page-content .notifications-wrap,.page-workspace main.page-content .support-wrap,.page-workspace main.page-content .profile-wrap,.page-workspace main.page-content .settings-wrap{width:100%;max-width:1180px;margin:0 auto}
 @media(max-width:760px){.page-workspace main.page-content.messages-page,.page-workspace main.page-content.notifications-page,.page-workspace main.page-content.support-page,.page-workspace main.page-content.profile-page,.page-workspace main.page-content.settings-page{width:100%;margin-left:0;padding:0 20px 28px!important}}
 @media(max-width:480px){.page-workspace main.page-content.messages-page,.page-workspace main.page-content.notifications-page,.page-workspace main.page-content.support-page,.page-workspace main.page-content.profile-page,.page-workspace main.page-content.settings-page{padding:0 14px 22px!important}}
+
+/* Unified premium portal surface and dependable message composer */
+.page-workspace{background:#f3f7fa!important;color:#29465b!important}
+.page-workspace .portal-main,.page-workspace main.page-content{background:linear-gradient(145deg,#f7fafc 0%,#f0f5f8 100%)!important}
+.page-workspace .page-content .messages-wrap,.page-workspace .page-content .notifications-wrap,.page-workspace .page-content .support-wrap,.page-workspace .page-content .profile-wrap,.page-workspace .page-content .settings-wrap{padding-bottom:35px}
+.page-workspace .page-content .messages-head,.page-workspace .page-content .notifications-head{padding:22px 24px;margin-bottom:18px;border:1px solid #e5edf2;border-radius:17px;background:linear-gradient(115deg,#fff,#f4fafc);box-shadow:0 12px 34px #163b5308}
+.page-workspace .page-content .community-selector{padding:17px 19px!important;background:#fff!important;border:1px solid #e4edf2!important;border-radius:14px!important;box-shadow:0 8px 25px #173a5208!important}
+.page-workspace .page-content .community-selector label{display:block;margin-bottom:8px;color:#6f8494!important;font-size:10px;font-weight:800;letter-spacing:1px}
+.page-workspace .page-content .community-selector select,.page-workspace .page-content .composer textarea,.page-workspace .page-content input,.page-workspace .page-content textarea,.page-workspace .page-content select{font-family:"DM Sans",sans-serif;outline:none;transition:border-color .2s,box-shadow .2s}
+.page-workspace .page-content .composer{display:flex!important;align-items:flex-end!important;gap:12px!important;padding:17px!important;background:#fff!important;border-top:1px solid #e8eef2!important}
+.page-workspace .page-content .composer textarea{display:block!important;min-width:0!important;width:100%!important;min-height:54px!important;max-height:170px!important;resize:vertical!important;padding:15px 16px!important;border:1px solid #dce7ee!important;border-radius:13px!important;background:#f7fafc!important;color:#29465b!important;font-size:14px!important;line-height:1.55!important;box-shadow:inset 0 1px 2px #18384b08!important}
+.page-workspace .page-content .composer textarea::placeholder{color:#9aabb8!important}
+.page-workspace .page-content .composer textarea:focus,.page-workspace .page-content .community-selector select:focus,.page-workspace .page-content input:focus,.page-workspace .page-content textarea:focus{border-color:#58b9cf!important;box-shadow:0 0 0 4px #55b8d21b!important}
+.page-workspace .page-content .send-btn{flex:0 0 auto!important;min-width:104px!important;min-height:49px!important;padding:0 19px!important;border:0!important;border-radius:12px!important;background:linear-gradient(135deg,#167e9d,#2767bd)!important;color:#fff!important;font-weight:800!important;box-shadow:0 8px 20px #187da52a!important;cursor:pointer!important}
+.page-workspace .page-content .send-btn:disabled{opacity:.48!important;cursor:not-allowed!important}
+.page-workspace .page-content .message-panel{overflow:hidden!important;border:1px solid #e3ebf0!important;border-radius:17px!important;background:#fff!important;box-shadow:0 14px 38px #153b520c!important}
+.page-workspace .page-content .message-status{background:#fbfdfe!important;color:#718797!important;border-color:#e8eef2!important}
+.page-workspace .page-content .message-list{background:linear-gradient(180deg,#f9fbfc,#f3f7f9)!important}
+.page-workspace .page-content .message-bubble{max-width:min(82%,680px);padding:13px 16px!important;border-radius:15px!important;background:#fff!important;box-shadow:0 5px 15px #183c5208!important}
+.page-workspace .page-content .message.mine .message-bubble{background:#e8f6fa!important;border-color:#ccebf1!important}
+.page-workspace .page-content .message-text{color:#385469!important}
+.page-workspace .page-content .message-author,.page-workspace .page-content .message-time{color:#8497a5!important}
+.page-workspace .page-content .support-card,.page-workspace .page-content .profile-card,.page-workspace .page-content .settings-card{background:#fff!important;border:1px solid #e4edf2!important;box-shadow:0 12px 34px #173b5209!important}
+.page-workspace .page-content .support-page,.page-workspace .page-content .profile-page,.page-workspace .page-content .settings-page,.page-workspace .page-content .notifications-page{background:transparent!important}
+.page-workspace .page-content .notification{background:#fff!important;border-color:#e4edf2!important}
+.page-workspace .page-content .form-field input,.page-workspace .page-content .form-field select,.page-workspace .page-content .form-field textarea{background:#f7fafc!important;color:#29465b!important;border:1px solid #dfe9ef!important}
+.page-workspace .brand-symbol,.page-workspace .startup-logo{overflow:hidden;padding:4px;background:#fff!important;border:1px solid #e5edf2;box-shadow:0 6px 18px #1b4a6414!important}
+.page-workspace .brand-symbol img,.page-workspace .startup-logo img{display:block;width:100%;height:100%;object-fit:contain;border-radius:8px}
+@media(max-width:600px){.page-workspace .page-content .composer{align-items:stretch!important;flex-direction:column!important}.page-workspace .page-content .composer textarea{width:100%!important}.page-workspace .page-content .send-btn{width:100%!important}.page-workspace .page-content .message-list{min-height:320px!important;height:55vh!important}.page-workspace .page-content .messages-head,.page-workspace .page-content .notifications-head{padding:17px}}
