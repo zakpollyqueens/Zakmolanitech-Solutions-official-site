@@ -147,5 +147,6 @@ init();
 <script>
 (function(){var sidebar=document.getElementById("dashboardSidebar"),backdrop=document.getElementById("dashBackdrop"),toggle=document.getElementById("dashMenuToggle");if(!sidebar||!backdrop||!toggle)return;function close(){sidebar.classList.remove("is-open");backdrop.classList.remove("is-visible");}toggle.addEventListener("click",function(){sidebar.classList.toggle("is-open");backdrop.classList.toggle("is-visible");});backdrop.addEventListener("click",close);Array.prototype.forEach.call(sidebar.querySelectorAll("a"),function(a){a.addEventListener("click",close);});})();
 </script>
+<script src="../static/js/portal-app-lock.js"></script>
 </body>
 </html>
