@@ -302,3 +302,28 @@ revoke all on function public.acknowledge_study_session(uuid) from public,anon;
 revoke all on function public.mark_study_attendance(uuid,text) from public,anon;
 grant execute on function public.acknowledge_study_session(uuid) to authenticated;
 grant execute on function public.mark_study_attendance(uuid,text) to authenticated;
+
+
+-- Serialize package allocation when multiple instructors schedule sessions together.
+create or replace function public.study_schedule_session_for_active_students()
+returns trigger language plpgsql security definer set search_path=''
+as $$
+declare sub record; att_id uuid; remaining integer;
+begin
+ for sub in select s.* from public.study_package_subscriptions s where s.status='active' order by s.created_at for update of s loop
+  remaining:=public.study_package_remaining(sub.id);
+  if remaining>0 then
+   insert into public.study_session_attendance(session_id,subscription_id,student_id) values(new.id,sub.id,sub.student_id)
+   on conflict(session_id,subscription_id) do nothing returning id into att_id;
+   if att_id is not null then
+    insert into public.study_session_notifications(student_id,session_id,attendance_id,title,message,notification_type)
+    values(sub.student_id,new.id,att_id,'New lesson scheduled',new.title||' is scheduled for '||
+    to_char(new.starts_at at time zone 'Africa/Kampala','Dy, DD Mon YYYY HH:MI AM')||'. Please acknowledge your attendance.','lesson_scheduled')
+    on conflict do nothing;
+   end if;
+   att_id:=null;
+  end if;
+ end loop;
+ return new;
+end $$;
+revoke all on function public.study_schedule_session_for_active_students() from public,anon,authenticated;
