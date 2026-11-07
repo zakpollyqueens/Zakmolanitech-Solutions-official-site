@@ -27,3 +27,25 @@
 .docs-feature[hidden]{display:none}
 @media(max-width:1050px){.docs-feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.docs-feature-grid{grid-template-columns:1fr}.docs-feature p{min-height:0}.docs-feature .docs-card-art{height:155px}}
+
+.docs-top nav .docs-app-link{padding:9px 13px;border:1px solid #7563d9;border-radius:8px;background:#7159d5;color:#fff;font-weight:800}
+.subscription-guide{margin:48px 0 55px;padding:clamp(20px,3vw,34px);border:1px solid #e2e7f0;border-radius:18px;background:linear-gradient(145deg,#fff,#f8f9ff);box-shadow:0 18px 48px #172c490b;scroll-margin-top:90px}
+.subscription-guide>h2{margin-top:10px!important}
+.subscription-plan-doc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:24px 0 32px}
+.subscription-doc-card{padding:18px;border:1px solid #e1e6ef;border-radius:13px;background:#fff}
+.subscription-doc-card>span{font-size:9px;letter-spacing:1.3px;font-weight:900;color:#6b7890}
+.subscription-doc-card h3{font-size:23px!important;margin:9px 0!important}
+.subscription-doc-card>strong{font-size:13px}
+.subscription-doc-card p{min-height:90px;margin:9px 0;font-size:12px}
+.subscription-doc-card small{display:block;padding-top:10px;border-top:1px solid #edf0f5;color:#65748a;font-weight:800}
+.subscription-doc-card.gold{border-top:4px solid #c79a35}.subscription-doc-card.silver{border-top:4px solid #8797ad}.subscription-doc-card.premium{border-top:4px solid #8b70d8}
+.subscription-table-wrap{overflow-x:auto;border:1px solid #e1e6ef;border-radius:12px;margin:18px 0}
+.subscription-price-table{width:100%;min-width:660px;border-collapse:collapse;background:#fff;font-size:12px}
+.subscription-price-table th,.subscription-price-table td{padding:13px 14px;text-align:left;border-bottom:1px solid #edf0f5}
+.subscription-price-table thead th{background:#101d31;color:#fff;font-size:10px;letter-spacing:.4px}
+.subscription-price-table tbody th{font-weight:800;color:#253650}
+.subscription-price-table td{color:#52647a;font-variant-numeric:tabular-nums}
+.subscription-note{padding:14px 16px;border-left:3px solid #7159d5;background:#f0edff;border-radius:0 9px 9px 0}
+.subscription-steps{margin:20px 0 28px}.subscription-guide li{margin:8px 0}
+.subscription-guide-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}.subscription-guide-actions .docs-action{margin:0}
+@media(max-width:820px){.subscription-plan-doc-grid{grid-template-columns:1fr}.subscription-doc-card p{min-height:0}}
