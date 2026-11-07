@@ -133,18 +133,19 @@
    rows.forEach(row=>{const l=row.study_scheduled_sessions||{},p=document.createElement("p");p.className="study-status";
     p.textContent=(l.title||"Scheduled lesson")+" · "+(l.starts_at?fmt(l.starts_at):"Time pending")+" · "+row.attendance_status.replaceAll("_"," ");
     if(row.attendance_status==="scheduled"){
-     const ack=document.createElement("button");ack.textContent=row.acknowledgement==="acknowledged"?"Attendance acknowledged":"Acknowledge lesson";ack.disabled=row.acknowledgement==="acknowledged";ack.addEventListener("click",async()=>{const x=await db.rpc("acknowledge_study_session",{p_attendance_id:row.id});if(x.error){feedback(x.error.message,"error");return}await loadPackageDashboard()});p.append(" ",ack);
+     const ack=document.createElement("button");ack.textContent=row.acknowledgement==="acknowledged"?"Attendance acknowledged":"Acknowledge lesson";ack.disabled=row.acknowledgement==="acknowledged";ack.addEventListener("click",async()=>{const x=await db.rpc("acknowledge_study_session",{p_attendance_id:row.id});if(x.error){feedback(x.error.message,"error");return}await db.from("study_session_notifications").update({is_read:true}).eq("attendance_id",row.id).eq("notification_type","lesson_scheduled");await loadPackageDashboard()});p.append(" ",ack);
      if(l.meeting_url){const join=document.createElement("a");join.href=l.meeting_url;join.target="_blank";join.rel="noopener noreferrer";join.textContent=" Join live class";p.append(join)}
     }
     card.append(p);
    });
    root.append(card);
   }
-  const n=await db.from("study_session_notifications").select("id,title,message,notification_type,is_read,created_at,attendance_id").eq("student_id",user.id).order("created_at",{ascending:false}).limit(30);
+  const n=await db.from("study_session_notifications").select("id,title,message,notification_type,is_read,created_at,attendance_id").eq("student_id",user.id).eq("is_read",false).order("created_at",{ascending:false}).limit(30);
   if(n.error){notify.textContent="Lesson notifications could not be loaded.";return}
   if(n.data?.length){const h=document.createElement("h3");h.textContent="Lesson notifications";notify.append(h);
    n.data.forEach(item=>{const p=document.createElement("div");p.className="study-status"+(item.notification_type==="lesson_missed"?" error":"");p.textContent=item.title+": "+item.message;
     if(item.notification_type==="lesson_scheduled"){const b=document.createElement("button");b.textContent="Acknowledge";b.addEventListener("click",async()=>{const x=await db.rpc("acknowledge_study_session",{p_attendance_id:item.attendance_id});if(x.error){feedback(x.error.message,"error");return}await db.from("study_session_notifications").update({is_read:true}).eq("id",item.id);await loadPackageDashboard()});p.append(" ",b)}
+    if(item.notification_type!=="lesson_scheduled"){const read=document.createElement("button");read.textContent="Mark as read";read.addEventListener("click",async()=>{await db.from("study_session_notifications").update({is_read:true}).eq("id",item.id);await loadPackageDashboard()});p.append(" ",read)}
     notify.append(p);
    });
   }
