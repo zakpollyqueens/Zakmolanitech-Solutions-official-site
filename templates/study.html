@@ -36,7 +36,7 @@
  const fmt=v=>new Date(v).toLocaleString(undefined,{dateStyle:"medium",timeStyle:"short"});
  let user=null,timer=null;
  function feedback(msg,type){const n=$("studentFeedback");n.hidden=false;n.className="study-status "+(type||"");n.textContent=msg}
- async function init(){const s=await db.auth.getSession();if(s.error)throw s.error;user=s.data.session?.user||null;
+ async function init(){const s=await db.auth.getSession();if(s.error)throw s.error;user=s.data.session?.user||null;if(new URLSearchParams(location.search).get("payment")==="return")feedback("You have returned from checkout. We are waiting for JJuma’s secure payment confirmation before activating your lesson.","success");
   if(!user){$("studentIntro").textContent="Create a student account or sign in to request weekend places and manage your lessons.";$("studentAuth").hidden=false;await loadLessons();return}
   $("studentGreeting").textContent="Welcome, "+(user.user_metadata?.full_name||user.email||"Student");$("studentIntro").textContent="You are signed in. Browse published lessons and check your access below.";
   if(["admin","manager","staff","architect"].includes(user.app_metadata?.staff_role))$("studyAdminLink").hidden=false;
@@ -51,7 +51,7 @@
    card.innerHTML="<span class='price-kicker'>"+(l.lesson_type==="weekend_free"?"FREE WEEKEND SESSION":"PAID ONLINE LESSON")+"</span><h3>"+esc(l.title)+"</h3><p>"+esc(l.summary||"Practical IT learning session.")+"</p><p><strong>"+esc(fmt(l.starts_at))+"</strong><br>"+Number(l.duration_minutes)+" minutes · "+(l.lesson_type==="weekend_free"?"FREE":esc(l.currency+" "+Number(l.price_amount).toLocaleString()))+"</p>";
    const b=document.createElement("button");b.type="button";
    if(l.lesson_type==="weekend_free"){b.textContent=user?"Request free seat":"Sign in to request a seat";b.disabled=!user;b.addEventListener("click",()=>requestFree(l,b))}
-   else{b.textContent="Secure checkout awaiting provider setup";b.disabled=true}
+   else{b.textContent=user?"Choose payment method":"Sign in to enrol";b.disabled=!user;b.addEventListener("click",()=>choosePayment(l,card,b))}
    card.append(b);list.append(card);
   });root.innerHTML="<h3>Available lessons</h3>";root.append(list);
  }
@@ -83,14 +83,35 @@
   const row=Array.isArray(r.data)?r.data[0]:r.data;feedback("Your lesson timer has started. Refreshing the page will not reset your access time.","success");b.remove();
   const p=document.createElement("p");p.className="study-status";resources.before(p);countdown(row.access_expires_at,p);await loadResources(e.lesson_id,resources);
  }
+ async function choosePayment(lesson,card,trigger){
+  const existing=card.querySelector(".payment-method-panel");if(existing){existing.remove();return}
+  const panel=document.createElement("div");panel.className="lesson-resources payment-method-panel";
+  const intro=document.createElement("p");intro.textContent="Choose how you want to pay for "+lesson.title+". The lesson opens only after payment is verified.";panel.append(intro);
+  const jjuma=document.createElement("button");jjuma.type="button";jjuma.textContent="Continue with JJuma Pay checkout";jjuma.addEventListener("click",()=>startPaidCheckout(lesson,"jjuma",jjuma,panel));panel.append(jjuma);
+  const airtel=document.createElement("button");airtel.type="button";airtel.style.marginLeft="8px";airtel.textContent="Pay with Airtel Money";airtel.addEventListener("click",()=>startPaidCheckout(lesson,"airtel_manual",airtel,panel));panel.append(airtel);
+  const note=document.createElement("p");note.className="study-status";note.textContent="Airtel Money: pay the exact lesson amount using merchant code 7171832, then submit the transaction ID from your Airtel confirmation message. Staff will verify it before access is granted.";panel.append(note);
+  card.append(panel);
+ }
+ async function startPaidCheckout(lesson,method,button,panel){
+  let reference=null;
+  if(method==="airtel_manual"){reference=window.prompt("Enter the Airtel Money transaction ID from your payment confirmation message. First pay the exact amount to merchant code 7171832.");if(!reference)return}
+  button.disabled=true;const oldText=button.textContent;button.textContent=method==="jjuma"?"Opening secure checkout…":"Submitting Airtel reference…";
+  try{
+   const {data,error}=await db.functions.invoke("create-study-checkout",{body:{lesson_id:lesson.id,payment_method:method,transaction_reference:reference}});
+   if(error)throw error;if(data?.error)throw new Error(data.error);
+   if(data?.already_paid){feedback(data.message||"You already have access to this lesson.","success");await loadMyLearning();return}
+   if(method==="jjuma"&&data?.payment_url){window.location.assign(data.payment_url);return}
+   feedback(data?.message||"Your Airtel payment reference was submitted for verification.","success");panel.textContent=data?.message||"Airtel payment reference submitted. Staff verification is pending.";await loadMyLearning();
+  }catch(error){feedback(error.message||"Payment could not be started. Please try again.", "error");button.disabled=false;button.textContent=oldText}
+ }
  async function loadResources(id,root){const r=await db.from("study_lesson_resources").select("title,resource_type,content_url,content_text,storage_path").eq("lesson_id",id).order("sort_order");root.replaceChildren();
   if(r.error){root.textContent="Lesson materials could not be loaded.";return}
   if(!r.data?.length){root.textContent="Your lesson is open. The instructor has not added materials yet.";return}
-  r.data.forEach(x=>{const box=document.createElement("div");box.style.margin="10px 0";const strong=document.createElement("strong");strong.textContent=x.title;box.append(strong);
+  for(const x of r.data){const box=document.createElement("div");box.style.margin="10px 0";const strong=document.createElement("strong");strong.textContent=x.title;box.append(strong);
    if(x.content_text){const p=document.createElement("p");p.style.whiteSpace="pre-wrap";p.textContent=x.content_text;box.append(p)}
    if(x.storage_path){const signed=await db.storage.from("study-lesson-audio").createSignedUrl(x.storage_path,900);if(signed.error){const p=document.createElement("p");p.textContent="Voice lesson is temporarily unavailable.";box.append(p)}else{const audio=document.createElement("audio");audio.controls=true;audio.preload="metadata";audio.style.width="100%";audio.src=signed.data.signedUrl;box.append(audio)}}
    if(x.content_url){const a=document.createElement("a");a.href=x.content_url;a.target="_blank";a.rel="noopener noreferrer";a.textContent=x.resource_type==="meeting"?"Join live class ↗":"Open "+x.resource_type+" ↗";box.append(a)}root.append(box);
-  });
+  }
  }
  function countdown(expires,p){if(timer)clearInterval(timer);const tick=()=>{const ms=new Date(expires).getTime()-Date.now();if(ms<=0){p.textContent="Your lesson access time has ended.";clearInterval(timer);return}const m=Math.floor(ms/60000),s=Math.floor(ms%60000/1000);p.textContent="Lesson time remaining: "+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")};tick();timer=setInterval(tick,1000)}
  init().catch(e=>{console.error(e);$("studentIntro").textContent="The student area is temporarily unavailable. Please try again later."});
