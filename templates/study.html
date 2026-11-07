@@ -25,7 +25,10 @@
 <section class="inner-body" style="background:#e9edf4"><div class="wrap"><div class="study-highlight"><div><div class="section-kicker">A FAIR WAY TO LEARN</div><h2>Your payment belongs to your lesson.</h2><p>Every lesson is published with its own duration. Once a paid lesson is confirmed, the student receives access to that lesson for the purchased time. A new lesson requires its own enrolment.</p></div><div class="study-highlight-art" aria-hidden="true"><span>60:00</span></div></div></div></section>
 <section class="inner-body"><div class="wrap"><div class="inner-title"><div class="section-kicker">HOW IT WORKS</div><h2>From account to classroom.</h2></div><div class="study-steps"><div class="study-step"><b>01 / ACCOUNT</b><strong>Create your student account</strong><p>Register or sign in with your existing Zakmolanitech account.</p></div><div class="study-step"><b>02 / CHOOSE</b><strong>Select a published lesson</strong><p>Review the lesson time, duration, price and whether it is free or paid.</p></div><div class="study-step"><b>03 / ACCESS</b><strong>Get verified lesson access</strong><p>Weekend seats are confirmed by the learning team. Paid access is unlocked only after provider confirmation.</p></div></div></div></section>
 <section class="inner-body" id="student-area" style="background:#f2f4f8"><div class="wrap"><div class="inner-title"><div class="section-kicker">STUDENT WORKSPACE</div><h2>Your lessons and learning access.</h2><p>Sign in to see available sessions, request a free weekend place and open lessons you are authorised to access.</p></div>
-<div class="student-area"><h2 id="studentGreeting">Student area</h2><p id="studentIntro" class="study-status">Checking your account…</p><div id="studentAuth" class="study-auth" hidden><a class="button button-primary" href="signup.html">Create student account ↗</a><a class="button button-glass" href="signin.html">Sign in ↗</a></div><div id="studentFeedback" class="study-status" hidden aria-live="polite"></div><div id="availableLessons"></div><div id="myLearning"></div><div id="studyAdminLink" hidden style="margin-top:18px"><a class="button button-glass" href="study-admin.html#lessonComposer">Prepare today’s lesson ↗</a></div></div></div></section>
+<div class="student-area"><h2 id="studentGreeting">Student area</h2><p id="studentIntro" class="study-status">Checking your account…</p><div id="studentAuth" class="study-auth" hidden><a class="button button-primary" href="signup.html">Create student account ↗</a><a class="button button-glass" href="signin.html">Sign in ↗</a></div><div id="studentFeedback" class="study-status" hidden aria-live="polite"></div>
+<div id="packageWorkspace" style="margin:20px 0"><h3>Choose a lesson package</h3><p class="study-status">Packages include one-hour sessions. Your instructor chooses the dates; they do not need to be consecutive.</p><div id="packageOptions" class="lesson-list"></div><div id="packagePayments"></div></div>
+<div id="sessionNotifications"></div><div id="packageProgress"></div>
+<div id="availableLessons"></div><div id="myLearning"></div><div id="studyAdminLink" hidden style="margin-top:18px"><a class="button button-glass" href="study-admin.html#lessonComposer">Prepare today’s lesson ↗</a></div></div></div></section>
 </main>
 <footer class="inner-footer"><div class="wrap"><span>© 2026 Zakmolanitech Solutions · Equipping minds with IT solutions.</span><span><a href="signin.html">Client portal</a>　<a href="pricing.html">Pricing</a></span><span><a href="../index.html">Home</a>　<a href="contact.html">Contact</a>　<a href="privacy-policy.html">Privacy</a>　<a href="terms.html">Terms</a></span></div></footer>
 <script src="../static/js/site-refresh.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -40,7 +43,7 @@
   if(!user){$("studentIntro").textContent="Create a student account or sign in to request weekend places and manage your lessons.";$("studentAuth").hidden=false;await loadLessons();return}
   $("studentGreeting").textContent="Welcome, "+(user.user_metadata?.full_name||user.email||"Student");$("studentIntro").textContent="You are signed in. Browse published lessons and check your access below.";
   if(["admin","manager","staff","architect"].includes(user.app_metadata?.staff_role))$("studyAdminLink").hidden=false;
-  await Promise.all([loadLessons(),loadMyLearning()]);
+  await Promise.all([loadLessons(),loadMyLearning(),loadPackages(),loadPackageDashboard()]);
  }
  async function loadLessons(){const root=$("availableLessons");root.innerHTML="<h3>Available lessons</h3><p class='study-status'>Loading sessions…</p>";
   const r=await db.from("study_lessons").select("id,title,summary,lesson_type,starts_at,duration_minutes,price_amount,currency").eq("status","published").order("starts_at");
@@ -77,6 +80,69 @@
    else if(e.status==="pending_payment")card.insertAdjacentHTML("beforeend","<p class='study-status'>Waiting for secure payment checkout.</p>");
    root.append(card);
   });
+ }
+
+ async function loadPackages(){
+  const root=$("packageOptions");root.innerHTML="<p class='study-status'>Loading packages…</p>";
+  const r=await db.from("study_package_catalog").select("id,title,session_count,price_ugx,description").eq("active",true).order("sort_order");
+  if(r.error){root.textContent="Lesson packages are temporarily unavailable.";return}
+  root.replaceChildren();
+  r.data.forEach(p=>{const card=document.createElement("article");card.className="lesson-item";
+   card.innerHTML="<span class='price-kicker'>"+p.session_count+" ONE-HOUR SESSION"+(p.session_count===1?"":"S")+"</span><h3>"+esc(p.title)+"</h3><p>"+esc(p.description)+"</p><p><strong>UGX "+Number(p.price_ugx).toLocaleString()+"</strong></p>";
+   const b=document.createElement("button");b.textContent="Select package";b.disabled=!user;b.addEventListener("click",()=>choosePackage(p,card));card.append(b);root.append(card);
+  });
+ }
+ async function choosePackage(pack,card){
+  let panel=card.querySelector(".package-pay-panel");if(panel){panel.remove();return}
+  panel=document.createElement("div");panel.className="lesson-resources package-pay-panel";
+  const note=document.createElement("p");note.textContent="You are selecting "+pack.title+" for UGX "+Number(pack.price_ugx).toLocaleString()+". Each scheduled class is one hour; sessions are counted only when the instructor records attendance or a missed lesson.";panel.append(note);
+  for(const [method,label] of [["jjuma","Pay securely with JJuma Pay"],["airtel_manual","Pay with Airtel Money"]]){
+   const b=document.createElement("button");b.type="button";b.textContent=label;b.addEventListener("click",()=>buyPackage(pack,method,b,panel));panel.append(b);
+  }
+  const airtel=document.createElement("p");airtel.className="study-status";airtel.textContent="Airtel Money: pay the exact amount to merchant code 7171832, then enter your transaction reference.";panel.append(airtel);card.append(panel);
+ }
+ async function buyPackage(pack,method,b,panel){
+  let reference=null;if(method==="airtel_manual"){reference=window.prompt("Enter the Airtel Money transaction ID after paying merchant code 7171832.");if(!reference)return}
+  const old=b.textContent;b.disabled=true;b.textContent="Processing…";
+  try{const {data,error}=await db.functions.invoke("create-study-package-checkout",{body:{package_id:pack.id,payment_method:method,transaction_reference:reference}});
+   if(error)throw error;if(data?.error)throw new Error(data.error);
+   if(method==="jjuma"&&data.payment_url){location.assign(data.payment_url);return}
+   feedback(data.message||"Airtel reference submitted. Your package activates after staff verification.","success");panel.textContent=data.message||"Awaiting staff verification.";await loadPackageDashboard();
+  }catch(e){feedback(e.message||"Could not process package payment.","error");b.disabled=false;b.textContent=old}
+ }
+ async function loadPackageDashboard(){
+  if(!user)return;
+  const root=$("packageProgress"),notify=$("sessionNotifications");
+  const subs=await db.from("study_package_subscriptions").select("id,package_id,total_sessions,status,amount_paid,currency,purchased_at,study_package_catalog(title)").eq("student_id",user.id).order("created_at",{ascending:false});
+  if(subs.error){root.textContent="Package progress could not be loaded.";return}
+  root.replaceChildren();notify.replaceChildren();
+  for(const sub of subs.data||[]){
+   const a=await db.from("study_session_attendance").select("id,attendance_status,acknowledgement,study_scheduled_sessions(title,starts_at,meeting_url)").eq("subscription_id",sub.id).order("created_at",{ascending:true});
+   const rows=a.data||[],used=rows.filter(x=>["attended","missed"].includes(x.attendance_status)).length,remaining=Math.max(0,sub.total_sessions-used);
+   const card=document.createElement("article");card.className="lesson-item";
+   const title=document.createElement("h3");title.textContent=sub.study_package_catalog?.title||"Lesson package";
+   const progress=document.createElement("p");progress.textContent="Package status: "+sub.status.replaceAll("_"," ")+" · "+used+" of "+sub.total_sessions+" sessions used · "+remaining+" remaining";
+   card.append(title,progress);
+   if(sub.status==="pending_payment"){const p=document.createElement("p");p.className="study-status";p.textContent="Your package is waiting for payment verification.";card.append(p)}
+   if(sub.status==="completed"){const p=document.createElement("p");p.className="study-status";p.textContent="Your package sessions are complete. Choose a new package to continue learning.";card.append(p)}
+   rows.forEach(row=>{const l=row.study_scheduled_sessions||{},p=document.createElement("p");p.className="study-status";
+    p.textContent=(l.title||"Scheduled lesson")+" · "+(l.starts_at?fmt(l.starts_at):"Time pending")+" · "+row.attendance_status.replaceAll("_"," ");
+    if(row.attendance_status==="scheduled"){
+     const ack=document.createElement("button");ack.textContent=row.acknowledgement==="acknowledged"?"Attendance acknowledged":"Acknowledge lesson";ack.disabled=row.acknowledgement==="acknowledged";ack.addEventListener("click",async()=>{const x=await db.rpc("acknowledge_study_session",{p_attendance_id:row.id});if(x.error){feedback(x.error.message,"error");return}await loadPackageDashboard()});p.append(" ",ack);
+     if(l.meeting_url){const join=document.createElement("a");join.href=l.meeting_url;join.target="_blank";join.rel="noopener noreferrer";join.textContent=" Join live class";p.append(join)}
+    }
+    card.append(p);
+   });
+   root.append(card);
+  }
+  const n=await db.from("study_session_notifications").select("id,title,message,notification_type,is_read,created_at,attendance_id").eq("student_id",user.id).order("created_at",{ascending:false}).limit(30);
+  if(n.error){notify.textContent="Lesson notifications could not be loaded.";return}
+  if(n.data?.length){const h=document.createElement("h3");h.textContent="Lesson notifications";notify.append(h);
+   n.data.forEach(item=>{const p=document.createElement("div");p.className="study-status"+(item.notification_type==="lesson_missed"?" error":"");p.textContent=item.title+": "+item.message;
+    if(item.notification_type==="lesson_scheduled"){const b=document.createElement("button");b.textContent="Acknowledge";b.addEventListener("click",async()=>{const x=await db.rpc("acknowledge_study_session",{p_attendance_id:item.attendance_id});if(x.error){feedback(x.error.message,"error");return}await db.from("study_session_notifications").update({is_read:true}).eq("id",item.id);await loadPackageDashboard()});p.append(" ",b)}
+    notify.append(p);
+   });
+  }
  }
  async function startLesson(e,b,resources){b.disabled=true;b.textContent="Starting lesson…";const r=await db.rpc("start_study_lesson",{p_enrollment_id:e.id});
   if(r.error){feedback(r.error.message||"Lesson access could not be started.","error");b.disabled=false;b.textContent="Start my lesson";return}
