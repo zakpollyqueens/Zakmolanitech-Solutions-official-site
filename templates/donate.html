@@ -43,6 +43,13 @@
 .donor-wall span{color:var(--muted);font-size:13px}
 @media(max-width:900px){.donation-grid,.support-grid{grid-template-columns:1fr}.donation-grid{gap:15px}}
 @media(max-width:680px){.donation-card,.support-box{padding:23px}.laptop-visual{min-height:260px}.payment-number{font-size:18px}}
+
+.jjuma-panel{position:relative;overflow:hidden;margin:28px 0 34px;padding:clamp(22px,4vw,38px);border:1px solid rgba(91,225,232,.34);border-radius:22px;background:radial-gradient(circle at 90% 0,rgba(91,225,232,.17),transparent 34%),linear-gradient(135deg,#10243a,#081321 72%);box-shadow:0 22px 60px rgba(0,0,0,.18)}
+.jjuma-panel:after{content:"";position:absolute;right:-95px;bottom:-155px;width:280px;height:280px;border:1px solid rgba(91,225,232,.18);border-radius:50%;pointer-events:none}
+.jjuma-head{position:relative;z-index:1;max-width:700px;margin-bottom:24px}.jjuma-kicker{color:var(--cyan);font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase}.jjuma-head h3{margin:10px 0;font-size:clamp(24px,4vw,34px)}.jjuma-head p{max-width:600px;color:var(--muted);font-size:13px;line-height:1.75}
+.jjuma-form{position:relative;z-index:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.jjuma-field{display:flex;flex-direction:column;gap:7px}.jjuma-field.full{grid-column:1/-1}.jjuma-field label{color:#d8e5ef;font-size:11px;font-weight:700}.jjuma-field input,.jjuma-field select{width:100%;min-height:48px;padding:12px 14px;border:1px solid rgba(255,255,255,.17);border-radius:10px;background:#0b1929;color:#fff;font:inherit;font-size:14px}.jjuma-field input:focus,.jjuma-field select:focus{outline:2px solid rgba(91,225,232,.55);border-color:var(--cyan)}.jjuma-submit{min-height:50px;border:0;border-radius:999px;background:linear-gradient(100deg,#62e4e9,#8b9cff);color:#071522;font-size:12px;font-weight:900;letter-spacing:.7px;cursor:pointer}.jjuma-submit:disabled{opacity:.55;cursor:wait}.jjuma-note{grid-column:1/-1;margin:0;color:#9fb0c2;font-size:11px;line-height:1.65}.jjuma-status{grid-column:1/-1;min-height:20px;margin:0;color:#bfeef0;font-size:12px}.jjuma-badge{display:inline-flex;align-items:center;gap:8px;margin-top:8px;padding:7px 11px;border:1px solid rgba(91,225,232,.25);border-radius:99px;color:#c9f8f7;font-size:10px;font-weight:700}
+@media(max-width:680px){.jjuma-form{grid-template-columns:1fr}.jjuma-field.full,.jjuma-note,.jjuma-status{grid-column:auto}.jjuma-panel{border-radius:17px}}
+
 </style>
 </head>
 
@@ -116,6 +123,47 @@
 <div class="eyebrow">08 / Donation Methods</div>
 <h2>Choose how you'd like to support.</h2>
 <p>Use one of the available payment methods below to contribute to the mission.</p>
+</div>
+
+
+<div class="jjuma-panel reveal" aria-labelledby="jjumaTitle">
+  <div class="jjuma-head">
+    <span class="jjuma-kicker">International giving · Secure hosted checkout</span>
+    <h3 id="jjumaTitle">Donate with Juma Pay</h3>
+    <p>Choose your country, select a currency and enter any amount you wish to contribute. You’ll be securely redirected to Juma Pay to complete your donation.</p>
+    <span class="jjuma-badge"> <span aria-hidden="true">✦</span> Custom amount · Secure payment</span>
+  </div>
+  <form class="jjuma-form" id="jjumaDonationForm">
+    <div class="jjuma-field full">
+      <label for="donorName">Your name</label>
+      <input id="donorName" name="donor_name" autocomplete="name" maxlength="120" required placeholder="Enter your name">
+    </div>
+    <div class="jjuma-field">
+      <label for="donorEmail">Email address (optional)</label>
+      <input id="donorEmail" name="donor_email" type="email" autocomplete="email" maxlength="180" placeholder="you@example.com">
+    </div>
+    <div class="jjuma-field">
+      <label for="donorCountry">Country</label>
+      <select id="donorCountry" name="country" required>
+        <option value="UG">Uganda</option><option value="KE">Kenya</option><option value="TZ">Tanzania</option><option value="RW">Rwanda</option><option value="MW">Malawi</option><option value="ZM">Zambia</option><option value="OTHER">Other country</option>
+      </select>
+    </div>
+    <div class="jjuma-field">
+      <label for="donorCurrency">Donation currency</label>
+      <select id="donorCurrency" name="currency" required>
+        <option value="UGX">UGX · Ugandan Shilling</option><option value="KES">KES · Kenyan Shilling</option><option value="TZS">TZS · Tanzanian Shilling</option><option value="RWF">RWF · Rwandan Franc</option><option value="MWK">MWK · Malawian Kwacha</option><option value="ZMW">ZMW · Zambian Kwacha</option><option value="USD">USD · US Dollar</option><option value="EUR">EUR · Euro</option>
+      </select>
+    </div>
+    <div class="jjuma-field">
+      <label for="donationAmount">Amount you want to donate</label>
+      <input id="donationAmount" name="amount" type="number" min="1" max="1000000000" step="0.01" inputmode="decimal" required placeholder="Enter any amount">
+    </div>
+    <div class="jjuma-field full">
+      <button class="jjuma-submit" id="jjumaDonateButton" type="submit">Continue to secure Juma Pay checkout <span aria-hidden="true">→</span></button>
+    </div>
+    <p class="jjuma-note">Your payment is processed on Juma Pay’s secure hosted checkout. Currency availability depends on the currencies enabled for our merchant account. Your donation is recorded as paid only after the provider’s signed notification and server-side verification.</p>
+    <p class="jjuma-status" id="jjumaDonationStatus" role="status" aria-live="polite"></p>
+  </form>
 </div>
 
 <div class="donation-grid">
@@ -230,6 +278,46 @@
 </nav>
 <div class="footer-copy">© 2026 Zakmolanitech Solutions. All Rights Reserved.</div>
 </footer>
+
+
+<script>
+(() => {
+  const form = document.getElementById("jjumaDonationForm");
+  if (!form) return;
+  const country = document.getElementById("donorCountry");
+  const currency = document.getElementById("donorCurrency");
+  const button = document.getElementById("jjumaDonateButton");
+  const status = document.getElementById("jjumaDonationStatus");
+  const countryCurrency = {UG:"UGX",KE:"KES",TZ:"TZS",RW:"RWF",MW:"MWK",ZM:"ZMW",OTHER:"USD"};
+  country.addEventListener("change", () => { currency.value = countryCurrency[country.value] || "USD"; });
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    status.textContent = "Preparing your secure donation checkout…";
+    button.disabled = true;
+    const payload = {
+      donor_name: form.elements.donor_name.value.trim(),
+      donor_email: form.elements.donor_email.value.trim(),
+      country: country.value,
+      currency: currency.value,
+      amount: Number(form.elements.amount.value)
+    };
+    try {
+      const response = await fetch("https://mmozesoarwkimhyloivu.supabase.co/functions/v1/zakitech-donations?action=create", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(payload)
+      });
+      const result = await response.json();
+      if (!response.ok || !result.success || !result.payment_url) throw new Error(result.error || "We could not start checkout. Please try again.");
+      status.textContent = "Checkout created. Redirecting securely to Juma Pay…";
+      window.location.assign(result.payment_url);
+    } catch (error) {
+      status.textContent = error && error.message ? error.message : "Unable to connect to Juma Pay. Please try again.";
+      button.disabled = false;
+    }
+  });
+})();
+</script>
 
 <script src="../static/js/main.js"></script>
 </body>
