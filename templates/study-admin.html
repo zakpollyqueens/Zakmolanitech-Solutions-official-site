@@ -30,6 +30,16 @@ body{background:#f2f5fa;color:#142238}.manage-wrap{width:min(1160px,calc(100% - 
 <div class="field"><label for="resourceText">LESSON NOTES / INSTRUCTIONS (OPTIONAL)</label><textarea id="resourceText" maxlength="20000" placeholder="Add instructions or learning notes…"></textarea></div>
 <button class="manage-button" id="publishButton" type="submit">Publish lesson</button><div id="lessonStatus" class="notice" hidden aria-live="polite"></div>
 </form></section>
+<section class="manage-card"><h2>Schedule a one-hour lesson</h2><p class="notice">Choose any future date. Lessons do not have to follow consecutive calendar days. Every scheduled session is one hour and is announced to students with active package balances.</p>
+<form id="sessionForm">
+<div class="field"><label for="sessionTitle">LESSON TOPIC</label><input id="sessionTitle" required minlength="4" maxlength="160" placeholder="e.g. Introduction to JavaScript"></div>
+<div class="field"><label for="sessionSummary">LESSON DESCRIPTION</label><textarea id="sessionSummary" maxlength="500" placeholder="What will students learn?"></textarea></div>
+<div class="field"><label for="sessionStart">DATE &amp; START TIME</label><input id="sessionStart" type="datetime-local" required></div>
+<div class="field"><label for="sessionMeeting">LIVE CLASS LINK (OPTIONAL)</label><input id="sessionMeeting" type="url" placeholder="https://meet.google.com/..."></div>
+<button class="manage-button" id="scheduleSessionButton" type="submit">Schedule lesson and notify students</button><div id="sessionStatus" class="notice" hidden></div>
+</form></section>
+<section class="manage-card"><h2>Session attendance</h2><p class="notice">Record attendance after each class. Marking a student absent deducts that session from their package and sends a missed-lesson warning.</p><div id="attendanceList">Loading attendance…</div></section>
+<section class="manage-card"><h2>Pending package Airtel payments</h2><p class="notice">Verify each reference against merchant code 7171832 before confirming the package.</p><div id="packageAirtelList">Loading package references…</div></section>
 <section class="manage-card"><h2>Weekend seat requests</h2><p class="notice">Approve only requests for free weekend sessions. Approval grants access to that specific lesson; the student’s access timer starts when they open it.</p><div id="requestsList">Loading requests…</div></section>
 <section class="manage-card"><h2>Pending Airtel Money confirmations</h2><p class="notice">Match each transaction reference against the merchant payment records before confirming. Never approve from a screenshot alone if the transaction cannot be verified.</p><div id="airtelPaymentsList">Loading Airtel payment references…</div></section>
 <section class="manage-card"><h2>Published and upcoming lessons</h2><div id="lessonsList">Loading lessons…</div></section>
@@ -54,7 +64,7 @@ body{background:#f2f5fa;color:#142238}.manage-wrap{width:min(1160px,calc(100% - 
  async function init(){const s=await db.auth.getSession();if(s.error)throw s.error;user=s.data.session?.user;
   if(!user){message("accessStatus","Sign in with an authorised staff account to manage lessons.","error");return}
   const role=user.app_metadata?.staff_role;if(!["admin","manager","staff","architect"].includes(role)){message("accessStatus","This area is restricted to authorised learning staff.","error");return}
-  $("accessStatus").textContent="Signed in as authorised staff: "+(user.email||role);$("manageContent").classList.remove("hidden");price();await Promise.all([loadRequests(),loadLessons(),loadAirtelPayments()]);
+  $("accessStatus").textContent="Signed in as authorised staff: "+(user.email||role);$("manageContent").classList.remove("hidden");price();await Promise.all([loadRequests(),loadLessons(),loadAirtelPayments(),loadAttendance(),loadPackageAirtelPayments()]);
  }
  async function loadRequests(){const root=$("requestsList");const r=await db.from("study_enrollments").select("id,student_id,created_at,study_lessons(title,starts_at)").eq("status","pending_review").order("created_at");
   if(r.error){root.textContent="Could not load weekend requests.";return}if(!r.data?.length){root.textContent="No weekend seat requests are waiting for review.";return}
@@ -63,6 +73,31 @@ body{background:#f2f5fa;color:#142238}.manage-wrap{width:min(1160px,calc(100% - 
   });
  }
  async function review(id,status,b){b.disabled=true;const r=await db.from("study_enrollments").update({status:status,updated_at:new Date().toISOString()}).eq("id",id);if(r.error){alert(r.error.message);b.disabled=false;return}await loadRequests()}
+
+ async function loadPackageAirtelPayments(){
+  const root=$("packageAirtelList"),r=await db.from("study_package_payments").select("id,provider_reference,amount,currency,created_at,student_id,study_package_subscriptions(package_id,study_package_catalog(title))").eq("provider","airtel_money_manual").eq("status","pending").order("created_at");
+  if(r.error){root.textContent="Could not load package Airtel references.";return}
+  if(!r.data?.length){root.textContent="No package Airtel references are awaiting verification.";return}
+  root.replaceChildren();r.data.forEach(p=>{const d=document.createElement("div");d.className="record";const s=document.createElement("strong");s.textContent=p.study_package_subscriptions?.study_package_catalog?.title||"Lesson package";const small=document.createElement("small");small.textContent="Student "+p.student_id+" · Ref "+p.provider_reference+" · "+p.currency+" "+Number(p.amount).toLocaleString()+" · "+fmt(p.created_at);const actions=document.createElement("div");actions.className="record-actions";const yes=document.createElement("button");yes.textContent="Confirm payment";yes.addEventListener("click",()=>reviewAirtel(p.id,"confirm",yes));const no=document.createElement("button");no.className="reject";no.textContent="Reject";no.addEventListener("click",()=>reviewAirtel(p.id,"reject",no));actions.append(yes,no);d.append(s,small,actions);root.append(d)})
+ }
+ async function loadAttendance(){
+  const root=$("attendanceList"),r=await db.from("study_session_attendance").select("id,student_id,attendance_status,acknowledgement,study_scheduled_sessions(title,starts_at),study_package_subscriptions(package_id,study_package_catalog(title))").eq("attendance_status","scheduled").order("created_at",{ascending:true});
+  if(r.error){root.textContent="Could not load session attendance.";return}
+  if(!r.data?.length){root.textContent="No scheduled student attendance records are waiting to be marked.";return}
+  root.replaceChildren();r.data.forEach(a=>{const d=document.createElement("div");d.className="record";const s=document.createElement("strong");s.textContent=a.study_scheduled_sessions?.title||"Scheduled lesson";const small=document.createElement("small");small.textContent="Student "+a.student_id+" · "+fmt(a.study_scheduled_sessions?.starts_at)+" · "+(a.study_package_subscriptions?.study_package_catalog?.title||"Package")+" · Acknowledgement: "+a.acknowledgement;const actions=document.createElement("div");actions.className="record-actions";
+   for(const [status,label] of [["attended","Mark attended"],["missed","Mark missed"],["excused","Excused"]]){const b=document.createElement("button");b.textContent=label;b.className=status==="missed"?"reject":"";b.addEventListener("click",async()=>{if(status==="missed"&&!confirm("Mark this student absent? The session will be deducted and a warning notification will be sent."))return;b.disabled=true;const x=await db.rpc("mark_study_attendance",{p_attendance_id:a.id,p_status:status});if(x.error){alert(x.error.message);b.disabled=false;return}await loadAttendance()});actions.append(b)}
+   d.append(s,small,actions);root.append(d);
+  });
+ }
+ $("sessionForm").addEventListener("submit",async e=>{
+  e.preventDefault();const b=$("scheduleSessionButton"),raw=$("sessionStart").value,starts=new Date(raw),url=$("sessionMeeting").value.trim();
+  if(!raw||Number.isNaN(starts.getTime())||starts<=new Date()){message("sessionStatus","Choose a valid future date and time.","error");return}
+  if(url&&!/^https:\/\//i.test(url)){message("sessionStatus","Live class links must use HTTPS.","error");return}
+  b.disabled=true;b.textContent="Scheduling…";
+  const r=await db.from("study_scheduled_sessions").insert({title:$("sessionTitle").value.trim(),summary:$("sessionSummary").value.trim(),starts_at:starts.toISOString(),duration_minutes:60,meeting_url:url||null,created_by:user.id,status:"scheduled"}).select("id").single();
+  if(r.error){message("sessionStatus",r.error.message||"The lesson could not be scheduled.","error");b.disabled=false;b.textContent="Schedule lesson and notify students";return}
+  $("sessionForm").reset();message("sessionStatus","Lesson scheduled. Eligible package students have been notified and attendance records created.","success");b.disabled=false;b.textContent="Schedule lesson and notify students";await loadAttendance();
+ });
  async function loadAirtelPayments(){const root=$("airtelPaymentsList");const r=await db.from("study_payments").select("id,provider_reference,amount,currency,created_at,enrollment_id,student_id").eq("provider","airtel_money_manual").eq("status","pending").order("created_at");if(r.error){root.textContent="Could not load Airtel payment references.";return}if(!r.data?.length){root.textContent="No Airtel payment references are waiting for verification.";return}root.replaceChildren();for(const p of r.data){const e=await db.from("study_enrollments").select("lesson_id").eq("id",p.enrollment_id).maybeSingle();let lessonTitle="Paid lesson";if(e.data?.lesson_id){const l=await db.from("study_lessons").select("title").eq("id",e.data.lesson_id).maybeSingle();lessonTitle=l.data?.title||lessonTitle}const div=document.createElement("div");div.className="record";const strong=document.createElement("strong");strong.textContent=lessonTitle;const small=document.createElement("small");small.textContent="Student "+p.student_id+" · Airtel reference "+p.provider_reference+" · "+p.currency+" "+Number(p.amount).toLocaleString()+" · "+fmt(p.created_at);const actions=document.createElement("div");actions.className="record-actions";const approve=document.createElement("button");approve.textContent="Confirm payment received";approve.addEventListener("click",()=>reviewAirtel(p.id,"confirm",approve));const reject=document.createElement("button");reject.className="reject";reject.textContent="Reject reference";reject.addEventListener("click",()=>reviewAirtel(p.id,"reject",reject));actions.append(approve,reject);div.append(strong,small,actions);root.append(div)}}
  async function reviewAirtel(id,action,b){if(action==="confirm"&&!confirm("Confirm only after checking that this transaction was received by merchant code 7171832. Continue?"))return;b.disabled=true;const r=await db.functions.invoke("review-airtel-study-payment",{body:{payment_id:id,action}});if(r.error||r.data?.error){alert(r.data?.error||r.error?.message||"Payment review failed.");b.disabled=false;return}await loadAirtelPayments()}
  async function loadLessons(){const root=$("lessonsList");const r=await db.from("study_lessons").select("id,title,lesson_type,status,starts_at,duration_minutes,price_amount,currency").order("starts_at",{ascending:false}).limit(30);
