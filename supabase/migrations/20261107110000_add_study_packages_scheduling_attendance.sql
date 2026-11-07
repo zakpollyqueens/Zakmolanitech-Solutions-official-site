@@ -195,3 +195,70 @@ grant execute on function public.acknowledge_study_session(uuid) to authenticate
 grant execute on function public.mark_study_attendance(uuid,text) to authenticated;
 revoke all on function public.study_schedule_session_for_active_students() from public,anon,authenticated;
 revoke all on function public.study_cancel_session_attendance() from public,anon,authenticated;
+
+
+-- Follow-up hardening: preserve package capacity for already scheduled sessions,
+-- protect live class links, release cancelled sessions and notify completed packages.
+create or replace function public.study_package_remaining(p_subscription_id uuid)
+returns integer language sql stable security invoker set search_path=''
+as $$
+ select greatest(s.total_sessions-count(a.id)::integer,0) from public.study_package_subscriptions s
+ left join public.study_session_attendance a on a.subscription_id=s.id and a.attendance_status in ('scheduled','attended','missed')
+ where s.id=p_subscription_id group by s.total_sessions
+$$;
+create or replace function public.mark_study_attendance(p_attendance_id uuid,p_status text)
+returns boolean language plpgsql security definer set search_path=''
+as $$
+declare v_student uuid; v_session uuid; v_title text; v_subscription uuid; v_completed boolean:=false; v_starts timestamptz;
+begin
+ if coalesce(auth.jwt()->'app_metadata'->>'staff_role','') not in ('admin','manager','staff','architect') then raise exception 'Authorised learning staff only.'; end if;
+ if p_status not in ('attended','missed','excused') then raise exception 'Invalid attendance status.'; end if;
+ select a.student_id,a.session_id,s.title,a.subscription_id,s.starts_at into v_student,v_session,v_title,v_subscription,v_starts
+ from public.study_session_attendance a join public.study_scheduled_sessions s on s.id=a.session_id where a.id=p_attendance_id;
+ if not found then raise exception 'Attendance record not found.'; end if;
+ if p_status='missed' and v_starts>now() then raise exception 'A lesson cannot be marked missed before its scheduled start time.'; end if;
+ update public.study_session_attendance set attendance_status=p_status,marked_by=auth.uid(),marked_at=now() where id=p_attendance_id and attendance_status='scheduled';
+ if not found then raise exception 'Attendance was already recorded.'; end if;
+ if p_status='missed' then
+  insert into public.study_session_notifications(student_id,session_id,attendance_id,title,message,notification_type)
+  values(v_student,v_session,p_attendance_id,'Missed lesson warning','You missed the scheduled lesson: '||v_title||'. This session has been deducted from your package.','lesson_missed')
+  on conflict(attendance_id,notification_type) do nothing;
+ end if;
+ update public.study_package_subscriptions s set status='completed',updated_at=now()
+ where s.id=v_subscription and s.status='active'
+ and not exists(select 1 from public.study_session_attendance a where a.subscription_id=s.id and a.attendance_status='scheduled')
+ and (select count(*) from public.study_session_attendance a where a.subscription_id=s.id and a.attendance_status in ('attended','missed'))>=s.total_sessions
+ returning true into v_completed;
+ if coalesce(v_completed,false) then
+  insert into public.study_session_notifications(student_id,session_id,attendance_id,title,message,notification_type)
+  values(v_student,v_session,p_attendance_id,'Package completed','You have used all sessions in this package. Choose a new lesson package to continue learning.','package_completed')
+  on conflict(attendance_id,notification_type) do nothing;
+ end if;
+ return true;
+end $$;
+create or replace function public.study_cancel_session_attendance()
+returns trigger language plpgsql security definer set search_path=''
+as $$
+begin
+ if new.status='cancelled' and old.status is distinct from new.status then
+  update public.study_session_attendance set attendance_status='excused',marked_at=now() where session_id=new.id and attendance_status='scheduled';
+ end if;
+ return new;
+end $$;
+drop trigger if exists study_cancelled_session_release on public.study_scheduled_sessions;
+create trigger study_cancelled_session_release after update of status on public.study_scheduled_sessions for each row execute function public.study_cancel_session_attendance();
+drop policy if exists "Active study packages are visible" on public.study_package_catalog;
+create policy "Active study packages are visible" on public.study_package_catalog for select to anon,authenticated using(active);
+drop policy if exists "Students view assigned scheduled sessions" on public.study_scheduled_sessions;
+create policy "Students view assigned scheduled sessions" on public.study_scheduled_sessions for select to authenticated
+using(status<>'cancelled' and (coalesce((select auth.jwt())->'app_metadata'->>'staff_role','') in ('admin','manager','staff','architect')
+or exists(select 1 from public.study_session_attendance a where a.session_id=study_scheduled_sessions.id and a.student_id=(select auth.uid()))));
+grant select on public.study_package_catalog to anon,authenticated;
+grant insert,update on public.study_scheduled_sessions to authenticated;
+grant update(is_read) on public.study_session_notifications to authenticated;
+revoke all on function public.acknowledge_study_session(uuid) from public,anon;
+revoke all on function public.mark_study_attendance(uuid,text) from public,anon;
+grant execute on function public.acknowledge_study_session(uuid) to authenticated;
+grant execute on function public.mark_study_attendance(uuid,text) to authenticated;
+revoke all on function public.study_schedule_session_for_active_students() from public,anon,authenticated;
+revoke all on function public.study_cancel_session_attendance() from public,anon,authenticated;
