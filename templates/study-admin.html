@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#07111f"><title>Study Management | Zakmolanitech Solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="../static/css/refresh.css">
+<style>
+body{background:#f2f5fa;color:#142238}.manage-wrap{width:min(1160px,calc(100% - 32px));margin:0 auto;padding:34px 0 70px}.manage-top{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:28px}.manage-top h1{margin:0;font:800 clamp(27px,4vw,38px) Manrope}.manage-top p{margin:7px 0 0;color:#6d7a8d;font-size:13px}.manage-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.manage-card{padding:24px;border:1px solid #e1e7ef;border-radius:18px;background:#fff;box-shadow:0 10px 28px rgba(18,38,64,.05)}.manage-card h2{margin:0 0 16px;font:800 20px Manrope}.field{display:grid;gap:6px;margin:0 0 13px}.field label{font-size:11px;font-weight:800;color:#4d5a70}.field input,.field textarea,.field select{width:100%;min-height:43px;padding:10px 12px;border:1px solid #dbe2ec;border-radius:9px;background:#fff;color:#142238;font:13px "DM Sans",sans-serif}.field textarea{min-height:85px;resize:vertical}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.manage-button{border:0;border-radius:9px;padding:12px 16px;background:#5c49b6;color:#fff;font-size:12px;font-weight:800;cursor:pointer}.manage-button:disabled{opacity:.55;cursor:wait}.notice{margin:12px 0;padding:12px 14px;border-radius:9px;background:#f0f3f8;color:#526176;font-size:12px;line-height:1.65}.notice.error{background:#fff0f1;color:#a62d3d}.notice.success{background:#ebfaf2;color:#18764d}.record{padding:14px 0;border-bottom:1px solid #e9edf3}.record:last-child{border-bottom:0}.record strong{display:block;font-size:13px;color:#17263c}.record small{display:block;margin-top:5px;color:#7a8799;font-size:11px}.record-actions{display:flex;gap:8px;margin-top:9px}.record-actions button{border:1px solid #d9deea;border-radius:7px;padding:7px 10px;background:#fff;color:#4d43a2;font-size:10px;font-weight:800}.record-actions button.reject{color:#a52d3d}.hidden{display:none!important}
+@media(max-width:760px){.manage-grid{grid-template-columns:1fr}.manage-wrap{width:min(100% - 24px,620px);padding-top:22px}.manage-card{padding:19px}.manage-top{align-items:flex-start;flex-direction:column}}
+@media(max-width:460px){.field-grid{grid-template-columns:1fr}}
+</style></head>
+<body><main class="manage-wrap">
+<header class="manage-top"><div><div class="section-kicker">INSTRUCTOR WORKSPACE</div><h1>Study management</h1><p>Publish lessons, add protected learning materials and approve free weekend seats.</p></div><a class="button button-glass" href="study.html">View student area ↗</a></header>
+<div id="accessStatus" class="notice">Checking staff permissions…</div>
+<div id="manageContent" class="hidden">
+<div class="manage-grid">
+<section class="manage-card"><h2>Publish a lesson</h2>
+<form id="lessonForm">
+<div class="field"><label for="lessonTitle">LESSON TITLE</label><input id="lessonTitle" required minlength="4" maxlength="160" placeholder="e.g. Introduction to Microsoft Excel"></div>
+<div class="field"><label for="lessonSummary">SHORT DESCRIPTION</label><textarea id="lessonSummary" maxlength="500" placeholder="What will students learn?"></textarea></div>
+<div class="field-grid">
+<div class="field"><label for="lessonType">LESSON TYPE</label><select id="lessonType"><option value="paid">Paid online lesson</option><option value="weekend_free">Free weekend lesson</option></select></div>
+<div class="field"><label for="lessonDuration">DURATION (MINUTES)</label><select id="lessonDuration"><option value="60">60 minutes</option><option value="120">120 minutes</option><option value="180">180 minutes</option><option value="240">240 minutes</option></select></div>
+</div>
+<div class="field"><label for="lessonStart">LESSON DATE &amp; START TIME</label><input id="lessonStart" type="datetime-local" required></div>
+<div id="paidFields">
+<div class="field-grid"><div class="field"><label for="lessonMarket">STUDENT MARKET</label><select id="lessonMarket"><option value="UG">Uganda · UGX</option><option value="KE">Kenya · KES</option><option value="TZ">Tanzania · TZS</option><option value="INTL">Outside Africa · USD</option></select></div><div class="field"><label for="lessonPrice">TOTAL LESSON PRICE</label><input id="lessonPrice" readonly></div></div>
+<p class="notice">The total is calculated from the approved hourly rate and lesson duration. Uganda UGX 10,000, Kenya KES 15,000, Tanzania TZS 15,000, outside Africa USD 10 per hour.</p>
+</div>
+<div class="field-grid"><div class="field"><label for="lessonCapacity">STUDENT CAPACITY (OPTIONAL)</label><input id="lessonCapacity" type="number" min="1" max="1000" placeholder="No limit"></div><div class="field"><label for="resourceType">MATERIAL TYPE</label><select id="resourceType"><option value="link">Lesson link</option><option value="video">Video</option><option value="document">Document</option><option value="meeting">Live meeting</option><option value="text">Text lesson</option></select></div></div>
+<div class="field"><label for="resourceTitle">MATERIAL TITLE (OPTIONAL)</label><input id="resourceTitle" maxlength="160" placeholder="e.g. Join the live class"></div>
+<div class="field"><label for="resourceUrl">PRIVATE HTTPS LESSON LINK (OPTIONAL)</label><input id="resourceUrl" type="url" placeholder="https://..."></div>
+<div class="field"><label for="resourceText">LESSON NOTES / INSTRUCTIONS (OPTIONAL)</label><textarea id="resourceText" maxlength="20000" placeholder="Add instructions or learning notes…"></textarea></div>
+<button class="manage-button" id="publishButton" type="submit">Publish lesson</button><div id="lessonStatus" class="notice" hidden aria-live="polite"></div>
+</form></section>
+<section class="manage-card"><h2>Weekend seat requests</h2><p class="notice">Approve only requests for free weekend sessions. Approval grants access to that specific lesson; the student’s access timer starts when they open it.</p><div id="requestsList">Loading requests…</div></section>
+<section class="manage-card"><h2>Published and upcoming lessons</h2><div id="lessonsList">Loading lessons…</div></section>
+<section class="manage-card"><h2>Access and payment safeguards</h2><p class="notice">Paid lessons are not activated from screenshots or return-page redirects. The payment provider must confirm a completed transaction through a verified server callback before a paid enrolment is marked confirmed.</p><p class="notice">Each enrolment is tied to one lesson. Starting a confirmed lesson creates a server-side access expiry based on its published duration; refreshing the page does not restart the timer.</p></section>
+</div></div></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(() => {
+ const db=window.supabase.createClient("https://jjcptobdzreckuhtcuzm.supabase.co","sb_publishable_5AyVE6y2FGY8S_NoLC5a-w_URf-Mfxc");
+ const $=id=>document.getElementById(id), rates={UG:10000,KE:15000,TZ:15000,INTL:10},currencies={UG:"UGX",KE:"KES",TZ:"TZS",INTL:"USD"};
+ let user=null;
+ function message(id,text,type){const n=$(id);n.hidden=false;n.className="notice "+(type||"");n.textContent=text}
+ function price(){const market=$("lessonMarket").value,duration=Number($("lessonDuration").value);$("lessonPrice").value=currencies[market]+" "+(rates[market]*duration/60).toLocaleString()}
+ function syncType(){const free=$("lessonType").value==="weekend_free";$("paidFields").classList.toggle("hidden",free);if(free){$("lessonPrice").value="FREE"}else price()}
+ $("lessonMarket").addEventListener("change",price);$("lessonDuration").addEventListener("change",()=>{if($("lessonType").value==="paid")price()});$("lessonType").addEventListener("change",syncType);
+ const fmt=v=>new Date(v).toLocaleString(undefined,{dateStyle:"medium",timeStyle:"short"});
+ async function init(){const s=await db.auth.getSession();if(s.error)throw s.error;user=s.data.session?.user;
+  if(!user){message("accessStatus","Sign in with an authorised staff account to manage lessons.","error");return}
+  const role=user.app_metadata?.staff_role;if(!["admin","manager","staff","architect"].includes(role)){message("accessStatus","This area is restricted to authorised learning staff.","error");return}
+  $("accessStatus").textContent="Signed in as authorised staff: "+(user.email||role);$("manageContent").classList.remove("hidden");price();await Promise.all([loadRequests(),loadLessons()]);
+ }
+ async function loadRequests(){const root=$("requestsList");const r=await db.from("study_enrollments").select("id,student_id,created_at,study_lessons(title,starts_at)").eq("status","pending_review").order("created_at");
+  if(r.error){root.textContent="Could not load weekend requests.";return}if(!r.data?.length){root.textContent="No weekend seat requests are waiting for review.";return}
+  root.replaceChildren();r.data.forEach(x=>{const div=document.createElement("div");div.className="record";const strong=document.createElement("strong");strong.textContent=(x.study_lessons?.title||"Weekend lesson");const small=document.createElement("small");small.textContent="Student "+x.student_id+" · "+fmt(x.study_lessons?.starts_at||x.created_at);const actions=document.createElement("div");actions.className="record-actions";
+   const approve=document.createElement("button");approve.textContent="Approve free seat";approve.addEventListener("click",()=>review(x.id,"confirmed",approve));const reject=document.createElement("button");reject.className="reject";reject.textContent="Decline";reject.addEventListener("click",()=>review(x.id,"rejected",reject));actions.append(approve,reject);div.append(strong,small,actions);root.append(div);
+  });
+ }
+ async function review(id,status,b){b.disabled=true;const r=await db.from("study_enrollments").update({status:status,updated_at:new Date().toISOString()}).eq("id",id);if(r.error){alert(r.error.message);b.disabled=false;return}await loadRequests()}
+ async function loadLessons(){const root=$("lessonsList");const r=await db.from("study_lessons").select("id,title,lesson_type,status,starts_at,duration_minutes,price_amount,currency").order("starts_at",{ascending:false}).limit(30);
+  if(r.error){root.textContent="Could not load lessons.";return}if(!r.data?.length){root.textContent="No lessons have been created yet.";return}root.replaceChildren();r.data.forEach(x=>{const d=document.createElement("div");d.className="record";const s=document.createElement("strong");s.textContent=x.title;const small=document.createElement("small");small.textContent=x.lesson_type+" · "+x.status+" · "+fmt(x.starts_at)+" · "+x.duration_minutes+" min"+(x.lesson_type==="paid"?" · "+x.currency+" "+Number(x.price_amount).toLocaleString():" · FREE");d.append(s,small);root.append(d)})}
+ $("lessonForm").addEventListener("submit",async e=>{e.preventDefault();const b=$("publishButton"),type=$("lessonType").value,duration=Number($("lessonDuration").value),market=$("lessonMarket").value,start=$("lessonStart").value;
+  if(!start){message("lessonStatus","Choose a date and start time.","error");return}
+  const starts=new Date(start);if(Number.isNaN(starts.getTime())||starts<=new Date()){message("lessonStatus","Choose a future lesson date and time.","error");return}
+  if(type==="weekend_free"){const day=new Intl.DateTimeFormat("en-US",{weekday:"short",timeZone:"Africa/Kampala"}).format(starts);if(day!=="Sat"&&day!=="Sun"){message("lessonStatus","Free learning sessions must be scheduled on a Saturday or Sunday (Uganda time).","error");return}}
+  const amount=type==="paid"?rates[market]*duration/60:0,currency=type==="paid"?currencies[market]:"UGX";
+  const url=$("resourceUrl").value.trim();if(url&&!/^https:\\/\\//i.test(url)){message("lessonStatus","Lesson material links must use HTTPS.","error");return}
+  b.disabled=true;b.textContent="Publishing…";
+  try{const payload={title:$("lessonTitle").value.trim(),summary:$("lessonSummary").value.trim(),lesson_type:type,status:"published",starts_at:starts.toISOString(),duration_minutes:duration,price_amount:amount,currency:currency,country_code:type==="paid"?market:null,capacity:$("lessonCapacity").value?Number($("lessonCapacity").value):null,created_by:user.id,published_at:new Date().toISOString()};
+   const created=await db.from("study_lessons").insert(payload).select("id").single();if(created.error)throw created.error;
+   const resourceTitle=$("resourceTitle").value.trim(),resourceText=$("resourceText").value.trim();
+   if(url||resourceTitle||resourceText){const resource=await db.from("study_lesson_resources").insert({lesson_id:created.data.id,title:resourceTitle||"Lesson material",resource_type:$("resourceType").value,content_url:url||null,content_text:resourceText,created_by:user.id});if(resource.error)throw new Error("Lesson published, but its material could not be saved: "+resource.error.message)}
+   $("lessonForm").reset();$("lessonDuration").value="60";syncType();message("lessonStatus","Lesson published successfully. It is now visible in the student area.","success");await loadLessons();
+  }catch(err){message("lessonStatus",err.message||"The lesson could not be published.","error")}finally{b.disabled=false;b.textContent="Publish lesson"}
+ });
+ init().catch(e=>{console.error(e);message("accessStatus","The study management area could not be loaded.","error")});
+})();
+</script></body></html>
