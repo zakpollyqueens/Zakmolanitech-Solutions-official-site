@@ -46,9 +46,9 @@
   await Promise.all([loadLessons(),loadMyLearning(),loadPackageDashboard()]);
  }
  async function loadLessons(){const root=$("availableLessons");root.innerHTML="<h3>Available lessons</h3><p class='study-status'>Loading sessions…</p>";
-  const r=await db.from("study_lessons").select("id,title,summary,lesson_type,starts_at,duration_minutes,price_amount,currency").eq("status","published").order("starts_at");
+  const r=await db.from("study_lessons").select("id,title,summary,lesson_type,starts_at,duration_minutes,price_amount,currency").eq("status","published").eq("lesson_type","weekend_free").order("starts_at");
   if(r.error){root.innerHTML="<h3>Available lessons</h3><p class='study-status error'>Lessons could not be loaded.</p>";return}
-  if(!r.data?.length){root.innerHTML="<h3>Available lessons</h3><p class='study-status'>No lessons have been published yet. Please check again soon.</p>";return}
+  if(!r.data?.length){root.innerHTML="<h3>Available lessons</h3><p class='study-status'>No free weekend sessions have been published yet. Paid learning is available through the lesson packages above.</p>";return}
   const list=document.createElement("div");list.className="lesson-list";
   r.data.forEach(l=>{const card=document.createElement("article");card.className="lesson-item";
    card.innerHTML="<span class='price-kicker'>"+(l.lesson_type==="weekend_free"?"FREE WEEKEND SESSION":"PAID ONLINE LESSON")+"</span><h3>"+esc(l.title)+"</h3><p>"+esc(l.summary||"Practical IT learning session.")+"</p><p><strong>"+esc(fmt(l.starts_at))+"</strong><br>"+Number(l.duration_minutes)+" minutes · "+(l.lesson_type==="weekend_free"?"FREE":esc(l.currency+" "+Number(l.price_amount).toLocaleString()))+"</p>";
@@ -56,7 +56,7 @@
    if(l.lesson_type==="weekend_free"){b.textContent=user?"Request free seat":"Sign in to request a seat";b.disabled=!user;b.addEventListener("click",()=>requestFree(l,b))}
    else{b.textContent=user?"Choose payment method":"Sign in to enrol";b.disabled=!user;b.addEventListener("click",()=>choosePayment(l,card,b))}
    card.append(b);list.append(card);
-  });root.innerHTML="<h3>Available lessons</h3>";root.append(list);
+  });root.innerHTML="<h3>Free weekend sessions</h3>";root.append(list);
  }
  async function requestFree(l,b){b.disabled=true;b.textContent="Sending request…";
   const r=await db.from("study_enrollments").insert({lesson_id:l.id,student_id:user.id,lesson_type:"weekend_free",status:"pending_review",amount_due:0,currency:"UGX"});
